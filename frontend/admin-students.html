@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resident Students Directory | HostelTrack Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="admin-dashboard.html" class="nav-brand">
+        <div class="brand-icon">🛡️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Administrator Portal</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="admin-dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="admin-dashboard.html#attendance-table-section" class="nav-link">Attendance</a></li>
+        <li><a href="admin-students.html" class="nav-link active">Students</a></li>
+        <li><a href="admin-profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Students Directory Container -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Resident Directory</span>
+        <h1 style="font-size: 2.1rem;">Hostel Students</h1>
+        <p style="font-size: 0.95rem; margin-top: 0.25rem;">
+          Complete directory of registered resident students and cumulative attendance rates.
+        </p>
+      </div>
+
+      <!-- Search Field -->
+      <div style="width: 100%; max-width: 320px;">
+        <input 
+          type="text" 
+          id="student-dir-search" 
+          class="form-control" 
+          placeholder="Filter students by name, ID, or room..."
+          oninput="AdminStudentsController.filterList()"
+        >
+      </div>
+    </div>
+
+    <!-- Students Directory Table Card -->
+    <div class="card" style="padding: 1rem;">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Room</th>
+              <th>Course / Program</th>
+              <th>Academic Year</th>
+              <th>Attendance Rate</th>
+              <th>Contact Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="students-dir-tbody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                Loading resident students...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- STUDENT DETAIL MODAL -->
+  <div id="student-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(39, 30, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; background: var(--bg-surface); padding: 2rem; position: relative;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem;">
+        <div>
+          <span class="badge badge-neutral" style="font-size: 0.75rem;">Student Profile</span>
+          <h3 id="modal-student-name" style="font-size: 1.45rem; margin-top: 0.25rem;">Student Name</h3>
+          <span id="modal-student-id" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-warm-brown);">ASIET2024CS000</span>
+        </div>
+        <button onclick="AdminStudentsController.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.88rem; background: var(--bg-surface-warm); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+        <div>
+          <span class="stat-label">Hostel & Room</span>
+          <div id="modal-room-hostel" style="font-weight: 600; color: var(--color-deep-brown);">Room A-101 • Main Hostel</div>
+        </div>
+        <div>
+          <span class="stat-label">Overall Attendance Rate</span>
+          <div id="modal-percentage" style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--status-present);">92.5%</div>
+        </div>
+        <div>
+          <span class="stat-label">Course & Department</span>
+          <div id="modal-course" style="color: var(--text-primary);">B.Tech CSE</div>
+        </div>
+        <div>
+          <span class="stat-label">Phone & Email</span>
+          <div id="modal-contact" style="color: var(--text-primary);">+91 98765 43210</div>
+        </div>
+      </div>
+
+      <h4 style="font-size: 1.05rem; margin-bottom: 0.75rem;">Attendance History</h4>
+      <div class="table-container" style="max-height: 220px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Distance</th>
+            </tr>
+          </thead>
+          <tbody id="modal-history-tbody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: var(--text-muted);">No records found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="AdminStudentsController.closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.requireAdmin();
+      Auth.initNav();
+      AdminStudentsController.loadStudents();
+    });
+
+    const AdminStudentsController = {
+      cachedStudents: [],
+
+      async loadStudents() {
+        const tbody = document.getElementById('students-dir-tbody');
+        try {
+          const response = await fetch(`${CONFIG.API_BASE_URL}/admin/students?query=`);
+          const result = await response.json();
+
+          if (response.ok && result.success && Array.isArray(result.data)) {
+            this.cachedStudents = result.data;
+            this.renderTable(result.data);
+          } else {
+            this.renderFallback();
+          }
+        } catch (err) {
+          console.warn('Backend students API unreachable, using fallback', err);
+          this.renderFallback();
+        }
+      },
+
+      renderTable(students) {
+        const tbody = document.getElementById('students-dir-tbody');
+        if (!tbody) return;
+
+        if (!students || students.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: var(--text-muted);">No students found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = students.map(s => `
+          <tr style="cursor: pointer;" onclick="AdminStudentsController.openModal('${s.studentId}')">
+            <td style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--color-warm-brown);">${s.studentId}</td>
+            <td style="font-weight: 600; color: var(--color-deep-brown);">${s.studentName}</td>
+            <td>${s.roomNumber || '--'}</td>
+            <td style="font-size: 0.82rem;">${s.course || 'B.Tech CSE'}</td>
+            <td style="font-size: 0.82rem;">${s.academicYear || '3rd Year'}</td>
+            <td>
+              <strong style="color: ${s.overallPercentage >= 75 ? 'var(--status-present)' : 'var(--status-absent)'}; font-family: var(--font-serif);">
+                ${s.overallPercentage || 90}%
+              </strong>
+            </td>
+            <td style="font-size: 0.82rem; color: var(--text-secondary);">${s.email || '--'}</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); AdminStudentsController.openModal('${s.studentId}')">
+                Details &rarr;
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      },
+
+      filterList() {
+        const query = document.getElementById('student-dir-search').value.toLowerCase().trim();
+        if (!query) {
+          this.renderTable(this.cachedStudents);
+          return;
+        }
+
+        const filtered = this.cachedStudents.filter(s =>
+          (s.studentName && s.studentName.toLowerCase().includes(query)) ||
+          (s.studentId && s.studentId.toLowerCase().includes(query)) ||
+          (s.roomNumber && s.roomNumber.toLowerCase().includes(query))
+        );
+        this.renderTable(filtered);
+      },
+
+      async openModal(studentId) {
+        const modal = document.getElementById('student-detail-modal');
+        if (!modal) return;
+        modal.style.display = 'flex';
+
+        try {
+          const response = await fetch(`${CONFIG.API_BASE_URL}/admin/students/${encodeURIComponent(studentId)}`);
+          const result = await response.json();
+          if (response.ok && result.success && result.data) {
+            this.renderModal(result.data);
+          } else {
+            const s = this.cachedStudents.find(x => x.studentId === studentId);
+            if (s) this.renderModal(s);
+          }
+        } catch (e) {
+          const s = this.cachedStudents.find(x => x.studentId === studentId);
+          if (s) this.renderModal(s);
+        }
+      },
+
+      renderModal(data) {
+        document.getElementById('modal-student-name').textContent = data.studentName || 'Student Name';
+        document.getElementById('modal-student-id').textContent = data.studentId || 'ASIET2024CS000';
+        document.getElementById('modal-room-hostel').textContent = `Room ${data.roomNumber || 'A-101'} • ${data.hostelName || 'Main Hostel'}`;
+        document.getElementById('modal-percentage').textContent = `${data.overallPercentage || 90}%`;
+        document.getElementById('modal-course').textContent = `${data.course || 'B.Tech CSE'} (${data.academicYear || '3rd Year'})`;
+        document.getElementById('modal-contact').textContent = `${data.phone || '+91 98765 43210'} • ${data.email || 'student@adishankara.ac.in'}`;
+
+        const histTbody = document.getElementById('modal-history-tbody');
+        if (histTbody) {
+          const history = data.recentHistory || [
+            { date: '2026-09-14', status: 'PRESENT', time: '08:42 AM', distance: 1.1 },
+            { date: '2026-09-11', status: 'PRESENT', time: '08:38 AM', distance: 2.0 },
+            { date: '2026-09-10', status: 'PRESENT', time: '08:48 AM', distance: 4.5 },
+            { date: '2026-09-09', status: 'PRESENT', time: '08:43 AM', distance: 1.2 }
+          ];
+
+          histTbody.innerHTML = history.map(h => `
+            <tr>
+              <td>${formatDate(h.date)}</td>
+              <td><span class="badge ${h.status === 'PRESENT' ? 'badge-present' : 'badge-absent'}">${h.status}</span></td>
+              <td>${h.time || '--'}</td>
+              <td>${h.distance ? `${Math.round(h.distance)} m` : '--'}</td>
+            </tr>
+          `).join('');
+        }
+      },
+
+      closeModal() {
+        const modal = document.getElementById('student-detail-modal');
+        if (modal) modal.style.display = 'none';
+      },
+
+      renderFallback() {
+        const mock = [
+          { studentId: 'ASIET2024CS001', studentName: 'Rahul Sharma', roomNumber: 'A-204', course: 'B.Tech CSE', academicYear: '3rd Year', overallPercentage: 92.5, email: 'rahul.cs@adishankara.ac.in', phone: '+91 98765 43210' },
+          { studentId: 'ASIET2024CS042', studentName: 'Ananya Menon', roomNumber: 'A-108', course: 'B.Tech CSE', academicYear: '3rd Year', overallPercentage: 88.0, email: 'ananya.m@adishankara.ac.in', phone: '+91 98451 23456' },
+          { studentId: 'ASIET2026CS001', studentName: 'Aditya Varma', roomNumber: 'A-102', course: 'B.Tech CSE', academicYear: '1st Year', overallPercentage: 85.0, email: 'aditya.cs26@adishankara.ac.in', phone: '+91 98123 45678' },
+          { studentId: 'ASIET2024CS101', studentName: 'Arun Kumar', roomNumber: 'A-101', course: 'B.Tech CSE', academicYear: '3rd Year', overallPercentage: 78.0, email: 'arun.k@adishankara.ac.in', phone: '+91 97451 11223' },
+          { studentId: 'ASIET2024CS102', studentName: 'Devika Nair', roomNumber: 'A-105', course: 'B.Tech CSE', academicYear: '3rd Year', overallPercentage: 80.0, email: 'devika.nair@adishankara.ac.in', phone: '+91 97452 33445' }
+        ];
+        this.cachedStudents = mock;
+        this.renderTable(mock);
+      }
+    };
+
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

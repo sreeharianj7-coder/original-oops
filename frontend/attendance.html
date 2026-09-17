@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Attendance | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Mark Attendance</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="attendance.html" class="nav-link active">Mark Attendance</a></li>
+        <li><a href="history.html" class="nav-link">Attendance History</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Mark Attendance Main Container -->
+  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <div style="margin-bottom: 2rem;">
+      <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Daily Verification</span>
+      <h1 style="font-size: 2.1rem;">Mark Attendance</h1>
+      <p style="font-size: 0.95rem; margin-top: 0.25rem;">
+        Verify your hostel location before marking attendance.
+      </p>
+    </div>
+
+    <!-- STEP 1: Request Browser Location -->
+    <div class="step-card" id="step-1-card">
+      <div class="step-indicator">
+        <span>Step 1 of 3</span>
+      </div>
+      <h3 style="margin-bottom: 0.5rem;">Verify Your Location</h3>
+      <p style="font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Click below to retrieve your live GPS coordinates using the browser Geolocation API. The backend will calculate your distance from your assigned hostel using the Haversine formula.
+      </p>
+
+      <button type="button" id="btn-request-location" class="btn btn-primary btn-lg" onclick="AttendanceWorkflow.requestLocation()">
+        <span>📍</span> Verify My Location
+      </button>
+    </div>
+
+    <!-- STEP 2: Location Verification & Diagnostics Card -->
+    <div class="step-card" id="step-2-card" style="opacity: 0.6; pointer-events: none;">
+      <div class="step-indicator">
+        <span>Step 2 of 3</span>
+      </div>
+      <h3 style="margin-bottom: 0.5rem;">Location Verification</h3>
+      <p style="font-size: 0.88rem; margin-bottom: 1.25rem;">
+        Real-time coordinates and server-side distance calculation results.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: var(--bg-surface-warm); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.25rem;">
+        <div>
+          <span class="stat-label">Current Coordinates</span>
+          <div id="loc-coords" style="font-family: var(--font-mono); font-size: 0.88rem; font-weight: 600; color: var(--color-deep-brown); margin-top: 0.2rem;">
+            -- , --
+          </div>
+        </div>
+        <div>
+          <span class="stat-label">Distance From Hostel</span>
+          <div id="loc-distance" style="font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700; color: var(--color-deep-brown); margin-top: 0.1rem;">
+            --
+          </div>
+        </div>
+        <div>
+          <span class="stat-label">Allowed Perimeter Radius</span>
+          <div id="loc-radius" style="font-size: 0.95rem; font-weight: 600; color: var(--color-warm-brown); margin-top: 0.2rem;">
+            1000 meters
+          </div>
+        </div>
+        <div>
+          <span class="stat-label">Location Status</span>
+          <div id="loc-status" class="badge badge-neutral" style="margin-top: 0.2rem;">
+            NOT VERIFIED
+          </div>
+        </div>
+      </div>
+
+      <div id="loc-feedback-message" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+        Awaiting GPS coordinate verification...
+      </div>
+    </div>
+
+    <!-- STEP 3: Mark Attendance Action Card -->
+    <div class="step-card" id="step-3-card" style="opacity: 0.6; pointer-events: none;">
+      <div class="step-indicator">
+        <span>Step 3 of 3</span>
+      </div>
+      <h3 style="margin-bottom: 0.5rem;">Record Attendance</h3>
+      <p style="font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Once your location is verified inside the hostel perimeter, confirm to record your daily attendance in the institutional database.
+      </p>
+
+      <div id="attendance-action-area">
+        <button type="button" id="btn-mark-attendance" class="btn btn-primary btn-lg" onclick="AttendanceWorkflow.submitAttendance()" disabled>
+          <span>✓</span> Mark Attendance Now
+        </button>
+      </div>
+
+      <!-- Success Confirmation Box -->
+      <div id="attendance-success-box" style="display: none; background: var(--status-present-bg); border: 1px solid var(--status-present-border); padding: 1.5rem; border-radius: var(--radius-md); margin-top: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--status-present); margin-bottom: 0.5rem;">
+          <span style="font-size: 1.25rem; font-weight: 700;">✓</span>
+          <h4 style="color: var(--status-present); font-size: 1.1rem;">Attendance Recorded Successfully</h4>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; font-size: 0.85rem; margin-top: 0.75rem;">
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem;">Date</span>
+            <div id="success-date" style="font-weight: 600; color: var(--color-deep-brown);">--</div>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem;">Time</span>
+            <div id="success-time" style="font-weight: 600; color: var(--color-deep-brown);">--</div>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem;">Location</span>
+            <div style="font-weight: 600; color: var(--status-present);">Verified (Within Radius)</div>
+          </div>
+        </div>
+        <div style="margin-top: 1rem;">
+          <a href="dashboard.html" class="btn btn-sm btn-primary">Go to Dashboard Calendar &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Outside Hostel Error Box -->
+      <div id="attendance-rejected-box" style="display: none; background: var(--status-absent-bg); border: 1px solid var(--status-absent-border); padding: 1.5rem; border-radius: var(--radius-md); margin-top: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--status-absent); margin-bottom: 0.5rem;">
+          <span style="font-size: 1.25rem; font-weight: 700;">✕</span>
+          <h4 style="color: var(--status-absent); font-size: 1.1rem;">Attendance Cannot Be Marked</h4>
+        </div>
+        <p id="rejected-reason-text" style="font-size: 0.88rem; color: var(--color-deep-brown); margin-top: 0.35rem;">
+          Reason: You are outside the permitted hostel attendance area.
+        </p>
+        <div style="margin-top: 1rem;">
+          <button class="btn btn-sm btn-secondary" onclick="AttendanceWorkflow.resetWorkflow()">Try Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Future Face Recognition Card Notice -->
+    <div class="future-card" style="margin-top: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <h4 style="font-size: 1.05rem; color: var(--color-deep-brown);">Face Recognition</h4>
+        <span class="badge badge-neutral">Coming Soon • Future Module</span>
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+        Facial verification will be integrated into a future version of the system. The current production phase verifies student identity via secure session authentication and authoritative backend GPS geolocation verification.
+      </p>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/attendance.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Student Profile</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="history.html" class="nav-link">Attendance History</a></li>
+        <li><a href="profile.html" class="nav-link active">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Profile Main Container -->
+  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <div style="margin-bottom: 2rem;">
+      <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Institutional Record</span>
+      <h1 style="font-size: 2.1rem;">Student Profile</h1>
+      <p style="font-size: 0.95rem; margin-top: 0.25rem;">
+        Academic affiliation and residential hostel room allocation details.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+      
+      <!-- Card 1: Student Information -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Student Information</h3>
+          <span id="prof-student-id" class="badge badge-present">ASIET2024CS001</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+          <div>
+            <span class="stat-label">Full Name</span>
+            <div id="prof-name" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">Rahul Sharma</div>
+          </div>
+          <div>
+            <span class="stat-label">College Email</span>
+            <div id="prof-email" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">rahul.cs@adishankara.ac.in</div>
+          </div>
+          <div>
+            <span class="stat-label">Phone Number</span>
+            <div id="prof-phone" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">+91 98765 43210</div>
+          </div>
+          <div>
+            <span class="stat-label">Academic Year</span>
+            <div id="prof-year" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">3rd Year (2023-2027)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Academic & Hostel Allocation -->
+      <div class="card card-warm">
+        <div class="card-header">
+          <h3 class="card-title">Academic & Hostel Details</h3>
+          <span class="badge badge-neutral">Enrolled</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+          <div>
+            <span class="stat-label">College Name</span>
+            <div style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">
+              Adi Shankara Institute of Science and Technology
+            </div>
+          </div>
+          <div>
+            <span class="stat-label">Program & Department</span>
+            <div id="prof-course" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">
+              B.Tech Computer Science and Engineering
+            </div>
+            <div id="prof-dept" style="font-size: 0.82rem; color: var(--text-muted);">
+              Department of Computer Science and Engineering
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border-light);">
+            <div>
+              <span class="stat-label">Hostel Name</span>
+              <div id="prof-hostel" style="font-weight: 600; color: var(--color-warm-brown); margin-top: 0.15rem;">Main Campus Hostel</div>
+            </div>
+            <div>
+              <span class="stat-label">Room Number</span>
+              <div id="prof-room" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">A-204</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Signout Card -->
+    <div class="card" style="margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h4 style="font-size: 1.05rem; color: var(--color-deep-brown);">Session Security</h4>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Logged in via secure BCrypt authentication token.</p>
+      </div>
+      <button class="btn btn-secondary" onclick="Auth.logout()">
+        <span>🚪</span> Log Out of Student Account
+      </button>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

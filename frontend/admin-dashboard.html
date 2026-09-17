@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Administrator Dashboard | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="admin-dashboard.html" class="nav-brand">
+        <div class="brand-icon">🛡️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Administrator Portal</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="admin-dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="#attendance-table-section" class="nav-link">Attendance</a></li>
+        <li><a href="admin-students.html" class="nav-link">Students</a></li>
+        <li><a href="admin-profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Admin Dashboard Main Content -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <!-- Welcome Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.25rem;">
+      <div>
+        <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Warden Roll-Call Overview</span>
+        <h1 style="font-size: 2.25rem;">
+          <span id="admin-greeting">Good Morning</span>, <span id="admin-name-display">Warden</span>
+        </h1>
+        <p style="font-size: 0.95rem; margin-top: 0.2rem;">
+          Hostel: <strong id="admin-hostel-display" style="color: var(--color-deep-brown);">Adi Shankara Main Campus Hostel</strong> • 
+          Selected Date: <span id="admin-header-date" style="font-weight: 600; color: var(--color-warm-brown);">September 14, 2026</span>
+        </p>
+      </div>
+
+      <!-- Date Filter Controls -->
+      <div class="card card-warm" style="padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <label for="admin-date-picker" style="font-size: 0.82rem; font-weight: 600; color: var(--color-deep-brown);">
+          Select Date:
+        </label>
+        <input 
+          type="date" 
+          id="admin-date-picker" 
+          class="form-control" 
+          style="padding: 0.35rem 0.65rem; font-size: 0.88rem; width: auto;"
+        >
+        <button type="button" class="btn btn-sm btn-primary" onclick="AdminDashboardController.onDateFilterChange()">
+          View Attendance
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 MAJOR SUMMARY CARDS -->
+    <div class="stats-grid" style="margin-bottom: 2rem;">
+      <!-- Card 1: Total Students -->
+      <div class="stat-box">
+        <span class="stat-label">Total Students</span>
+        <div class="stat-value" id="stat-total-students">0</div>
+        <span class="stat-hint">Allocated in this hostel block</span>
+      </div>
+
+      <!-- Card 2: Present (Muted Green) -->
+      <div class="stat-box" style="border-left: 4px solid var(--status-present);">
+        <span class="stat-label" style="color: var(--status-present);">Present</span>
+        <div class="stat-value" id="stat-present-count" style="color: var(--status-present);">0</div>
+        <span class="stat-hint">Location verified & marked</span>
+      </div>
+
+      <!-- Card 3: Absent (Muted Terracotta) -->
+      <div class="stat-box" style="border-left: 4px solid var(--status-absent);">
+        <span class="stat-label" style="color: var(--status-absent);">Absent</span>
+        <div class="stat-value" id="stat-absent-count" style="color: var(--status-absent);">0</div>
+        <span class="stat-hint">Reported absent / leave</span>
+      </div>
+
+      <!-- Card 4: Not Marked (Muted Blue) -->
+      <div class="stat-box" style="border-left: 4px solid var(--status-not-marked);">
+        <span class="stat-label" style="color: var(--status-not-marked);">Not Marked</span>
+        <div class="stat-value" id="stat-not-marked-count" style="color: var(--status-not-marked);">0</div>
+        <span class="stat-hint">Awaiting roll-call submission</span>
+      </div>
+    </div>
+
+    <!-- Attendance Percentage Progress Banner -->
+    <div class="card" style="margin-bottom: 2.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; padding: 1.25rem 1.75rem;">
+      <div>
+        <span class="stat-label">Today's Hostel Attendance Rate</span>
+        <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-top: 0.2rem;">
+          <span id="stat-attendance-rate" style="font-family: var(--font-serif); font-size: 2.25rem; font-weight: 700; color: var(--color-deep-brown);">
+            0.0%
+          </span>
+          <span style="font-size: 0.88rem; color: var(--text-secondary);">compliance across hostel rooms</span>
+        </div>
+      </div>
+
+      <div style="flex-grow: 1; max-width: 450px; min-width: 240px;">
+        <div style="width: 100%; height: 10px; background: var(--color-cream); border-radius: var(--radius-full); overflow: hidden; border: 1px solid var(--border-light);">
+          <div id="stat-rate-bar" style="height: 100%; width: 0%; background: var(--status-present); border-radius: var(--radius-full); transition: width 0.5s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENT SEARCH & ATTENDANCE TABLE SECTION -->
+    <div id="attendance-table-section" style="margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2>Student Attendance Register</h2>
+          <p style="font-size: 0.9rem; margin-top: 0.2rem;">Click any student row to view full profile and attendance breakdown.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div style="width: 100%; max-width: 320px;">
+          <input 
+            type="text" 
+            id="admin-student-search" 
+            class="form-control" 
+            placeholder="Search student name, ID, or room..."
+            oninput="AdminDashboardController.filterTable()"
+          >
+        </div>
+      </div>
+
+      <!-- Attendance Table -->
+      <div class="card" style="padding: 1rem;">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Room</th>
+                <th>Course</th>
+                <th>Attendance Status</th>
+                <th>Location Status</th>
+                <th>Time</th>
+                <th>Distance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-attendance-tbody">
+              <tr>
+                <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                  Loading attendance records...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- STUDENT DETAIL MODAL -->
+  <div id="student-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(39, 30, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; background: var(--bg-surface); padding: 2rem; position: relative;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem;">
+        <div>
+          <span class="badge badge-neutral" style="font-size: 0.75rem;">Student Record</span>
+          <h3 id="modal-student-name" style="font-size: 1.45rem; margin-top: 0.25rem;">Student Name</h3>
+          <span id="modal-student-id" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-warm-brown);">ASIET2024CS000</span>
+        </div>
+        <button onclick="AdminDashboardController.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- Student Overview Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.88rem; background: var(--bg-surface-warm); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+        <div>
+          <span class="stat-label">Hostel & Room</span>
+          <div id="modal-room-hostel" style="font-weight: 600; color: var(--color-deep-brown);">Room A-101 • Main Hostel</div>
+        </div>
+        <div>
+          <span class="stat-label">Overall Attendance Rate</span>
+          <div id="modal-percentage" style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--status-present);">92.5%</div>
+        </div>
+        <div>
+          <span class="stat-label">Course & Department</span>
+          <div id="modal-course" style="color: var(--text-primary);">B.Tech CSE</div>
+        </div>
+        <div>
+          <span class="stat-label">Contact</span>
+          <div id="modal-contact" style="color: var(--text-primary);">+91 98765 43210</div>
+        </div>
+      </div>
+
+      <!-- Recent Attendance History Table -->
+      <h4 style="font-size: 1.05rem; margin-bottom: 0.75rem;">Recent Attendance History</h4>
+      <div class="table-container" style="max-height: 220px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Distance</th>
+            </tr>
+          </thead>
+          <tbody id="modal-history-tbody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: var(--text-muted);">No records found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="AdminDashboardController.closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

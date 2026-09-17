@@ -1,0 +1,44 @@
+# ==========================================================
+# GIT IGNORE CONFIGURATION
+# ==========================================================
+
+# Compiled Java Bytecode & Build Artifacts
+backend/target/
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# Node / Frontend Build Tools (if used)
+node_modules/
+dist/
+.npm/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini

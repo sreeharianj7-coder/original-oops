@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Administrator Registration | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon">🛡️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Administrator Registration</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="admin-login.html" class="btn btn-sm btn-secondary">Admin Login</a>
+        <a href="login.html" class="btn btn-sm btn-outline">Student Portal</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin Registration Main Container -->
+  <main class="container container-narrow" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div class="card" style="max-width: 640px; margin: 0 auto; padding: 2.5rem;">
+      <div style="margin-bottom: 2rem;">
+        <span class="badge badge-neutral" style="margin-bottom: 0.5rem;">Warden Onboarding</span>
+        <h1 style="font-size: 2rem;">Hostel Administrator Registration</h1>
+        <p style="font-size: 0.92rem; margin-top: 0.25rem;">
+          Create a designated warden administration account for residential oversight.
+        </p>
+      </div>
+
+      <form id="admin-register-form">
+        <!-- Personal & Admin Info -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            1. Administrator Information
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="admin-name">Full Name & Designation *</label>
+              <input type="text" id="admin-name" class="form-control" placeholder="e.g. Prof. K. Narayanan (Warden)" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="admin-id">Admin / Staff ID *</label>
+              <input type="text" id="admin-id" class="form-control" placeholder="e.g. ADM-HST-001" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="admin-phone">Phone Number *</label>
+              <input type="tel" id="admin-phone" class="form-control" placeholder="e.g. +91 94471 23456" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="admin-email">Official Institutional Email *</label>
+              <input type="email" id="admin-email" class="form-control" placeholder="e.g. warden@adishankara.ac.in" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Hostel -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            2. Assigned Hostel Block
+          </h4>
+          <div class="form-group">
+            <label class="form-label" for="admin-hostel">Hostel Block *</label>
+            <select id="admin-hostel" class="form-control" required>
+              <option value="1">Adi Shankara Institute Main Campus Hostel</option>
+              <option value="2">ASIET Boys Hostel (Block B)</option>
+              <option value="3">ASIET Ladies Hostel (Block C)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div style="margin-bottom: 2rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            3. Security Credentials
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="admin-password">Password *</label>
+              <input type="password" id="admin-password" class="form-control" placeholder="At least 6 characters" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="admin-confirm-password">Confirm Password *</label>
+              <input type="password" id="admin-confirm-password" class="form-control" placeholder="Repeat password" minlength="6" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="admin-reg-btn" class="btn btn-primary btn-block btn-lg">
+          <span>🛡️</span> Create Administrator Account
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
+        <p>Already have an admin account? <a href="admin-login.html" style="font-weight: 600;">Login here</a></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.redirectIfLoggedIn();
+
+      const form = document.getElementById('admin-register-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const pwd = document.getElementById('admin-password').value;
+        const confirmPwd = document.getElementById('admin-confirm-password').value;
+
+        if (pwd !== confirmPwd) {
+          showToast('Passwords do not match', 'error');
+          return;
+        }
+
+        const formData = {
+          adminId: document.getElementById('admin-id').value.trim(),
+          fullName: document.getElementById('admin-name').value.trim(),
+          email: document.getElementById('admin-email').value.trim(),
+          phone: document.getElementById('admin-phone').value.trim(),
+          hostelId: parseInt(document.getElementById('admin-hostel').value, 10),
+          password: pwd,
+          confirmPassword: confirmPwd
+        };
+
+        const btn = document.getElementById('admin-reg-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Creating Administrator Account...';
+
+        try {
+          const result = await Auth.registerAdmin(formData);
+          if (result.success) {
+            showToast('Administrator registered! Redirecting...', 'success');
+            setTimeout(() => {
+              window.location.href = 'admin-dashboard.html';
+            }, 600);
+          } else {
+            showToast(result.message || 'Registration failed', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<span>🛡️</span> Create Administrator Account';
+          }
+        } catch (err) {
+          showToast('An error occurred during registration', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>🛡️</span> Create Administrator Account';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

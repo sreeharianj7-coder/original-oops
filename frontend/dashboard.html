@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Student Portal</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="history.html" class="nav-link">Attendance History</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Dashboard Main Content -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <!-- Welcome Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.25rem;">
+      <div>
+        <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Student Dashboard</span>
+        <h1 style="font-size: 2.25rem; margin-top: 0.15rem;">
+          <span id="dash-greeting">Good Morning</span>, <span id="dash-welcome-name">Student</span>
+        </h1>
+        <p style="font-size: 0.95rem; margin-top: 0.2rem;">
+          Student ID: <strong id="dash-student-id-display" style="color: var(--color-deep-brown);">ASIET2024CS000</strong> • Adi Shankara Campus
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="attendance.html" class="btn btn-primary">
+          <span>📍</span> Mark Today's Attendance
+        </a>
+        <a href="history.html" class="btn btn-secondary">
+          <span>📋</span> View History
+        </a>
+      </div>
+    </div>
+
+    <!-- Top Row: Student Allocation & Today's Attendance Status -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- Student Info Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Residential Profile</h3>
+          <span id="dash-badge-year" class="badge badge-neutral">3rd Year</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+          <div>
+            <span class="stat-label">Course / Program</span>
+            <div id="dash-course" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">B.Tech CSE</div>
+          </div>
+          <div>
+            <span class="stat-label">Department</span>
+            <div id="dash-department" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">Computer Science</div>
+          </div>
+          <div>
+            <span class="stat-label">Hostel Allocation</span>
+            <div id="dash-hostel" style="font-weight: 600; color: var(--color-warm-brown); margin-top: 0.15rem;">Main Campus Hostel</div>
+          </div>
+          <div>
+            <span class="stat-label">Room Number</span>
+            <div id="dash-room" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">A-204</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; padding-top: 0.85rem; border-top: 1px solid var(--border-light); display: flex; justify-content: flex-end;">
+          <a href="profile.html" style="font-size: 0.85rem; font-weight: 600; color: var(--color-warm-brown);">
+            View Complete Profile &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Today's Attendance Status Card -->
+      <div class="card card-warm">
+        <div class="card-header">
+          <h3 class="card-title">Today's Roll-Call Status</h3>
+          <span id="dash-today-date-badge" class="badge badge-neutral">September 14, 2026</span>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin: 1rem 0;">
+          <div>
+            <div id="dash-today-status-badge" class="badge badge-not-marked" style="font-size: 0.9rem; padding: 0.45rem 1rem;">
+              NOT MARKED
+            </div>
+            <p id="dash-today-time-info" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.6rem;">
+              Daily roll-call location verification required
+            </p>
+          </div>
+          <div style="font-size: 2.75rem;">
+            📍
+          </div>
+        </div>
+
+        <div style="background: var(--bg-surface); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); font-size: 0.84rem;">
+          <span>Perimeter Policy: <strong>1000m radius from hostel</strong> (Server-side Haversine verification)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAJOR SECTION: Monthly Attendance Calendar & Monthly Summary -->
+    <div style="margin-bottom: 2.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="badge badge-neutral" style="margin-bottom: 0.35rem;">Calendar View</span>
+          <h2>Monthly Attendance</h2>
+        </div>
+
+        <!-- Month Navigation Controls -->
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button id="cal-prev-btn" class="calendar-nav-btn" onclick="CalendarController.prevMonth()">
+            &larr; Previous
+          </button>
+          <span id="cal-current-label" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--color-deep-brown); min-width: 150px; text-align: center;">
+            September 2026
+          </span>
+          <button id="cal-next-btn" class="calendar-nav-btn" onclick="CalendarController.nextMonth()">
+            Next &rarr;
+          </button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+        
+        <!-- Left: Interactive Calendar Card -->
+        <div class="calendar-card">
+          <!-- Calendar Day Headers -->
+          <div class="calendar-grid" id="calendar-grid-header">
+            <div class="calendar-day-header">Sun</div>
+            <div class="calendar-day-header">Mon</div>
+            <div class="calendar-day-header">Tue</div>
+            <div class="calendar-day-header">Wed</div>
+            <div class="calendar-day-header">Thu</div>
+            <div class="calendar-day-header">Fri</div>
+            <div class="calendar-day-header">Sat</div>
+          </div>
+
+          <!-- Calendar Dates Grid -->
+          <div class="calendar-grid" id="calendar-days-container" style="margin-top: 0.5rem;">
+            <!-- Injected dynamically by CalendarController.render() -->
+          </div>
+
+          <!-- Calendar Status Legend -->
+          <div class="calendar-legend">
+            <div class="legend-item">
+              <span class="status-dot dot-present"></span>
+              <span>Present</span>
+            </div>
+            <div class="legend-item">
+              <span class="status-dot dot-absent"></span>
+              <span>Absent</span>
+            </div>
+            <div class="legend-item">
+              <span class="status-dot dot-not-marked"></span>
+              <span>Not Marked</span>
+            </div>
+            <div class="legend-item" style="color: var(--text-muted);">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #CCC;"></span>
+              <span>Future Date (No Status)</span>
+            </div>
+          </div>
+
+          <!-- Popover / Details for Clicked Date -->
+          <div id="calendar-date-details" class="date-detail-popover" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+              <h4 id="detail-date-title" style="font-size: 1.05rem;">Date Details</h4>
+              <span id="detail-status-badge" class="badge badge-present">Present</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; font-size: 0.85rem;">
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Recorded Time</span>
+                <span id="detail-time" style="font-weight: 600; color: var(--color-deep-brown);">--</span>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Location Status</span>
+                <span id="detail-location-status" style="font-weight: 600; color: var(--status-present);">--</span>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Distance From Hostel</span>
+                <span id="detail-distance" style="font-weight: 600; color: var(--color-deep-brown);">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Monthly Summary Cards -->
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <div class="card card-warm">
+            <h4 style="margin-bottom: 1rem; color: var(--color-deep-brown);">Monthly Summary</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
+                <span style="font-size: 0.88rem; color: var(--text-secondary);">Present Days</span>
+                <strong id="summary-present" style="color: var(--status-present); font-size: 1.1rem;">0 days</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
+                <span style="font-size: 0.88rem; color: var(--text-secondary);">Absent Days</span>
+                <strong id="summary-absent" style="color: var(--status-absent); font-size: 1.1rem;">0 days</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
+                <span style="font-size: 0.88rem; color: var(--text-secondary);">Not Marked</span>
+                <strong id="summary-not-marked" style="color: var(--status-not-marked); font-size: 1.1rem;">0 days</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.25rem;">
+                <span style="font-size: 0.88rem; font-weight: 600; color: var(--color-deep-brown);">Attendance Rate</span>
+                <strong id="summary-percentage" style="font-size: 1.35rem; color: var(--color-warm-brown); font-family: var(--font-serif);">100%</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Future Biometrics Info Card -->
+          <div class="future-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h4 style="font-size: 1rem; color: var(--color-deep-brown);">Face Recognition</h4>
+              <span class="badge badge-neutral" style="font-size: 0.68rem;">Coming Soon</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+              Facial verification will be integrated into a future version of the system.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

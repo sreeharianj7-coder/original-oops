@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Administrator Login | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon">🛡️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Administrator Portal</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-sm btn-secondary">Student Login</a>
+        <a href="admin-register.html" class="btn btn-sm btn-outline">Admin Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin Login Main Container -->
+  <main class="container container-narrow" style="padding-top: 3.5rem; padding-bottom: 4rem;">
+    <div class="card" style="max-width: 480px; margin: 0 auto; padding: 2.25rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="badge badge-neutral" style="margin-bottom: 0.5rem;">Hostel Warden & Admin</span>
+        <h1 style="font-size: 1.85rem; margin-top: 0.25rem;">Administrator Login</h1>
+        <p style="font-size: 0.9rem; margin-top: 0.25rem;">Sign in to access hostel roll-call and monitoring</p>
+      </div>
+
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label class="form-label" for="admin-identifier">Admin ID or Email</label>
+          <input 
+            type="text" 
+            id="admin-identifier" 
+            class="form-control" 
+            placeholder="e.g. ADM-HST-001 or warden@adishankara.ac.in" 
+            required 
+            autocomplete="username"
+          >
+          <span class="form-hint">Authorized warden or hostel administration account.</span>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="form-label" for="admin-password">Password</label>
+            <a href="#" onclick="showToast('Contact IT administrator for password reset.', 'info'); return false;" style="font-size: 0.8rem;">Forgot Password?</a>
+          </div>
+          <input 
+            type="password" 
+            id="admin-password" 
+            class="form-control" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" id="admin-login-btn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+          <span>🛡️</span> Administrator Login
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
+        <p>Need warden access? <a href="admin-register.html" style="font-weight: 600;">Register Administrator</a></p>
+        <div style="margin-top: 0.75rem;">
+          <a href="login.html" style="font-size: 0.82rem; color: var(--text-muted);">Looking for Student Login? Click here &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.redirectIfLoggedIn();
+
+      const form = document.getElementById('admin-login-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const identifier = document.getElementById('admin-identifier').value.trim();
+        const password = document.getElementById('admin-password').value;
+        const btn = document.getElementById('admin-login-btn');
+
+        btn.disabled = true;
+        btn.innerHTML = 'Verifying Credentials...';
+
+        try {
+          const result = await Auth.loginAdmin(identifier, password);
+          if (result.success) {
+            showToast('Administrator login successful!', 'success');
+            setTimeout(() => {
+              window.location.href = 'admin-dashboard.html';
+            }, 600);
+          } else {
+            showToast(result.message || 'Invalid administrator credentials', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<span>🛡️</span> Administrator Login';
+          }
+        } catch (err) {
+          showToast('An unexpected error occurred during admin authentication', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>🛡️</span> Administrator Login';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

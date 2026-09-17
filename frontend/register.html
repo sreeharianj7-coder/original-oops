@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Student Registration</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-sm btn-secondary">Student Login</a>
+        <a href="admin-register.html" class="btn btn-sm btn-outline">Admin Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Registration Main Container -->
+  <main class="container container-narrow" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div class="card" style="max-width: 680px; margin: 0 auto; padding: 2.5rem;">
+      <div style="margin-bottom: 2rem;">
+        <span class="badge badge-present" style="margin-bottom: 0.5rem;">Student Onboarding</span>
+        <h1 style="font-size: 2rem;">Create Your Account</h1>
+        <p style="font-size: 0.92rem; margin-top: 0.25rem;">
+          Register as a resident student at Adi Shankara Institute of Science and Technology.
+        </p>
+      </div>
+
+      <form id="register-form">
+        <!-- Personal Details -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            1. Personal Details
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="reg-name">Full Name *</label>
+              <input type="text" id="reg-name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-student-id">Student ID / Roll No *</label>
+              <input type="text" id="reg-student-id" class="form-control" placeholder="e.g. ASIET2024CS001" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">Phone Number *</label>
+              <input type="tel" id="reg-phone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="reg-email">College Email Address *</label>
+              <input type="email" id="reg-email" class="form-control" placeholder="e.g. rahul.cs@adishankara.ac.in" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Details -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            2. Academic Details
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="reg-course">Course / Program *</label>
+              <input type="text" id="reg-course" class="form-control" value="B.Tech Computer Science and Engineering" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-dept">Department *</label>
+              <input type="text" id="reg-dept" class="form-control" value="Computer Science and Engineering" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-year">Academic Year *</label>
+              <select id="reg-year" class="form-control" required>
+                <option value="1st Year (2026-2030)">1st Year (2026-2030)</option>
+                <option value="2nd Year (2025-2029)">2nd Year (2025-2029)</option>
+                <option value="3rd Year (2023-2027)" selected>3rd Year (2023-2027)</option>
+                <option value="4th Year (2022-2026)">4th Year (2022-2026)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hostel Details -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            3. Hostel Allocation
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="reg-hostel">Hostel Name *</label>
+              <select id="reg-hostel" class="form-control" required>
+                <option value="1">Adi Shankara Institute Main Campus Hostel</option>
+                <option value="2">ASIET Boys Hostel (Block B)</option>
+                <option value="3">ASIET Ladies Hostel (Block C)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-room">Room Number *</label>
+              <input type="text" id="reg-room" class="form-control" placeholder="e.g. A-204" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div style="margin-bottom: 2rem;">
+          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
+            4. Security Credentials
+          </h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Password *</label>
+              <input type="password" id="reg-password" class="form-control" placeholder="At least 6 characters" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-confirm-password">Confirm Password *</label>
+              <input type="password" id="reg-confirm-password" class="form-control" placeholder="Repeat password" minlength="6" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block btn-lg">
+          <span>📝</span> Create Account
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
+        <p>Already have an account? <a href="login.html" style="font-weight: 600;">Login here</a></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.redirectIfLoggedIn();
+
+      const form = document.getElementById('register-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const pwd = document.getElementById('reg-password').value;
+        const confirmPwd = document.getElementById('reg-confirm-password').value;
+
+        if (pwd !== confirmPwd) {
+          showToast('Passwords do not match', 'error');
+          return;
+        }
+
+        const formData = {
+          studentId: document.getElementById('reg-student-id').value.trim(),
+          name: document.getElementById('reg-name').value.trim(),
+          email: document.getElementById('reg-email').value.trim(),
+          phone: document.getElementById('reg-phone').value.trim(),
+          course: document.getElementById('reg-course').value.trim(),
+          department: document.getElementById('reg-dept').value.trim(),
+          academicYear: document.getElementById('reg-year').value,
+          hostelId: parseInt(document.getElementById('reg-hostel').value, 10),
+          roomNumber: document.getElementById('reg-room').value.trim(),
+          password: pwd,
+          confirmPassword: confirmPwd
+        };
+
+        const btn = document.getElementById('reg-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Creating Account...';
+
+        try {
+          const result = await Auth.registerStudent(formData);
+          if (result.success) {
+            showToast('Registration successful! Redirecting...', 'success');
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 600);
+          } else {
+            showToast(result.message || 'Registration failed', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<span>📝</span> Create Account';
+          }
+        } catch (err) {
+          showToast('An unexpected error occurred during registration', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>📝</span> Create Account';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

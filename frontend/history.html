@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance History | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Attendance History</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="history.html" class="nav-link active">Attendance History</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Attendance History Main Container -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Audit Log</span>
+        <h1 style="font-size: 2.1rem;">Attendance History</h1>
+        <p style="font-size: 0.95rem; margin-top: 0.25rem;">
+          Personal record of verified roll-call entries and GPS verification distances.
+        </p>
+      </div>
+
+      <!-- Quick Filter -->
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <select id="filter-status" class="form-control" style="width: auto; padding: 0.45rem 0.85rem;" onchange="HistoryController.applyFilter()">
+          <option value="ALL">All Statuses</option>
+          <option value="PRESENT">Present Only</option>
+          <option value="ABSENT">Absent Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Attendance Table Card -->
+    <div class="card" style="padding: 1.25rem;">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Location Status</th>
+              <th>Distance</th>
+              <th>Attendance Status</th>
+              <th>Verification Mode</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body">
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                Loading attendance history...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/history.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>
