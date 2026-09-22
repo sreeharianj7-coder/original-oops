@@ -110,6 +110,24 @@ def enroll_faces():
 
     all_valid = (valid_count == len(images))
 
+    # Requirement 6: Verify all uploaded registration photos belong to the same student
+    if valid_count > 1:
+        raw_embeddings = [item["embedding"] for item in valid_embeddings]
+        consistency = EmbeddingService.verify_same_person_consistency(raw_embeddings)
+        if not consistency["isConsistent"]:
+            logger.warning(f"Registration rejected for {student_id}: {consistency['message']}")
+            return jsonify({
+                "success": False,
+                "studentId": student_id,
+                "totalSubmitted": len(images),
+                "validCount": 0,
+                "registeredPhotos": 0,
+                "allPhotosValid": False,
+                "message": consistency["message"],
+                "results": results,
+                "embeddings": []
+            }), 400
+
     logger.info(
         f"Enrollment processed for {student_id}: {valid_count}/{len(images)} valid photos. "
         f"All Valid: {all_valid}"
@@ -125,6 +143,7 @@ def enroll_faces():
         "results": results,
         "embeddings": valid_embeddings
     }), 200
+
 
 
 @app.route("/face/verify", methods=["POST"])

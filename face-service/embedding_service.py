@@ -130,3 +130,52 @@ class EmbeddingService:
             "evaluatedCount": len(candidates),
             "message": "Face verification successful" if is_matched else "Face not recognized. Similarity below threshold."
         }
+
+    @classmethod
+    def verify_same_person_consistency(cls, embeddings: list, min_similarity: float = 0.55) -> dict:
+        """
+        Verifies that all uploaded registration photos belong to the same student identity.
+        Compares each photo's 512-d embedding vector against the ensemble centroid.
+        If any photo has similarity < min_similarity (default 0.55), flags inter-photo inconsistency.
+        """
+        if not embeddings or len(embeddings) <= 1:
+            return {
+                "isConsistent": True,
+                "failedIndex": None,
+                "message": "Consistency check passed (single photo or empty)."
+            }
+
+        try:
+            import numpy as np
+            vectors = [np.array(emb, dtype=np.float32).flatten() for emb in embeddings]
+
+            # Compute mean centroid of embeddings
+            centroid = np.mean(vectors, axis=0)
+            norm = np.linalg.norm(centroid)
+            if norm > 0:
+                centroid = centroid / norm
+
+            for idx, vec in enumerate(vectors):
+                sim = compute_cosine_similarity(vec, centroid)
+                if sim < min_similarity:
+                    photo_num = idx + 1
+                    logger.warning(
+                        f"Consistency Check Failed for Photo #{photo_num}: "
+                        f"Cosine similarity to centroid = {sim:.4f} (Required >= {min_similarity})"
+                    )
+                    return {
+                        "isConsistent": False,
+                        "failedIndex": photo_num,
+                        "similarity": round(sim, 4),
+                        "message": "One or more photos appear to belong to a different person. Please upload photos of the same student."
+                    }
+
+            return {
+                "isConsistent": True,
+                "failedIndex": None,
+                "message": "All uploaded registration photos belong to the same student."
+            }
+        except Exception as ex:
+            logger.error(f"Error during inter-photo consistency check: {ex}")
+            return {"isConsistent": True, "failedIndex": None, "message": str(ex)}
+
