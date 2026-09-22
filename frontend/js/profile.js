@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch updated student profile from backend if available
   fetchLiveProfile(student);
+  fetchFaceStatus(student);
 });
 
 function renderProfile(student) {
@@ -55,3 +56,30 @@ async function fetchLiveProfile(cachedStudent) {
     console.warn('Backend profile API unreachable, using cached session data', err);
   }
 }
+
+async function fetchFaceStatus(student) {
+  if (!student || !student.studentId) return;
+  const badge = document.getElementById('prof-face-badge');
+  const info = document.getElementById('prof-face-info');
+  if (!badge) return;
+
+  try {
+    const response = await fetch(`${CONFIG.API_BASE_URL}/face/status?studentId=${encodeURIComponent(student.studentId)}`);
+    const result = await response.json();
+    if (response.ok && result.data) {
+      const data = result.data;
+      if (data.registered) {
+        badge.className = 'badge badge-present';
+        badge.textContent = 'Registered';
+        if (info) info.textContent = `${data.photoCount} of ${data.maxAllowed} FaceNet 512-d templates enrolled.`;
+      } else {
+        badge.className = 'badge badge-not-marked';
+        badge.textContent = 'Not Registered';
+        if (info) info.textContent = 'No face photos registered yet. Register photos to enable face verification.';
+      }
+    }
+  } catch (e) {
+    // Default
+  }
+}
+

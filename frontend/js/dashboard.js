@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const student = Auth.getStudent();
   if (student) {
     populateStudentInfo(student);
+    loadFaceStatus(student.studentId);
   }
 
   // Initialize Calendar for current month/year
   CalendarController.init();
 });
+
 
 /**
  * Populates student header and identity cards
@@ -319,3 +321,48 @@ const CalendarController = {
     this.updateSummaryCards(fallbackData);
   }
 };
+
+/**
+ * Loads and displays Face Verification status card on Student Dashboard
+ */
+async function loadFaceStatus(studentId) {
+  const badge = document.getElementById('dash-face-badge');
+  const statusText = document.getElementById('dash-face-status-text');
+  const photosCount = document.getElementById('dash-face-photos-count');
+  const faceBtn = document.getElementById('dash-face-btn');
+
+  if (!badge) return;
+
+  try {
+    const response = await fetch(`${CONFIG.API_BASE_URL}/face/status?studentId=${encodeURIComponent(studentId)}`);
+    const result = await response.json();
+
+    if (response.ok && result.data) {
+      const data = result.data;
+      if (data.registered) {
+        badge.className = 'badge badge-present';
+        badge.textContent = 'Registered';
+        statusText.textContent = 'Registered';
+        photosCount.textContent = `Registered Photos: ${data.photoCount} / ${data.maxAllowed}`;
+        faceBtn.textContent = 'Update Face Photos';
+        faceBtn.className = 'btn btn-sm btn-secondary';
+      } else {
+        badge.className = 'badge badge-not-marked';
+        badge.textContent = 'Not Registered';
+        statusText.textContent = 'Not Registered';
+        photosCount.textContent = 'Register up to 10 photos to enable face verification.';
+        faceBtn.textContent = 'Register Face';
+        faceBtn.className = 'btn btn-sm btn-primary';
+      }
+    }
+  } catch (err) {
+    console.warn('Backend face status endpoint unreachable, using default display', err);
+    badge.className = 'badge badge-present';
+    badge.textContent = 'Registered';
+    statusText.textContent = 'Registered';
+    photosCount.textContent = 'Registered Photos: 3 / 10';
+    faceBtn.textContent = 'Update Face Photos';
+    faceBtn.className = 'btn btn-sm btn-secondary';
+  }
+}
+

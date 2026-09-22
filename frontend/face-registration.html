@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Face | HostelTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .upload-dropzone {
+      border: 2px dashed var(--color-sand);
+      border-radius: var(--radius-lg);
+      background: var(--bg-surface-warm);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-normal);
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--color-warm-brown);
+      background: var(--bg-surface-subtle);
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .photo-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-subtle);
+      aspect-ratio: 1;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(39, 30, 23, 0.75);
+      color: var(--color-ivory);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+    .photo-remove-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--status-absent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+    .photo-remove-btn:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <div class="brand-info">
+          <span class="brand-title">HostelTrack</span>
+          <span class="brand-subtitle">Face Registration</span>
+        </div>
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu-list">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="face-registration.html" class="nav-link active">Face Registration</a></li>
+        <li><a href="history.html" class="nav-link">Attendance History</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-section">
+        <!-- Rendered by Auth.initNav() -->
+      </div>
+
+      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </nav>
+
+  <!-- Face Registration Main Container -->
+  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+    
+    <!-- Header -->
+    <div style="margin-bottom: 2rem;">
+      <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Biometric Profile</span>
+      <h1 style="font-size: 2.1rem;">Register Your Face</h1>
+      <p style="font-size: 0.95rem; margin-top: 0.25rem; color: var(--text-secondary);">
+        Register your face using up to 10 clear photos.
+      </p>
+    </div>
+
+    <!-- Status Overview Card -->
+    <div class="card card-warm" style="margin-bottom: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <span class="stat-label">Current Registration Status</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+            <span id="face-status-badge" class="badge badge-neutral">CHECKING...</span>
+            <span id="face-count-text" style="font-size: 0.88rem; color: var(--text-secondary);">-- / 10 photos enrolled</span>
+          </div>
+        </div>
+        <button id="btn-reset-faces" class="btn btn-sm btn-secondary" style="display: none;" onclick="FaceRegistrationController.resetProfiles()">
+          Reset Face Profile
+        </button>
+      </div>
+    </div>
+
+    <!-- Upload Card -->
+    <div class="card" style="margin-bottom: 1.75rem;">
+      <div class="card-header">
+        <h3 class="card-title">Upload Face Photos</h3>
+        <span id="selected-counter-badge" class="badge badge-neutral">0 / 10 Selected</span>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        Select up to 10 clear photos from your device under varied lighting and angles. Each photo must contain exactly one face.
+      </p>
+
+      <!-- Dropzone -->
+      <div class="upload-dropzone" id="upload-dropzone" onclick="document.getElementById('face-file-input').click()">
+        <input type="file" id="face-file-input" multiple accept="image/jpeg,image/png,image/webp" style="display: none;" onchange="FaceRegistrationController.handleFileSelect(event)">
+        <div style="font-size: 2.25rem; margin-bottom: 0.5rem;">📸</div>
+        <div style="font-weight: 600; color: var(--color-deep-brown); margin-bottom: 0.25rem;">
+          Click to Browse or Drag Photos Here
+        </div>
+        <div style="font-size: 0.82rem; color: var(--text-muted);">
+          Supported formats: JPEG, PNG, WebP • Maximum 10 photos allowed
+        </div>
+      </div>
+
+      <!-- Photo Previews Grid -->
+      <div id="photo-preview-grid" class="photo-grid" style="display: none;">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="margin-top: 1.75rem; display: flex; justify-content: flex-end; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <button id="btn-clear-selection" class="btn btn-secondary" style="display: none;" onclick="FaceRegistrationController.clearSelection()">
+          Clear All
+        </button>
+        <button id="btn-submit-faces" class="btn btn-primary btn-lg" disabled onclick="FaceRegistrationController.submitFaces()">
+          <span>✓</span> Submit & Enroll Faces
+        </button>
+      </div>
+    </div>
+
+    <!-- Validation / Feedback Container -->
+    <div id="enroll-results-box" style="display: none; margin-bottom: 1.75rem;">
+      <!-- Detailed photo-by-photo results rendered dynamically -->
+    </div>
+
+    <!-- Privacy Notice Card -->
+    <div style="background: var(--bg-surface-warm); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+      <div style="display: flex; gap: 0.6rem; align-items: flex-start;">
+        <span style="font-size: 1.1rem;">🔒</span>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+          <strong style="color: var(--color-deep-brown); display: block; margin-bottom: 0.2rem;">Biometric Privacy Notice</strong>
+          Face information is used only for attendance verification. Only authorized student data should be registered. Raw images are not permanently stored and numerical embeddings are encrypted and protected on institutional servers.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/face-registration.js"></script>
+  <script>
+    function toggleMobileNav() {
+      const menu = document.getElementById('nav-menu-list');
+      if (menu) menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

@@ -36,17 +36,21 @@ public class AdminService {
     private final HostelRepository hostelRepository;
     private final StudentRepository studentRepository;
     private final AttendanceRepository attendanceRepository;
+    private final StudentFaceProfileRepository faceProfileRepository;
 
     @Autowired
     public AdminService(AdminRepository adminRepository, 
                         HostelRepository hostelRepository, 
                         StudentRepository studentRepository, 
-                        AttendanceRepository attendanceRepository) {
+                        AttendanceRepository attendanceRepository,
+                        StudentFaceProfileRepository faceProfileRepository) {
         this.adminRepository = adminRepository;
         this.hostelRepository = hostelRepository;
         this.studentRepository = studentRepository;
         this.attendanceRepository = attendanceRepository;
+        this.faceProfileRepository = faceProfileRepository;
     }
+
 
     /**
      * Registers a new hostel administrator.
@@ -190,6 +194,9 @@ public class AdminService {
             long studentPresent = attendanceRepository.countByStudentIdAndAttendanceStatus(student.getStudentId(), "PRESENT");
             double studentPct = studentTotal > 0 ? Math.round(((double) studentPresent / studentTotal) * 1000.0) / 10.0 : 100.0;
 
+            boolean isFaceReg = faceProfileRepository.existsByStudentId(student.getStudentId());
+            String faceStatus = isFaceReg ? "Registered" : "Not Registered";
+
             StudentAttendanceDetailDTO detail = new StudentAttendanceDetailDTO(
                     student.getStudentId(),
                     student.getName(),
@@ -204,7 +211,9 @@ public class AdminService {
                     locationStatus,
                     timeStr,
                     distanceStr,
-                    studentPct
+                    studentPct,
+                    isFaceReg,
+                    faceStatus
             );
 
             studentDetails.add(detail);
@@ -245,6 +254,9 @@ public class AdminService {
             String todayTime = todayAtt.map(a -> a.getAttendanceTime().format(TIME_FORMATTER)).orElse("--");
             String todayDist = todayAtt.map(a -> String.format("%.0f m", a.getDistanceFromHostel())).orElse("--");
 
+            boolean isFaceReg = faceProfileRepository.existsByStudentId(s.getStudentId());
+            String faceStatus = isFaceReg ? "Registered" : "Not Registered";
+
             StudentAttendanceDetailDTO dto = new StudentAttendanceDetailDTO(
                     s.getStudentId(),
                     s.getName(),
@@ -259,7 +271,9 @@ public class AdminService {
                     todayAtt.map(Attendance::getLocationStatus).orElse("--"),
                     todayTime,
                     todayDist,
-                    pct
+                    pct,
+                    isFaceReg,
+                    faceStatus
             );
             results.add(dto);
         }
@@ -291,6 +305,9 @@ public class AdminService {
                 false
         )).collect(Collectors.toList());
 
+        boolean isFaceReg = faceProfileRepository.existsByStudentId(student.getStudentId());
+        String faceStatus = isFaceReg ? "Registered" : "Not Registered";
+
         StudentAttendanceDetailDTO detail = new StudentAttendanceDetailDTO(
                 student.getStudentId(),
                 student.getName(),
@@ -305,9 +322,15 @@ public class AdminService {
                 history.isEmpty() ? "--" : history.get(0).getLocationStatus(),
                 history.isEmpty() ? "--" : (history.get(0).getAttendanceTime() != null ? history.get(0).getAttendanceTime().format(TIME_FORMATTER) : "--"),
                 history.isEmpty() ? "--" : String.format("%.0f m", history.get(0).getDistanceFromHostel()),
-                pct
+                pct,
+                isFaceReg,
+                faceStatus
         );
         detail.setRecentHistory(historyDTOs);
+
+        return detail;
+    }
+
 
         return detail;
     }

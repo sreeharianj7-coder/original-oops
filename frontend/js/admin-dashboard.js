@@ -221,7 +221,14 @@ const AdminDashboardController = {
     document.getElementById('modal-course').textContent = `${data.course || 'B.Tech CSE'} (${data.academicYear || '3rd Year'})`;
     document.getElementById('modal-contact').textContent = `${data.phone || '+91 98765 43210'} • ${data.email || 'student@adishankara.ac.in'}`;
 
+    const faceEl = document.getElementById('modal-face-status');
+    if (faceEl) {
+      const isReg = data.faceRegistered || data.faceStatus === 'Registered';
+      faceEl.innerHTML = `<span class="badge ${isReg ? 'badge-present' : 'badge-not-marked'}">Face Verification: ${isReg ? 'Registered' : 'Not Registered'}</span>`;
+    }
+
     const histTbody = document.getElementById('modal-history-tbody');
+
     if (histTbody) {
       const history = data.recentHistory || [
         { date: '2026-09-14', status: 'PRESENT', time: '08:42 AM', distance: 1.1 },

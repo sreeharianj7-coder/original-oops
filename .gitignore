@@ -42,3 +42,21 @@ dist/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Python & Face Recognition Microservice
+face-service/venv/
+face-service/.venv/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+face-service/temp_faces/
+temp_faces/
+*.pt
+*.pth
+checkpoints/
+

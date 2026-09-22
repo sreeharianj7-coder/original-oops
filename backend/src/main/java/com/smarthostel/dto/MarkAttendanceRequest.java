@@ -16,6 +16,8 @@ public class MarkAttendanceRequest {
 
     private Double accuracy;
 
+    private String faceImage; // Optional Base64 captured frame for Face Verification
+
     public MarkAttendanceRequest() {
     }
 
@@ -25,6 +27,15 @@ public class MarkAttendanceRequest {
         this.longitude = longitude;
         this.accuracy = accuracy;
     }
+
+    public MarkAttendanceRequest(String studentId, Double latitude, Double longitude, Double accuracy, String faceImage) {
+        this.studentId = studentId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.accuracy = accuracy;
+        this.faceImage = faceImage;
+    }
+
 
     public String getStudentId() {
         return studentId;
@@ -57,4 +68,13 @@ public class MarkAttendanceRequest {
     public void setAccuracy(Double accuracy) {
         this.accuracy = accuracy;
     }
+
+    public String getFaceImage() {
+        return faceImage;
+    }
+
+    public void setFaceImage(String faceImage) {
+        this.faceImage = faceImage;
+    }
 }
+

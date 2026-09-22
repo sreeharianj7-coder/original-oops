@@ -22,9 +22,11 @@
       <ul class="nav-menu" id="nav-menu-list">
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="face-registration.html" class="nav-link">Face Registration</a></li>
         <li><a href="history.html" class="nav-link">Attendance History</a></li>
         <li><a href="profile.html" class="nav-link active">Profile</a></li>
       </ul>
+
 
       <div class="nav-actions" id="nav-auth-section">
         <!-- Rendered by Auth.initNav() -->
@@ -110,6 +112,22 @@
       </div>
     </div>
 
+    <!-- Card 3: Biometric Facial Profile -->
+    <div class="card card-warm" style="margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <h4 style="font-size: 1.05rem; color: var(--color-deep-brown);">Facial Biometric Enrollment</h4>
+          <span id="prof-face-badge" class="badge badge-present">Registered</span>
+        </div>
+        <p id="prof-face-info" style="font-size: 0.85rem; color: var(--text-secondary);">
+          Pretrained FaceNet model (VGGFace2) • 512-d embeddings enrolled
+        </p>
+      </div>
+      <a href="face-registration.html" class="btn btn-secondary">
+        <span>📸</span> Manage Face Photos &rarr;
+      </a>
+    </div>
+
     <!-- Security & Signout Card -->
     <div class="card" style="margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
       <div>
@@ -120,6 +138,7 @@
         <span>🚪</span> Log Out of Student Account
       </button>
     </div>
+
   </main>
 
   <script src="js/config.js"></script>

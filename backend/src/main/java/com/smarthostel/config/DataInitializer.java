@@ -32,17 +32,21 @@ public class DataInitializer implements CommandLineRunner {
     private final StudentRepository studentRepository;
     private final AdminRepository adminRepository;
     private final AttendanceRepository attendanceRepository;
+    private final StudentFaceProfileRepository faceProfileRepository;
 
     @Autowired
     public DataInitializer(HostelRepository hostelRepository, 
                            StudentRepository studentRepository, 
                            AdminRepository adminRepository,
-                           AttendanceRepository attendanceRepository) {
+                           AttendanceRepository attendanceRepository,
+                           StudentFaceProfileRepository faceProfileRepository) {
         this.hostelRepository = hostelRepository;
         this.studentRepository = studentRepository;
         this.adminRepository = adminRepository;
         this.attendanceRepository = attendanceRepository;
+        this.faceProfileRepository = faceProfileRepository;
     }
+
 
     @Override
     public void run(String... args) {
@@ -239,5 +243,25 @@ public class DataInitializer implements CommandLineRunner {
 
             log.info("Sample students, admins, and attendance records seeded successfully.");
         }
+
+        // 4. Initialize Sample Face Profiles for Student 1 (Rahul Sharma - ASIET2024CS001) if empty
+        if (faceProfileRepository.count() == 0) {
+            log.info("Seeding sample FaceNet biometric profiles for demonstration student ASIET2024CS001...");
+            // Seed 3 normalized 512-d template vectors
+            for (int i = 1; i <= 3; i++) {
+                StringBuilder sb = new StringBuilder("[");
+                for (int k = 0; k < 512; k++) {
+                    double val = Math.sin((i * 10) + (k * 0.1)) * 0.044;
+                    sb.append(String.format(java.util.Locale.US, "%.6f", val));
+                    if (k < 511) sb.append(",");
+                }
+                sb.append("]");
+
+                StudentFaceProfile profile = new StudentFaceProfile("ASIET2024CS001", i, sb.toString());
+                faceProfileRepository.save(profile);
+            }
+            log.info("Seeded 3 sample face profiles for student ASIET2024CS001.");
+        }
     }
 }
+

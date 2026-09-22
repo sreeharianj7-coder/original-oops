@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS attendance (
     INDEX idx_student_date (student_id, attendance_date),
     INDEX idx_hostel_date (hostel_id, attendance_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 5. STUDENT FACE PROFILES TABLE (Pretrained FaceNet Embeddings, Max 10 Photos/Student)
+CREATE TABLE IF NOT EXISTS student_face_profiles (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(50) NOT NULL,
+    photo_index INT NOT NULL COMMENT 'Index value from 1 to 10 (max 10 photos per student)',
+    embedding MEDIUMTEXT NOT NULL COMMENT 'Pretrained FaceNet 512-dimensional numerical embedding (JSON format)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uq_student_photo_index UNIQUE (student_id, photo_index),
+    CONSTRAINT chk_photo_index CHECK (photo_index BETWEEN 1 AND 10),
+    CONSTRAINT fk_face_profiles_student FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    INDEX idx_face_student (student_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

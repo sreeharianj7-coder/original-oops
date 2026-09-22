@@ -18,6 +18,8 @@ public class StudentAttendanceDetailDTO {
     private String time;
     private String distance;
     private double overallPercentage;
+    private boolean faceRegistered;
+    private String faceStatus; // "Registered" | "Not Registered"
     private List<DayAttendanceDTO> recentHistory;
 
     public StudentAttendanceDetailDTO() {
@@ -28,6 +30,16 @@ public class StudentAttendanceDetailDTO {
                                       String phone, String email, String hostelName, 
                                       String attendanceStatus, String locationStatus, 
                                       String time, String distance, double overallPercentage) {
+        this(studentId, studentName, roomNumber, course, department, academicYear, phone, email, hostelName,
+             attendanceStatus, locationStatus, time, distance, overallPercentage, false, "Not Registered");
+    }
+
+    public StudentAttendanceDetailDTO(String studentId, String studentName, String roomNumber, 
+                                      String course, String department, String academicYear, 
+                                      String phone, String email, String hostelName, 
+                                      String attendanceStatus, String locationStatus, 
+                                      String time, String distance, double overallPercentage,
+                                      boolean faceRegistered, String faceStatus) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.roomNumber = roomNumber;
@@ -42,7 +54,10 @@ public class StudentAttendanceDetailDTO {
         this.time = time;
         this.distance = distance;
         this.overallPercentage = overallPercentage;
+        this.faceRegistered = faceRegistered;
+        this.faceStatus = faceStatus;
     }
+
 
     public String getStudentId() {
         return studentId;
@@ -156,9 +171,26 @@ public class StudentAttendanceDetailDTO {
         this.overallPercentage = overallPercentage;
     }
 
+    public boolean isFaceRegistered() {
+        return faceRegistered;
+    }
+
+    public void setFaceRegistered(boolean faceRegistered) {
+        this.faceRegistered = faceRegistered;
+    }
+
+    public String getFaceStatus() {
+        return faceStatus;
+    }
+
+    public void setFaceStatus(String faceStatus) {
+        this.faceStatus = faceStatus;
+    }
+
     public List<DayAttendanceDTO> getRecentHistory() {
         return recentHistory;
     }
+
 
     public void setRecentHistory(List<DayAttendanceDTO> recentHistory) {
         this.recentHistory = recentHistory;

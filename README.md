@@ -1,103 +1,165 @@
-# SMART HOSTEL ATTENDANCE MANAGEMENT SYSTEM USING GEOLOCATION
+# SMART HOSTEL ATTENDANCE MANAGEMENT SYSTEM USING FACE RECOGNITION AND GEOLOCATION
 
-> **College Project**: Smart Hostel Attendance Management System  
+> **College Project**: Smart Hostel Attendance Management System Using Face Recognition and Geolocation  
 > **Institution**: Adi Shankara Institute of Science and Technology, Kalady  
-> **Current Version**: Phase 1 (Role-Based Authentication, Geolocation Validation & Monthly Attendance Calendar)  
-> **UI Aesthetic**: Light, Warm, Elegant Editorial Design (Superbook-Inspired)
+> **Version**: Multi-Factor Biometric & Geofenced Attendance System  
+> **UI Aesthetic**: Light, Warm, Elegant Editorial Design (Ivory, Cream, Beige, Warm Brown)
 
 ---
 
 ## 🏛️ System Overview
 
-The **Smart Hostel Attendance Management System (HostelTrack)** digitizes college hostel attendance roll-calls through secure authentication, role-based authorization, and high-precision browser geolocation verification.
-
-### Core Value Proposition:
-1. **Zero Proxy Attendance**: Geolocation verification ensures students can only mark attendance when physically within their designated hostel block (1000m perimeter).
-2. **Authoritative Backend Haversine Engine**: The Java Spring Boot backend independently computes distance using spherical trigonometry; frontend coordinates cannot bypass validation.
-3. **Monthly Student Attendance Calendar**: Visual calendar integrated into the student dashboard featuring daily status dots (Present, Absent, Not Marked) backed by real database records.
-4. **Hostel Administrator Dashboard**: Real-time roll-call oversight for hostel wardens with 4 summary cards (Total Students, Present, Absent, Not Marked), date filtering, search, and student history lookup.
-5. **Future Biometrics Roadmap**: Face Recognition is clearly demarcated as a future module without unnecessary dependencies.
+The **Smart Hostel Attendance Management System (HostelTrack)** provides multi-factor roll-call verification for collegiate residential institutions by combining:
+1. **Face Recognition Verification**: Pretrained FaceNet (`InceptionResnetV1` trained on VGGFace2) + `MTCNN` face detection/alignment. Extracts 512-dimensional numerical face embeddings from up to 10 photos per student and computes cosine similarity against live captured camera frames.
+2. **Authoritative Geofence Validation**: Spherical Haversine distance verification computed on the Spring Boot backend against assigned hostel coordinates (1000m radius).
+3. **Institutional Policy Enforcement**: 1st-year student time window restrictions (09:00 AM – 05:00 PM) and duplicate daily attendance prevention.
+4. **Biometric Privacy Protection**: Raw photos and embeddings are never exposed to client browsers or administrators. Admins only see `Face Verification: Registered / Not Registered`.
 
 ---
 
-## 🎨 Visual Design Language (Light & Warm)
-
-The application follows a **light, warm, minimal, and editorial design system**:
-
-- **Warm Ivory**: `#F8F3EA` (Main Background)
-- **Warm Cream**: `#EFE5D5` (Surface & Panels)
-- **Soft Beige**: `#E5D7C4` (Borders & Dividers)
-- **Sand & Taupe**: `#D7C2A8`, `#B5A18C`
-- **Warm Brown**: `#8B6B4A` (Accents & Highlights)
-- **Deep Brown**: `#3F3025` (Headings & Primary Actions)
-- **Status Colors (Soft, Academic)**:
-  - **Present**: Muted Green (`#4A7C59` / `●` Green Dot)
-  - **Absent**: Muted Terracotta (`#B9664E` / `●` Red Dot)
-  - **Not Marked**: Muted Slate (`#5B7B8C` / `●` Blue Dot)
-  - **Future Dates**: No dot / Subtle neutral
-
----
-
-## 👥 Two User Portals & Roles
-
-| Feature / Page | Student Portal (`STUDENT`) | Administrator Portal (`ADMIN`) |
-| :--- | :--- | :--- |
-| **Authentication** | `/login.html`, `/register.html` | `/admin-login.html`, `/admin-register.html` |
-| **Dashboard** | Residential profile, today's roll-call status | 4 major metrics, attendance rate bar, date filter |
-| **Calendar** | Monthly calendar with navigation & status dots | Date-based attendance register table |
-| **Attendance Action** | 3-step GPS location verification | Live hostel monitoring & student audit |
-| **History / Reports** | Personal attendance audit log | Comprehensive resident student directory & modal |
-| **Profile** | College & hostel room allocation details | Warden credentials & hostel jurisdiction |
-
----
-
-## 📂 Project Repository Structure
+## 🏗️ Architecture & Technology Stack
 
 ```
-smart-hostel-attendance/
-├── frontend/                     # Vercel-ready Frontend
-│   ├── index.html                # Public Landing Page (HostelTrack)
-│   ├── login.html                # Student Login
-│   ├── register.html             # Student Registration
-│   ├── dashboard.html            # Student Dashboard & Monthly Calendar
-│   ├── attendance.html           # 3-Step Geolocation Attendance Marking
-│   ├── history.html              # Student Attendance History
-│   ├── profile.html              # Student Profile
-│   ├── admin-login.html          # Administrator Login
-│   ├── admin-register.html       # Administrator Registration
-│   ├── admin-dashboard.html      # Administrator Dashboard & Monitoring
-│   ├── admin-students.html       # Administrator Student Directory
-│   ├── admin-profile.html        # Administrator Profile
-│   ├── css/
-│   │   └── style.css             # Light Warm Editorial Design System
-│   └── js/
-│       ├── config.js             # API URL resolution & utilities
-│       ├── auth.js               # Role-based session management
-│       ├── dashboard.js          # Monthly Calendar & statistics controller
-│       ├── attendance.js         # Geolocation verification workflow
-│       ├── history.js            # Student history controller
-│       ├── profile.js            # Student profile controller
-│       └── admin-dashboard.js    # Admin dashboard controller
-├── backend/                      # Java 17 + Spring Boot 3 REST API
-│   ├── pom.xml                   # Maven Build Specification
-│   └── src/
-│       └── main/
-│           ├── java/com/smarthostel/
-│           │   ├── SmartHostelApplication.java
-│           │   ├── config/       # DataInitializer, CorsConfig
-│           │   ├── controller/   # Auth, Student, Admin, Attendance, Hostel
-│           │   ├── dto/          # Request & Response DTOs
-│           │   ├── model/        # Student, Admin, Hostel, Attendance
-│           │   ├── repository/   # JPA Repositories
-│           │   ├── service/      # Auth, Admin, Attendance, Location, Student
-│           │   └── util/         # DistanceCalculator (Haversine), PasswordHasher (BCrypt)
-│           └── resources/
-│               ├── application.properties
-│               └── application-mysql.properties
-├── database/
-│   ├── schema.sql                # MySQL DDL (hostels, students, admins, attendance)
-│   ├── seed.sql                  # Comprehensive sample data & history
-│   └── sample_data.sql           # Sample data mirror
+   Browser Client (Webcam + Geolocation API)
+         │
+         ▼ (Live Face JPEG Base64 + GPS Coordinates)
+   Java Spring Boot Backend (Port 8080)
+         │
+         ├── Retrieves registered 512-d embeddings from MySQL (student_face_profiles)
+         │
+         ▼ (REST Call: Live Frame + Registered Embeddings)
+   Python Facial Recognition Microservice (Port 5000)
+         │
+         ├── 1. MTCNN Face Detection & Alignment (PIL/Torch, Single Face Enforced)
+         ├── 2. InceptionResnetV1 FaceNet Feature Extraction (512-d L2-Normalized Vector)
+         └── 3. Cosine Similarity vs Enrolled Photos (Evaluated against FACE_MATCH_THRESHOLD)
+         │
+         ▼ (Result: matched, similarity score)
+   Java Spring Boot Backend
+         │
+         ├── Validates Face Match
+         ├── Validates GPS Geolocation (Haversine distance <= hostel radius)
+         └── Records Verified Attendance in MySQL (attendance table)
+```
+
+### Technology Highlights
+- **Backend Core**: Java 17, Spring Boot 3.2.3, Spring Data JPA, Hibernate, BCrypt.
+- **Biometrics Microservice**: Python 3.9+, PyTorch, `facenet-pytorch`, Pillow (PIL), NumPy, Flask.
+- **Strict Constraint**: **No OpenCV (`cv2`)** is used in any module. Image decoding and transformations are performed via Pillow and PyTorch tensors.
+- **Database**: MySQL 8.0 / H2 in-memory mode.
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+), Camera API (`navigator.mediaDevices.getUserMedia()`), Geolocation API (`navigator.geolocation`).
+
+---
+
+## 🚀 Setup & Execution Guide
+
+### 1. Python Facial Recognition Microservice Setup
+
+#### A. Create Python Virtual Environment
+```bash
+# In the project root directory:
+python -m venv face-service/venv
+
+# Activate virtual environment:
+# Windows (PowerShell):
+.\face-service\venv\Scripts\Activate.ps1
+# Linux / macOS:
+source face-service/venv/bin/activate
+```
+
+#### B. Install Dependencies
+```bash
+pip install -r face-service/requirements.txt
+```
+
+#### C. Run the Python Microservice
+```bash
+# Default port: 5000, default threshold: 0.70
+python face-service/app.py
+```
+Service will start at `http://localhost:5000`. You can verify it by opening `http://localhost:5000/health`.
+
+---
+
+### 2. Java Spring Boot Backend Setup
+
+#### A. Configure Environment Variables (Optional)
+The backend reads from `application.properties` with sensible local defaults:
+- `FACE_SERVICE_URL`: `http://localhost:5000` (URL of Python microservice)
+- `FACE_MATCH_THRESHOLD`: `0.70` (Matching similarity threshold)
+- `SPRING_DATASOURCE_URL`: `jdbc:mysql://localhost:3306/smart_hostel_attendance` (or uses H2 in-memory by default)
+
+#### B. Run the Spring Boot Application
+```bash
+cd backend
+mvn spring-boot:run
+```
+Backend runs on `http://localhost:8080`.
+
+---
+
+### 3. Frontend Web Application Setup
+
+Run the lightweight Node.js static server:
+```bash
+node serve.js
+```
+Open `http://localhost:3000` in your web browser.
+
+---
+
+## 📸 Face Registration & Attendance Flow
+
+### 1. Face Registration (`face-registration.html`)
+- Log in as student (Demo: `ASIET2024CS001` / `Password@123`).
+- Navigate to **Face Registration** in the top menu.
+- Upload **up to 10 clear photos** of your face.
+- View real-time thumbnail previews and remove unwanted photos.
+- Click **Submit & Enroll Faces**.
+- The backend validates that each photo contains **exactly one face** and stores the 512-dimensional FaceNet embeddings in MySQL.
+
+### 2. Live Roll-Call Attendance (`attendance.html`)
+- Navigate to **Mark Attendance**.
+- Click **Open Camera** to activate your webcam.
+- Align your face in the oval guide and click **Capture & Verify Face**.
+- The system extracts your live face embedding, compares it with your registered embeddings via cosine similarity, checks your GPS location against the hostel radius, and records verified attendance.
+
+---
+
+## 🧪 Kaggle Experimentation Notebook
+
+The repository includes a standalone Kaggle-compatible notebook:  
+📂 `face-service/kaggle_facenet_experiment.ipynb`
+
+### What it does:
+1. Installs `facenet-pytorch`.
+2. Loads pretrained `MTCNN` and `InceptionResnetV1` (VGGFace2).
+3. Accepts student test photos (up to 10).
+4. Detects face and rejects images with 0 or >1 faces.
+5. Generates 512-d embeddings.
+6. Accepts a live test photo, computes similarity, and outputs `MATCH / NO MATCH` with score.
+
+> **Note**: Kaggle is used purely for experimentation and parameter tuning. The production application connects the Spring Boot backend directly to the Python microservice.
+
+---
+
+## ⚙️ Configuration & Threshold Tuning
+
+| Variable | Default | Purpose |
+| :--- | :--- | :--- |
+| `FACE_SERVICE_URL` | `http://localhost:5000` | Address of Python FaceNet service |
+| `FACE_MATCH_THRESHOLD` | `0.70` | Minimum cosine similarity required to grant a match (range: 0.0 - 1.0) |
+| `face.max.photos` | `10` | Maximum allowed registered face photos per student |
+| `app.hostel.default-radius` | `1000` | Allowed perimeter distance in meters (1km geofence) |
+
+---
+
+## 🔒 Security & Privacy Rules
+
+1. **Biometric Privacy**: Face embeddings are stored securely on the backend in `student_face_profiles`. Raw photos are discarded after embedding generation.
+2. **Administrator Views**: Administrators only see `Face Verification: Registered` or `Not Registered`. Numerical vectors and raw biometric data are protected.
+3. **Authoritative Verification**: Decisions are made entirely on the backend; the browser client cannot force `matched = true`.
+
 ├── docs/
 │   └── API.md                    # Complete REST API specifications
 ├── serve.js                      # Local Node.js static preview server

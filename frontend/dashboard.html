@@ -22,9 +22,11 @@
       <ul class="nav-menu" id="nav-menu-list">
         <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
         <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
+        <li><a href="face-registration.html" class="nav-link">Face Registration</a></li>
         <li><a href="history.html" class="nav-link">Attendance History</a></li>
         <li><a href="profile.html" class="nav-link">Profile</a></li>
       </ul>
+
 
       <div class="nav-actions" id="nav-auth-section">
         <!-- Rendered by Auth.initNav() -->
@@ -231,16 +233,25 @@
             </div>
           </div>
 
-          <!-- Future Biometrics Info Card -->
-          <div class="future-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-              <h4 style="font-size: 1rem; color: var(--color-deep-brown);">Face Recognition</h4>
-              <span class="badge badge-neutral" style="font-size: 0.68rem;">Coming Soon</span>
+          <!-- FACE VERIFICATION STATUS CARD -->
+          <div class="card card-warm" id="dash-face-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h4 style="font-size: 1rem; color: var(--color-deep-brown); text-transform: uppercase; letter-spacing: 0.5px;">Face Verification</h4>
+              <span id="dash-face-badge" class="badge badge-neutral">Checking...</span>
             </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
-              Facial verification will be integrated into a future version of the system.
-            </p>
+
+            <div id="dash-face-details" style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
+              <div>Status: <strong id="dash-face-status-text" style="color: var(--color-deep-brown);">--</strong></div>
+              <div id="dash-face-photos-count" style="margin-top: 0.2rem; color: var(--text-muted);">Registered Photos: -- / 10</div>
+            </div>
+
+            <div id="dash-face-action-area">
+              <a href="face-registration.html" id="dash-face-btn" class="btn btn-sm btn-primary" style="width: 100%; justify-content: center;">
+                Register Face
+              </a>
+            </div>
           </div>
+
 
         </div>
       </div>

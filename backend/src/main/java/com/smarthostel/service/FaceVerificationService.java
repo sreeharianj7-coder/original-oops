@@ -1,50 +1,65 @@
 package com.smarthostel.service;
 
+import com.smarthostel.dto.FaceEnrollRequest;
+import com.smarthostel.dto.FaceEnrollResponse;
+import com.smarthostel.dto.FaceStatusResponse;
+import com.smarthostel.dto.FaceVerifyResponse;
+
 /**
  * ============================================================================
- * FACE RECOGNITION MODULE — FUTURE IMPLEMENTATION INTERFACE
+ * FACE RECOGNITION SERVICE INTERFACE
  * ============================================================================
- * 
- * DESIGN NOTE:
- * This interface establishes the architectural contract for facial biometrics
- * verification planned for future phases of the Smart Hostel Attendance System.
- * 
- * IMPORTANT SCOPE RULES:
- * 1. The current production phase operates strictly on Secure Student Login
- *    + Real-time Geolocation Verification (Haversine distance validation).
- * 2. Future biometric implementation will evaluate secure, modern facial
- *    biometric microservices in Phase 2.
- * 
- * OOP Concept:
- *   - Abstraction & Interface Segregation: Defines what a future verification
- *     module must implement without coupling the system to a specific biometric library.
+ * Service contract for student facial biometric enrollment, live verification,
+ * and registration status queries.
  */
 public interface FaceVerificationService {
 
     /**
-     * Future biometric verification signature.
+     * Enrolls up to 10 facial photographs for a student.
+     * Communicates with Python FaceNet microservice to extract 512-d embeddings
+     * and securely persists them in MySQL (student_face_profiles table).
      * 
-     * @param studentId Unique student identifier
-     * @param imagePayload Base64 encoded or byte payload of facial frame
-     * @return true if face matches enrolled student template, false otherwise
+     * @param request FaceEnrollRequest containing studentId and list of base64 images
+     * @return FaceEnrollResponse with per-photo validation results
      */
-    boolean verifyFace(String studentId, Object imagePayload);
+    FaceEnrollResponse enrollFaces(FaceEnrollRequest request);
 
     /**
-     * Checks if the biometric service is currently enabled in system configuration.
+     * Verifies a captured live camera face against a student's enrolled embeddings.
      * 
-     * @return false (Current development phase uses Geolocation Verification)
+     * @param studentId Student identifier
+     * @param faceImageBase64 Captured live image base64 data
+     * @return FaceVerifyResponse containing matched boolean and similarity score
      */
-    default boolean isBiometricEnabled() {
-        return false;
-    }
+    FaceVerifyResponse verifyFace(String studentId, String faceImageBase64);
 
     /**
-     * Descriptive status of the Face Recognition module.
+     * Checks registration status and count of enrolled photos for a student.
      * 
-     * @return Status message indicating future roadmap
+     * @param studentId Student identifier
+     * @return FaceStatusResponse
      */
-    default String getModuleStatus() {
-        return "FACE RECOGNITION MODULE — FUTURE IMPLEMENTATION (Current Phase: Login + Geolocation)";
-    }
+    FaceStatusResponse getFaceStatus(String studentId);
+
+    /**
+     * Resets all registered facial templates for a student.
+     * 
+     * @param studentId Student identifier
+     */
+    void resetFaceProfiles(String studentId);
+
+    /**
+     * Returns true if the student has at least 1 registered face template.
+     * 
+     * @param studentId Student identifier
+     * @return boolean
+     */
+    boolean isFaceRegistered(String studentId);
+
+    /**
+     * Checks if the biometric microservice is enabled and reachable.
+     * 
+     * @return boolean
+     */
+    boolean isBiometricEnabled();
 }

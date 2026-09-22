@@ -44,14 +44,17 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
     private final LocationService locationService;
+    private final FaceVerificationService faceVerificationService;
 
     @Autowired
     public AttendanceService(AttendanceRepository attendanceRepository, 
                              StudentRepository studentRepository, 
-                             LocationService locationService) {
+                             LocationService locationService,
+                             FaceVerificationService faceVerificationService) {
         this.attendanceRepository = attendanceRepository;
         this.studentRepository = studentRepository;
         this.locationService = locationService;
+        this.faceVerificationService = faceVerificationService;
     }
 
     /**
@@ -101,7 +104,28 @@ public class AttendanceService {
             throw new IllegalStateException("Attendance has already been marked for today (" + today + ")");
         }
 
-        // 4. Perform authoritative server-side location verification
+        // 4. Perform Facial Biometric Verification (FaceNet)
+        boolean hasFaceProfiles = faceVerificationService.isFaceRegistered(studentId);
+        String verificationMode = "GEOLOCATION";
+
+        if (hasFaceProfiles || (request.getFaceImage() != null && !request.getFaceImage().trim().isEmpty())) {
+            if (request.getFaceImage() == null || request.getFaceImage().trim().isEmpty()) {
+                throw new IllegalArgumentException("Attendance Rejected — Face verification required. Please capture your live camera face photo.");
+            }
+
+            var faceResult = faceVerificationService.verifyFace(studentId, request.getFaceImage());
+            if (!faceResult.isMatched()) {
+                log.warn("Attendance rejected for Student {}: Live face verification failed (Score: {}, Threshold: {})",
+                        studentId, faceResult.getSimilarity(), faceResult.getThreshold());
+                throw new IllegalArgumentException("Attendance Rejected — Face not recognized (Similarity: " + 
+                        faceResult.getSimilarity() + ", Required: " + faceResult.getThreshold() + "). Please ensure your face is well-lit and clearly centered.");
+            }
+
+            verificationMode = "FACE_AND_GEOLOCATION";
+            log.info("Facial biometric verified for Student: {} (Similarity: {})", studentId, faceResult.getSimilarity());
+        }
+
+        // 5. Perform authoritative server-side location verification
         LocationVerifyRequest verifyReq = new LocationVerifyRequest(
                 studentId, request.getLatitude(), request.getLongitude(), request.getAccuracy()
         );
@@ -110,11 +134,11 @@ public class AttendanceService {
         if (!verifyRes.isVerified()) {
             log.warn("Attendance rejected for Student {}: Distance {}m exceeds allowed radius {}m", 
                     studentId, verifyRes.getDistance(), verifyRes.getAllowedRadius());
-            throw new IllegalArgumentException("Attendance Failed — You are outside the permitted hostel location (" + 
+            throw new IllegalArgumentException("Attendance Rejected — You are outside the permitted hostel area (" + 
                     verifyRes.getHostelName() + "). Distance: " + verifyRes.getDistance() + "m, Allowed: " + verifyRes.getAllowedRadius() + "m.");
         }
 
-        // 5. Save Attendance record
+        // 6. Save Attendance record
         Attendance attendance = new Attendance(
                 studentId,
                 today,
@@ -124,15 +148,16 @@ public class AttendanceService {
                 verifyRes.getDistance(),
                 "VERIFIED",
                 "PRESENT",
-                "GEOLOCATION"
+                verificationMode
         );
 
         Attendance savedRecord = attendanceRepository.save(attendance);
-        log.info("Attendance marked successfully. ID: {}, Student: {}, Time: {}", 
-                savedRecord.getId(), studentId, savedRecord.getAttendanceTime());
+        log.info("Attendance marked successfully. ID: {}, Student: {}, Time: {}, Mode: {}", 
+                savedRecord.getId(), studentId, savedRecord.getAttendanceTime(), verificationMode);
 
         return savedRecord;
     }
+
 
     /**
      * Computes real day-by-day attendance data for the Monthly Attendance Calendar.
