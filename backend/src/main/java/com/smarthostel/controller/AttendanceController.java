@@ -22,6 +22,11 @@ import java.util.Map;
  * ATTENDANCE CONTROLLER (REST API for Geolocation & Attendance Recording)
  * ============================================================================
  */
+import com.smarthostel.dto.FaceVerificationResult;
+import com.smarthostel.dto.MonthlyAttendanceResponse;
+import com.smarthostel.service.FaceVerificationService;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/attendance")
 @CrossOrigin(origins = "*")
@@ -29,11 +34,41 @@ public class AttendanceController {
 
     private final LocationService locationService;
     private final AttendanceService attendanceService;
+    private final FaceVerificationService faceVerificationService;
 
     @Autowired
-    public AttendanceController(LocationService locationService, AttendanceService attendanceService) {
+    public AttendanceController(LocationService locationService, 
+                                AttendanceService attendanceService,
+                                FaceVerificationService faceVerificationService) {
         this.locationService = locationService;
         this.attendanceService = attendanceService;
+        this.faceVerificationService = faceVerificationService;
+    }
+
+    /**
+     * Verifies live face photo against student enrolled templates.
+     * POST /api/attendance/verify-face
+     */
+    @PostMapping("/verify-face")
+    public ResponseEntity<ApiResponse<FaceVerificationResult>> verifyFace(@RequestBody Map<String, String> payload) {
+        try {
+            String studentId = payload.get("studentId");
+            String faceImage = payload.get("faceImage");
+            if (studentId == null || faceImage == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.error("Missing required parameters: studentId and faceImage"));
+            }
+
+            FaceVerificationResult result = faceVerificationService.verifyStudentFace(studentId, faceImage);
+            if (result.isMatched()) {
+                return ResponseEntity.ok(ApiResponse.ok("Face verified successfully", result));
+            } else {
+                return ResponseEntity.ok(new ApiResponse<>(false, result.getMessage(), result));
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Face verification failed: " + ex.getMessage()));
+        }
     }
 
     /**
@@ -110,16 +145,50 @@ public class AttendanceController {
     }
 
     /**
-     * Informational endpoint describing future Face Recognition module.
-     * GET /api/attendance/face-module-info
+     * Retrieves attendance history for a student by path variable.
+     * GET /api/attendance/student/{studentId}
      */
-    @GetMapping("/face-module-info")
-    public ResponseEntity<ApiResponse<Map<String, String>>> getFaceModuleInfo() {
-        Map<String, String> info = new HashMap<>();
-        info.put("moduleName", "Face Recognition Biometric Verification");
-        info.put("phase", "FUTURE DEVELOPMENT (Phase 2 Roadmap)");
-        info.put("currentAuthentication", "Secure Login + GPS Geolocation Distance Verification");
-        info.put("notice", "Future biometrics will integrate via dedicated secure microservices in Phase 2.");
-        return ResponseEntity.ok(ApiResponse.ok("Future module specifications", info));
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<ApiResponse<List<Attendance>>> getStudentAttendance(@PathVariable String studentId) {
+        try {
+            List<Attendance> history = attendanceService.getAttendanceHistory(studentId);
+            return ResponseEntity.ok(ApiResponse.ok("Attendance history loaded", history));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Failed to load history: " + ex.getMessage()));
+        }
+    }
+
+    /**
+     * Retrieves monthly attendance calendar data with status dots.
+     * GET /api/attendance/student/{studentId}/month?year=2026&month=9
+     */
+    @GetMapping("/student/{studentId}/month")
+    public ResponseEntity<ApiResponse<MonthlyAttendanceResponse>> getStudentMonthlyAttendance(
+            @PathVariable String studentId,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        try {
+            LocalDate now = LocalDate.now();
+            int reqYear = (year != null && year > 0) ? year : now.getYear();
+            int reqMonth = (month != null && month >= 1 && month <= 12) ? month : now.getMonthValue();
+            MonthlyAttendanceResponse response = attendanceService.getMonthlyAttendance(studentId, reqYear, reqMonth);
+            return ResponseEntity.ok(ApiResponse.ok("Monthly attendance records loaded", response));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error("Failed to load monthly attendance: " + ex.getMessage()));
+        }
+    }
+
+    /**
+     * Alias for monthly attendance using query params.
+     * GET /api/attendance/month?studentId=...&year=...&month=...
+     */
+    @GetMapping("/month")
+    public ResponseEntity<ApiResponse<MonthlyAttendanceResponse>> getMonthlyAttendanceQuery(
+            @RequestParam String studentId,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        return getStudentMonthlyAttendance(studentId, year, month);
     }
 }

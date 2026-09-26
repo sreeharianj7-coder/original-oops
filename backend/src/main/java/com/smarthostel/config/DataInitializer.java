@@ -4,9 +4,11 @@ import com.smarthostel.model.Admin;
 import com.smarthostel.model.Attendance;
 import com.smarthostel.model.Hostel;
 import com.smarthostel.model.Student;
+import com.smarthostel.model.StudentFaceProfile;
 import com.smarthostel.repository.AdminRepository;
 import com.smarthostel.repository.AttendanceRepository;
 import com.smarthostel.repository.HostelRepository;
+import com.smarthostel.repository.StudentFaceProfileRepository;
 import com.smarthostel.repository.StudentRepository;
 import com.smarthostel.util.PasswordHasher;
 import org.slf4j.Logger;
@@ -57,8 +59,8 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Seeding default Adi Shankara Institute hostels with 1000m geofence radius...");
             Hostel mainHostel = new Hostel(
                     "Adi Shankara Institute Main Campus Hostel", 
-                    10.1706000, 
-                    76.4357000, 
+                    10.1782, 
+                    76.4305, 
                     1000, 
                     "Main Campus Hostel - Block A, Adi Shankara Institute of Science and Technology, Kalady"
             );
@@ -117,8 +119,8 @@ public class DataInitializer implements CommandLineRunner {
 
             Student student1 = new Student(
                     "ASIET2024CS001",
-                    "Rahul Sharma",
-                    "rahul.cs@adishankara.ac.in",
+                    "Sreehari K A",
+                    "sreehari.ka@adishankara.ac.in",
                     "+91 98765 43210",
                     "B.Tech Computer Science and Engineering",
                     "Computer Science and Engineering",
@@ -129,35 +131,35 @@ public class DataInitializer implements CommandLineRunner {
             );
 
             Student student2 = new Student(
-                    "ASIET2024CS042",
-                    "Ananya Menon",
-                    "ananya.m@adishankara.ac.in",
+                    "ASIET2024CS002",
+                    "Nithin S",
+                    "nithin.s@adishankara.ac.in",
                     "+91 98451 23456",
                     "B.Tech Computer Science and Engineering",
                     "Computer Science and Engineering",
                     "3rd Year (2023-2027)",
                     defaultHostel,
-                    "C-108",
+                    "A-205",
                     defaultHash
             );
 
             Student student3 = new Student(
-                    "ASIET2026CS001",
-                    "Aditya Varma",
-                    "aditya.cs26@adishankara.ac.in",
+                    "ASIET2024CS003",
+                    "Ajith P",
+                    "ajith.p@adishankara.ac.in",
                     "+91 98123 45678",
                     "B.Tech Computer Science and Engineering",
                     "Computer Science and Engineering",
-                    "1st Year (2026-2030)",
+                    "3rd Year (2023-2027)",
                     defaultHostel,
                     "A-102",
                     defaultHash
             );
 
             Student student4 = new Student(
-                    "ASIET2024CS101",
-                    "Arun Kumar",
-                    "arun.k@adishankara.ac.in",
+                    "ASIET2024CS004",
+                    "Rithin M",
+                    "rithin.m@adishankara.ac.in",
                     "+91 97451 11223",
                     "B.Tech Computer Science and Engineering",
                     "Computer Science and Engineering",
@@ -168,9 +170,9 @@ public class DataInitializer implements CommandLineRunner {
             );
 
             Student student5 = new Student(
-                    "ASIET2024CS102",
-                    "Devika Nair",
-                    "devika.nair@adishankara.ac.in",
+                    "ASIET2024CS005",
+                    "Adhithya K",
+                    "adhithya.k@adishankara.ac.in",
                     "+91 97452 33445",
                     "B.Tech Computer Science and Engineering",
                     "Computer Science and Engineering",
@@ -213,30 +215,30 @@ public class DataInitializer implements CommandLineRunner {
                 // Student 2 attended some days
                 if (day % 2 == 0) {
                     attendanceRepository.save(new Attendance(
-                            "ASIET2024CS042",
+                            "ASIET2024CS002",
                             attDate,
                             LocalTime.of(8, 40 + (day % 15), 20),
-                            10.170600,
-                            76.435700,
+                            10.1782,
+                            76.4305,
                             1.2,
                             "VERIFIED",
                             "PRESENT",
-                            "GEOLOCATION"
+                            "FACE_AND_GEOLOCATION"
                     ));
                 }
 
-                // Student 3 (1st year) marked during 9am-5pm window
+                // Student 3 marked during 9am-5pm window
                 if (day % 3 != 0) {
                     attendanceRepository.save(new Attendance(
-                            "ASIET2026CS001",
+                            "ASIET2024CS003",
                             attDate,
                             LocalTime.of(9, 15 + (day % 15), 10),
-                            10.170605,
-                            76.435705,
+                            10.1782,
+                            76.4305,
                             0.8,
                             "VERIFIED",
                             "PRESENT",
-                            "GEOLOCATION"
+                            "FACE_AND_GEOLOCATION"
                     ));
                 }
             }

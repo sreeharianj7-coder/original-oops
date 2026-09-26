@@ -20,14 +20,14 @@ const CONFIG = {
     academicYear: '2023 - 2027'
   },
 
-  // Default Campus Hostel Coordinates & Radius
+  // Default Campus Hostel Coordinates & Radius (ASIET Demonstration Center)
   DEFAULT_HOSTEL: {
     id: 1,
-    name: 'Adi Shankara Institute Main Campus Hostel',
-    latitude: 10.1706000,
-    longitude: 76.4357000,
+    name: 'Adi Shankara Institute of Engineering & Technology',
+    latitude: 10.1782,
+    longitude: 76.4305,
     allowedRadius: 1000, // in meters (1km geofence)
-    description: 'Main Campus Hostel - Block A, Adi Shankara Institute'
+    description: 'Vidya Bharathi Nagar, Mattoor, Kalady, Kerala'
   },
 
   // Storage Keys for Role-Based Session Management

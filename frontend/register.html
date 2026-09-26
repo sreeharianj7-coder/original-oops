@@ -3,136 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Registration | HostelTrack</title>
+  <title>Student Registration | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="index.html" class="nav-brand">
-        <div class="brand-icon">🏛️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Student Registration</span>
+  <!-- Top Navigation Header -->
+  <header style="padding: 1.25rem 2rem; background: var(--color-forest-green); color: var(--color-warm-cream); display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; color: inherit;">
+        <div style="width: 36px; height: 36px; background: var(--color-forest-green-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🏛️</div>
+        <div>
+          <div style="font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em;">SMART HOSTEL ATTENDANCE</div>
+          <div style="font-size: 0.68rem; color: var(--color-soft-beige); text-transform: uppercase;">Adi Shankara Institute (ASIET)</div>
         </div>
       </a>
-      <div class="nav-actions">
-        <a href="login.html" class="btn btn-sm btn-secondary">Student Login</a>
-        <a href="admin-register.html" class="btn btn-sm btn-outline">Admin Register</a>
-      </div>
     </div>
-  </nav>
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="login.html" class="btn btn-sm btn-secondary">Student Login</a>
+      <a href="admin-register.html" class="btn btn-sm btn-outline" style="border-color: var(--color-soft-beige); color: var(--color-soft-beige);">Admin Register</a>
+    </div>
+  </header>
 
-  <!-- Registration Main Container -->
-  <main class="container container-narrow" style="padding-top: 3rem; padding-bottom: 4rem;">
-    <div class="card" style="max-width: 680px; margin: 0 auto; padding: 2.5rem;">
-      <div style="margin-bottom: 2rem;">
-        <span class="badge badge-present" style="margin-bottom: 0.5rem;">Student Onboarding</span>
-        <h1 style="font-size: 2rem;">Create Your Account</h1>
-        <p style="font-size: 0.92rem; margin-top: 0.25rem;">
-          Register as a resident student at Adi Shankara Institute of Science and Technology.
+  <!-- Main Registration Form Container -->
+  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    <div class="card" style="padding: 2.5rem; border-color: var(--color-beige-border);">
+      <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1.25rem;">
+        <span class="badge badge-present" style="margin-bottom: 0.5rem;">Student Enrollment</span>
+        <h1 style="font-size: 2rem; color: var(--color-forest-green);">Student Registration</h1>
+        <p style="font-size: 0.92rem; margin-top: 0.35rem; color: var(--text-secondary);">
+          Complete your personal, academic, hostel allocation details and register 3–4 facial reference photographs.
         </p>
       </div>
 
-      <form id="register-form">
-        <!-- Personal Details -->
-        <div style="margin-bottom: 1.5rem;">
-          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
-            1. Personal Details
-          </h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group" style="grid-column: span 2;">
-              <label class="form-label" for="reg-name">Full Name *</label>
-              <input type="text" id="reg-name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+      <form id="student-reg-form">
+        <!-- 1. Personal Information -->
+        <div class="form-legend">
+          <span>👤</span> 1. Personal Information
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="form-label" for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. Sreehari K A" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-student-id">Student ID / Roll Number *</label>
+            <input type="text" id="reg-student-id" class="form-control" placeholder="e.g. ASIET2024CS001" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-gender">Gender *</label>
+            <select id="reg-gender" class="form-control" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-dob">Date of Birth *</label>
+            <input type="date" id="reg-dob" class="form-control" value="2004-05-15" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-phone">Phone Number *</label>
+            <input type="tel" id="reg-phone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="form-label" for="reg-email">College Email Address *</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="e.g. sreehari.ka@adishankara.ac.in" required>
+          </div>
+        </div>
+
+        <!-- 2. Academic Information -->
+        <div class="form-legend">
+          <span>🎓</span> 2. Academic Information
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="form-label" for="reg-dept">Branch / Department *</label>
+            <select id="reg-dept" class="form-control" required>
+              <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+              <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+              <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-year">Academic Year *</label>
+            <select id="reg-year" class="form-control" required>
+              <option value="1st Year (2026-2030)">1st Year (2026-2030)</option>
+              <option value="2nd Year (2025-2029)">2nd Year (2025-2029)</option>
+              <option value="3rd Year (2023-2027)" selected>3rd Year (2023-2027)</option>
+              <option value="4th Year (2022-2026)">4th Year (2022-2026)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-sem">Semester *</label>
+            <select id="reg-sem" class="form-control" required>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="S3">S3</option>
+              <option value="S4">S4</option>
+              <option value="S5" selected>S5</option>
+              <option value="S6">S6</option>
+              <option value="S7">S7</option>
+              <option value="S8">S8</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-div">Division / Class *</label>
+            <input type="text" id="reg-div" class="form-control" value="A" placeholder="e.g. A, B, or C" required>
+          </div>
+        </div>
+
+        <!-- 3. Hostel Information -->
+        <div class="form-legend">
+          <span>🏢</span> 3. Hostel Information
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="form-label" for="reg-hostel">Hostel Name *</label>
+            <select id="reg-hostel" class="form-control" required>
+              <option value="1">Adi Shankara Institute Main Campus Hostel</option>
+              <option value="2">ASIET Boys Hostel (Block B)</option>
+              <option value="3">ASIET Ladies Hostel (Block C)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-block">Hostel Block *</label>
+            <input type="text" id="reg-block" class="form-control" value="Block A" placeholder="e.g. Block A" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-room">Room Number *</label>
+            <input type="text" id="reg-room" class="form-control" placeholder="e.g. A-204" required>
+          </div>
+        </div>
+
+        <!-- 4. Login Credentials -->
+        <div class="form-legend">
+          <span>🔐</span> 4. Login Credentials
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="form-label" for="reg-username">Username / Student ID *</label>
+            <input type="text" id="reg-username" class="form-control" placeholder="e.g. sreehari or ASIET2024CS001" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password *</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm-password">Confirm Password *</label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="Re-enter password" minlength="6" required>
+          </div>
+        </div>
+
+        <!-- 5. Face Registration (3-4 Facial Photos) -->
+        <div class="form-legend">
+          <span>📸</span> 5. Facial Biometric Registration (Mandatory: 3–4 Photos)
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          <strong>Register 3–4 photos from different angles for better face verification.</strong> Capture directly with your camera or upload photo files.
+        </p>
+
+        <!-- Live Camera Capture Modal / Section -->
+        <div class="card card-warm" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+            <button type="button" id="btn-start-camera" class="btn btn-sm btn-forest">
+              <span>📷</span> Open Camera
+            </button>
+            <button type="button" id="btn-snap-photo" class="btn btn-sm btn-primary" style="display: none;">
+              <span>⚡</span> Capture Current Angle
+            </button>
+            <label class="btn btn-sm btn-secondary" style="margin: 0; cursor: pointer;">
+              <span>📁</span> Upload Photos
+              <input type="file" id="file-photo-input" accept="image/*" multiple style="display: none;">
+            </label>
+            <span id="photo-count-badge" class="badge badge-not-marked" style="margin-left: auto;">0 of 4 photos captured</span>
+          </div>
+
+          <!-- Video preview container -->
+          <div id="camera-enroll-preview" style="display: none; max-width: 380px; margin: 0 auto 1rem; border-radius: var(--radius-md); overflow: hidden; position: relative; border: 2px solid var(--color-forest-green);">
+            <video id="enroll-video" autoplay playsinline style="width: 100%; height: auto; display: block;"></video>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 140px; height: 180px; border: 2px dashed rgba(255,255,255,0.8); border-radius: 50% 50% 45% 45%; pointer-events: none;"></div>
+          </div>
+          <canvas id="enroll-canvas" style="display: none;"></canvas>
+
+          <!-- 4 Slots Grid -->
+          <div class="photo-enroll-grid">
+            <div class="photo-enroll-slot" id="slot-1">
+              <span style="font-size: 1.5rem; color: var(--text-muted);">👤</span>
+              <span class="slot-label">Angle 1: Front</span>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-student-id">Student ID / Roll No *</label>
-              <input type="text" id="reg-student-id" class="form-control" placeholder="e.g. ASIET2024CS001" required>
+            <div class="photo-enroll-slot" id="slot-2">
+              <span style="font-size: 1.5rem; color: var(--text-muted);">👈</span>
+              <span class="slot-label">Angle 2: Slight Left</span>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-phone">Phone Number *</label>
-              <input type="tel" id="reg-phone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+            <div class="photo-enroll-slot" id="slot-3">
+              <span style="font-size: 1.5rem; color: var(--text-muted);">👉</span>
+              <span class="slot-label">Angle 3: Slight Right</span>
             </div>
-            <div class="form-group" style="grid-column: span 2;">
-              <label class="form-label" for="reg-email">College Email Address *</label>
-              <input type="email" id="reg-email" class="form-control" placeholder="e.g. rahul.cs@adishankara.ac.in" required>
+            <div class="photo-enroll-slot" id="slot-4">
+              <span style="font-size: 1.5rem; color: var(--text-muted);">🙂</span>
+              <span class="slot-label">Angle 4: Optional Angle</span>
             </div>
           </div>
         </div>
 
-        <!-- Academic Details -->
-        <div style="margin-bottom: 1.5rem;">
-          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
-            2. Academic Details
-          </h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group" style="grid-column: span 2;">
-              <label class="form-label" for="reg-course">Course / Program *</label>
-              <input type="text" id="reg-course" class="form-control" value="B.Tech Computer Science and Engineering" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-dept">Department *</label>
-              <input type="text" id="reg-dept" class="form-control" value="Computer Science and Engineering" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-year">Academic Year *</label>
-              <select id="reg-year" class="form-control" required>
-                <option value="1st Year (2026-2030)">1st Year (2026-2030)</option>
-                <option value="2nd Year (2025-2029)">2nd Year (2025-2029)</option>
-                <option value="3rd Year (2023-2027)" selected>3rd Year (2023-2027)</option>
-                <option value="4th Year (2022-2026)">4th Year (2022-2026)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hostel Details -->
-        <div style="margin-bottom: 1.5rem;">
-          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
-            3. Hostel Allocation
-          </h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label class="form-label" for="reg-hostel">Hostel Name *</label>
-              <select id="reg-hostel" class="form-control" required>
-                <option value="1">Adi Shankara Institute Main Campus Hostel</option>
-                <option value="2">ASIET Boys Hostel (Block B)</option>
-                <option value="3">ASIET Ladies Hostel (Block C)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-room">Room Number *</label>
-              <input type="text" id="reg-room" class="form-control" placeholder="e.g. A-204" required>
-            </div>
-          </div>
-        </div>
-
-        <!-- Security -->
-        <div style="margin-bottom: 2rem;">
-          <h4 style="color: var(--color-warm-brown); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-light);">
-            4. Security Credentials
-          </h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label class="form-label" for="reg-password">Password *</label>
-              <input type="password" id="reg-password" class="form-control" placeholder="At least 6 characters" minlength="6" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="reg-confirm-password">Confirm Password *</label>
-              <input type="password" id="reg-confirm-password" class="form-control" placeholder="Repeat password" minlength="6" required>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block btn-lg">
-          <span>📝</span> Create Account
+        <button type="submit" id="reg-submit-btn" class="btn btn-primary btn-block btn-lg" style="margin-top: 1rem;">
+          <span>📝</span> Complete Student Registration
         </button>
       </form>
 
-      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
-        <p>Already have an account? <a href="login.html" style="font-weight: 600;">Login here</a></p>
+      <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
+        <p>Already have a registered account? <a href="login.html" style="font-weight: 700; color: var(--color-forest-green);">Login here →</a></p>
       </div>
     </div>
   </main>
@@ -140,10 +224,113 @@
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
   <script>
+    let capturedImages = [];
+    let mediaStream = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       Auth.redirectIfLoggedIn();
 
-      const form = document.getElementById('register-form');
+      const btnStartCamera = document.getElementById('btn-start-camera');
+      const btnSnapPhoto = document.getElementById('btn-snap-photo');
+      const cameraPreview = document.getElementById('camera-enroll-preview');
+      const video = document.getElementById('enroll-video');
+      const canvas = document.getElementById('enroll-canvas');
+      const fileInput = document.getElementById('file-photo-input');
+
+      // Camera Start
+      btnStartCamera.addEventListener('click', async () => {
+        try {
+          if (mediaStream) {
+            mediaStream.getTracks().forEach(t => t.stop());
+            mediaStream = null;
+            cameraPreview.style.display = 'none';
+            btnStartCamera.innerHTML = '<span>📷</span> Open Camera';
+            btnSnapPhoto.style.display = 'none';
+            return;
+          }
+
+          mediaStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+          video.srcObject = mediaStream;
+          cameraPreview.style.display = 'block';
+          btnStartCamera.innerHTML = '<span>🛑</span> Stop Camera';
+          btnSnapPhoto.style.display = 'inline-flex';
+        } catch (err) {
+          showToast('Camera access denied or unavailable: ' + err.message, 'error');
+        }
+      });
+
+      // Capture Photo
+      btnSnapPhoto.addEventListener('click', () => {
+        if (!mediaStream || capturedImages.length >= 4) {
+          if (capturedImages.length >= 4) showToast('Maximum 4 photos already captured.', 'info');
+          return;
+        }
+
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+        addPhoto(dataUrl);
+      });
+
+      // File upload handler
+      fileInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+          if (capturedImages.length >= 4) return;
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            addPhoto(evt.target.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      function addPhoto(dataUrl) {
+        if (capturedImages.length >= 4) return;
+        capturedImages.push(dataUrl);
+        updatePhotoGrid();
+      }
+
+      window.removePhoto = function(index) {
+        capturedImages.splice(index, 1);
+        updatePhotoGrid();
+      };
+
+      function updatePhotoGrid() {
+        const labels = ['Angle 1: Front', 'Angle 2: Slight Left', 'Angle 3: Slight Right', 'Angle 4: Additional'];
+        const badge = document.getElementById('photo-count-badge');
+        badge.textContent = `${capturedImages.length} of 4 photos captured`;
+        if (capturedImages.length >= 3) {
+          badge.className = 'badge badge-present';
+        } else {
+          badge.className = 'badge badge-not-marked';
+        }
+
+        for (let i = 1; i <= 4; i++) {
+          const slot = document.getElementById(`slot-${i}`);
+          const imgData = capturedImages[i - 1];
+          if (imgData) {
+            slot.className = 'photo-enroll-slot has-image';
+            slot.innerHTML = `
+              <img src="${imgData}" alt="Photo ${i}">
+              <button type="button" class="slot-delete-btn" onclick="removePhoto(${i - 1})" title="Delete">✕</button>
+              <span class="slot-label">${labels[i - 1]}</span>
+            `;
+          } else {
+            slot.className = 'photo-enroll-slot';
+            slot.innerHTML = `
+              <span style="font-size: 1.5rem; color: var(--text-muted);">${i === 1 ? '👤' : i === 2 ? '👈' : i === 3 ? '👉' : '🙂'}</span>
+              <span class="slot-label">${labels[i - 1]}</span>
+            `;
+          }
+        }
+      }
+
+      // Registration Form Submission
+      const form = document.getElementById('student-reg-form');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -151,44 +338,73 @@
         const confirmPwd = document.getElementById('reg-confirm-password').value;
 
         if (pwd !== confirmPwd) {
-          showToast('Passwords do not match', 'error');
+          showToast('Passwords do not match.', 'error');
           return;
         }
 
-        const formData = {
-          studentId: document.getElementById('reg-student-id').value.trim(),
+        if (capturedImages.length < 3) {
+          showToast('Please capture or upload at least 3 facial reference photos (front, left, right angles).', 'error');
+          return;
+        }
+
+        const studentId = document.getElementById('reg-student-id').value.trim().toUpperCase();
+
+        const payload = {
+          studentId: studentId,
           name: document.getElementById('reg-name').value.trim(),
           email: document.getElementById('reg-email').value.trim(),
           phone: document.getElementById('reg-phone').value.trim(),
-          course: document.getElementById('reg-course').value.trim(),
-          department: document.getElementById('reg-dept').value.trim(),
+          gender: document.getElementById('reg-gender').value,
+          dateOfBirth: document.getElementById('reg-dob').value,
+          course: 'B.Tech ' + document.getElementById('reg-dept').value,
+          department: document.getElementById('reg-dept').value,
           academicYear: document.getElementById('reg-year').value,
+          semester: document.getElementById('reg-sem').value,
+          division: document.getElementById('reg-div').value.trim(),
           hostelId: parseInt(document.getElementById('reg-hostel').value, 10),
+          block: document.getElementById('reg-block').value.trim(),
           roomNumber: document.getElementById('reg-room').value.trim(),
+          username: document.getElementById('reg-username').value.trim() || studentId,
           password: pwd,
-          confirmPassword: confirmPwd
+          confirmPassword: confirmPwd,
+          faceImages: capturedImages
         };
 
         const btn = document.getElementById('reg-submit-btn');
         btn.disabled = true;
-        btn.innerHTML = 'Creating Account...';
+        btn.innerHTML = 'Enrolling Student & Registering Face Biometrics...';
 
         try {
-          const result = await Auth.registerStudent(formData);
-          if (result.success) {
-            showToast('Registration successful! Redirecting...', 'success');
+          const res = await fetch(`${CONFIG.API_BASE_URL}/students/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            // Save registered photos in localStorage for display in My Profile
+            try {
+              localStorage.setItem(`profile_photos_${studentId}`, JSON.stringify(capturedImages));
+            } catch (err) {}
+
+            showToast('Registration and facial enrollment completed! Redirecting to login...', 'success');
+            if (mediaStream) {
+              mediaStream.getTracks().forEach(t => t.stop());
+            }
             setTimeout(() => {
-              window.location.href = 'dashboard.html';
-            }, 600);
+              window.location.href = 'login.html';
+            }, 1200);
           } else {
-            showToast(result.message || 'Registration failed', 'error');
+            showToast(data.message || 'Registration failed.', 'error');
             btn.disabled = false;
-            btn.innerHTML = '<span>📝</span> Create Account';
+            btn.innerHTML = '<span>📝</span> Complete Student Registration';
           }
         } catch (err) {
-          showToast('An unexpected error occurred during registration', 'error');
+          showToast('Failed to connect to server: ' + err.message, 'error');
           btn.disabled = false;
-          btn.innerHTML = '<span>📝</span> Create Account';
+          btn.innerHTML = '<span>📝</span> Complete Student Registration';
         }
       });
     });

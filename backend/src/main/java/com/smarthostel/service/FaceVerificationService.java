@@ -34,6 +34,11 @@ public interface FaceVerificationService {
     FaceVerifyResponse verifyFace(String studentId, String faceImageBase64);
 
     /**
+     * Verifies live face and returns structured FaceVerificationResult.
+     */
+    com.smarthostel.dto.FaceVerificationResult verifyStudentFace(String studentId, String faceImageBase64);
+
+    /**
      * Checks registration status and count of enrolled photos for a student.
      * 
      * @param studentId Student identifier

@@ -37,9 +37,9 @@ public class AttendanceService {
     private static final Logger log = LoggerFactory.getLogger(AttendanceService.class);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
 
-    // 1st-Year attendance window policy: 09:00 AM to 05:00 PM (17:00)
-    public static final LocalTime FIRST_YEAR_START_TIME = LocalTime.of(9, 0, 0);
-    public static final LocalTime FIRST_YEAR_END_TIME = LocalTime.of(17, 0, 0);
+    // Institutional attendance window policy: 09:00 AM to 05:00 PM (17:00)
+    public static final LocalTime ATTENDANCE_START_TIME = LocalTime.of(9, 0, 0);
+    public static final LocalTime ATTENDANCE_END_TIME = LocalTime.of(17, 0, 0);
 
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
@@ -58,17 +58,25 @@ public class AttendanceService {
     }
 
     /**
-     * Validates whether the student is allowed to mark attendance at the given time.
+     * Validates whether attendance can be marked at the given time.
      * Enforces institutional policy: 1st-year students are restricted to marking
-     * attendance exclusively within the 9:00 AM to 5:00 PM time window.
+     * attendance exclusively within the 09:00 AM to 05:00 PM time window.
      */
     public void validateTimeWindowRestriction(Student student, LocalTime attendanceTime) {
         if (student != null && student.isFirstYear()) {
-            if (attendanceTime.isBefore(FIRST_YEAR_START_TIME) || attendanceTime.isAfter(FIRST_YEAR_END_TIME)) {
-                log.warn("Attendance rejected for 1st-year student {}: Attempted at {} outside allowed window (09:00 AM - 05:00 PM)",
+            if (attendanceTime.isBefore(ATTENDANCE_START_TIME)) {
+                log.warn("Attendance rejected for 1st-year student {}: Attempted at {} before 09:00 AM",
                         student.getStudentId(), attendanceTime);
                 throw new IllegalArgumentException(
-                        "Attendance restriction: 1st-year students are only permitted to mark attendance between 09:00 AM and 05:00 PM. (Current time: " 
+                        "Attendance restriction: 1st-year students are only permitted to mark attendance between 09:00 AM and 05:00 PM. Attendance has not started yet. (Current time: " 
+                        + attendanceTime.withNano(0) + ")"
+                );
+            }
+            if (attendanceTime.isAfter(ATTENDANCE_END_TIME)) {
+                log.warn("Attendance rejected for 1st-year student {}: Attempted at {} after 05:00 PM",
+                        student.getStudentId(), attendanceTime);
+                throw new IllegalArgumentException(
+                        "Attendance restriction: 1st-year students are only permitted to mark attendance between 09:00 AM and 05:00 PM. Attendance time has ended. (Current time: " 
                         + attendanceTime.withNano(0) + ")"
                 );
             }
@@ -96,12 +104,12 @@ public class AttendanceService {
         Student student = studentRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with ID: " + studentId));
 
-        // 2. Enforce 1st-Year Time Window Restriction (9:00 AM to 5:00 PM)
+        // 2. Enforce Time Window Restriction (09:00 AM to 05:00 PM)
         validateTimeWindowRestriction(student, now);
 
-        // 3. Prevent duplicate daily attendance
+        // 3. Prevent duplicate daily attendance (Only one attendance per day)
         if (attendanceRepository.existsByStudentIdAndAttendanceDate(studentId, today)) {
-            throw new IllegalStateException("Attendance has already been marked for today (" + today + ")");
+            throw new IllegalStateException("Attendance already marked for today.");
         }
 
         // 4. Perform Facial Biometric Verification (FaceNet)
@@ -219,8 +227,20 @@ public class AttendanceService {
             } else if (isFuture) {
                 status = "FUTURE";
             } else {
-                status = "NOT_MARKED";
-                notMarkedCount++;
+                LocalTime currentClock = LocalTime.now();
+                if (isToday) {
+                    if (currentClock.isAfter(ATTENDANCE_END_TIME)) {
+                        status = "ABSENT";
+                        absentCount++;
+                    } else {
+                        status = "NOT_MARKED";
+                        notMarkedCount++;
+                    }
+                } else {
+                    // Unmarked past date automatically evaluated as ABSENT
+                    status = "ABSENT";
+                    absentCount++;
+                }
                 elapsedDays++;
             }
 

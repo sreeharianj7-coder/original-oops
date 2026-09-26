@@ -33,14 +33,17 @@ public class AuthService {
     private final StudentRepository studentRepository;
     private final AdminRepository adminRepository;
     private final HostelRepository hostelRepository;
+    private final FaceVerificationService faceVerificationService;
 
     @Autowired
     public AuthService(StudentRepository studentRepository, 
                        AdminRepository adminRepository, 
-                       HostelRepository hostelRepository) {
+                       HostelRepository hostelRepository,
+                       FaceVerificationService faceVerificationService) {
         this.studentRepository = studentRepository;
         this.adminRepository = adminRepository;
         this.hostelRepository = hostelRepository;
+        this.faceVerificationService = faceVerificationService;
     }
 
     /**
@@ -80,8 +83,30 @@ public class AuthService {
                 hashedPassword
         );
 
+        if (request.getGender() != null) student.setGender(request.getGender().trim());
+        if (request.getDateOfBirth() != null) student.setDateOfBirth(request.getDateOfBirth().trim());
+        if (request.getSemester() != null) student.setSemester(request.getSemester().trim());
+        if (request.getDivision() != null) student.setDivision(request.getDivision().trim());
+        if (request.getBlock() != null) student.setBlock(request.getBlock().trim());
+        if (request.getUsername() != null) student.setUsername(request.getUsername().trim());
+
         Student savedStudent = studentRepository.save(student);
         log.info("Student successfully registered with ID: {}", savedStudent.getId());
+
+        // Automatically enroll registered facial photos if provided
+        if (request.getFaceImages() != null && !request.getFaceImages().isEmpty()) {
+            try {
+                com.smarthostel.dto.FaceEnrollRequest enrollReq = new com.smarthostel.dto.FaceEnrollRequest();
+                enrollReq.setStudentId(savedStudent.getStudentId());
+                enrollReq.setImages(request.getFaceImages());
+                faceVerificationService.enrollFaces(enrollReq);
+                log.info("Successfully enrolled {} face photos for student {}", 
+                        request.getFaceImages().size(), savedStudent.getStudentId());
+            } catch (Exception ex) {
+                log.warn("Facial enrollment warning during registration for {}: {}", 
+                        savedStudent.getStudentId(), ex.getMessage());
+            }
+        }
 
         String sessionToken = "student_token_" + UUID.randomUUID().toString();
         return new AuthResponse(sessionToken, savedStudent, "Student account created successfully");

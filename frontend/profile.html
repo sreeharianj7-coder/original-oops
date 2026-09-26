@@ -3,152 +3,360 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Profile | HostelTrack</title>
+  <title>Student Profile | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-card-border);
+      margin-bottom: 1.5rem;
+    }
+    .profile-avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 3px solid var(--color-accent-soft);
+    }
+    .profile-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .meta-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+    .meta-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .biometric-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .bio-photo-card {
+      border: 1px solid var(--color-card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--color-surface);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .bio-photo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(22, 59, 45, 0.08);
+    }
+    .bio-photo-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+      background: var(--color-cream);
+    }
+    .bio-photo-label {
+      padding: 0.4rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      background: var(--color-cream);
+      border-top: 1px solid var(--color-card-border);
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="dashboard.html" class="nav-brand">
-        <div class="brand-icon">🏛️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Student Profile</span>
+  <!-- Mobile Top Bar Header -->
+  <header class="mobile-header">
+    <div style="display: flex; align-items: center; gap: 0.6rem;">
+      <span style="font-size: 1.25rem;">🏛️</span>
+      <span class="mobile-brand">Hostel Attendance</span>
+    </div>
+    <button class="btn btn-sm btn-outline" onclick="Auth.logout()" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 0.25rem 0.6rem;">
+      Logout
+    </button>
+  </header>
+
+  <div class="app-layout">
+    <!-- Desktop Left Navigation Sidebar (Dark Forest Green #163B2D) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">🏛️</div>
+        <div>
+          <div class="sidebar-brand-name">HOSTELTRACK</div>
+          <div class="sidebar-brand-sub">ASIET KALADY</div>
         </div>
-      </a>
-      
-      <ul class="nav-menu" id="nav-menu-list">
-        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="attendance.html" class="nav-link">Mark Attendance</a></li>
-        <li><a href="face-registration.html" class="nav-link">Face Registration</a></li>
-        <li><a href="history.html" class="nav-link">Attendance History</a></li>
-        <li><a href="profile.html" class="nav-link active">Profile</a></li>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="link-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="attendance.html" class="sidebar-link">
+            <span class="link-icon">📍</span>
+            <span>Mark Attendance</span>
+          </a>
+        </li>
+        <li>
+          <a href="profile.html" class="sidebar-link active">
+            <span class="link-icon">👤</span>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="history.html" class="sidebar-link">
+            <span class="link-icon">🗓️</span>
+            <span>Attendance History</span>
+          </a>
+        </li>
+        <li style="margin-top: auto;">
+          <a href="javascript:void(0)" onclick="Auth.logout()" class="sidebar-link" style="color: #F1C4BF;">
+            <span class="link-icon">🚪</span>
+            <span>Logout</span>
+          </a>
+        </li>
       </ul>
 
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar" id="sidebar-avatar">S</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-user-name">Loading...</div>
+            <div class="user-role" id="sidebar-user-id">Student</div>
+          </div>
+        </div>
+      </div>
+    </aside>
 
-      <div class="nav-actions" id="nav-auth-section">
-        <!-- Rendered by Auth.initNav() -->
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Topbar Header -->
+      <div class="topbar">
+        <div>
+          <h1 class="topbar-greeting">Student Institutional Profile</h1>
+          <p class="topbar-subtitle">
+            Academic enrollment, residential hostel room allocation, and enrolled biometrics.
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <a href="attendance.html" class="btn btn-primary">
+            <span>📷</span> Mark Attendance
+          </a>
+        </div>
       </div>
 
-      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
-    </div>
+      <!-- Student Hero Banner -->
+      <div class="profile-hero">
+        <div class="profile-avatar-lg" id="profile-hero-avatar">S</div>
+        <div style="flex-grow: 1;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+            <h2 id="prof-hero-name" style="margin: 0; font-size: 1.5rem; color: var(--color-primary);">Student Name</h2>
+            <span id="prof-hero-id" class="badge badge-present">ASIET2024CS001</span>
+            <span class="badge badge-neutral" id="prof-hero-status">Active Resident</span>
+          </div>
+          <p id="prof-hero-dept" style="margin: 0.35rem 0 0 0; color: var(--color-text-secondary); font-size: 0.9rem;">
+            B.Tech Computer Science and Engineering • Adi Shankara Institute
+          </p>
+        </div>
+      </div>
+
+      <!-- Profile Grid -->
+      <div class="profile-meta-grid">
+        
+        <!-- Card 1: Personal Details -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Personal Particulars</h3>
+            <span class="badge badge-neutral">Identity</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+            <div class="meta-item">
+              <span class="meta-label">Full Legal Name</span>
+              <span class="meta-value" id="prof-full-name">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">University / Student ID</span>
+              <span class="meta-value" id="prof-id-val" style="font-family: var(--font-mono); color: var(--color-accent);">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Gender</span>
+              <span class="meta-value" id="prof-gender">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Date of Birth</span>
+              <span class="meta-value" id="prof-dob">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Email Address</span>
+              <span class="meta-value" id="prof-email">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Phone Number</span>
+              <span class="meta-value" id="prof-phone">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Academic & Hostel Allocation -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Academic & Hostel Details</h3>
+            <span class="badge badge-present">Enrolled</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+            <div class="meta-item">
+              <span class="meta-label">Institution</span>
+              <span class="meta-value">Adi Shankara Institute of Science and Technology (ASIET)</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Course / Degree</span>
+              <span class="meta-value" id="prof-course">B.Tech Computer Science and Engineering</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Department</span>
+              <span class="meta-value" id="prof-dept">Computer Science and Engineering</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="meta-item">
+                <span class="meta-label">Academic Year</span>
+                <span class="meta-value" id="prof-year">3rd Year</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Semester & Division</span>
+                <span class="meta-value" id="prof-sem-div">Sem 5 • Div A</span>
+              </div>
+            </div>
+            <div style="border-top: 1px solid var(--color-card-border); padding-top: 0.85rem; margin-top: 0.2rem;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="meta-item">
+                  <span class="meta-label">Hostel Facility</span>
+                  <span class="meta-value" id="prof-hostel" style="color: var(--color-primary);">Main Campus Hostel</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Room Allocation</span>
+                  <span class="meta-value" id="prof-room" style="font-weight: 700; color: var(--color-accent);">Room A-204</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Biometric Facial Gallery -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header" style="flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h3 class="card-title">Enrolled Multi-Angle Facial Biometrics</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0.25rem 0 0 0;">
+              High-accuracy 512-dimensional vector representations computed via pure Java spatial-gradient FaceNet (Zero OpenCV).
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span id="prof-face-status-badge" class="badge badge-present">FaceNet 512-d Enrolled</span>
+          </div>
+        </div>
+
+        <div class="biometric-gallery" id="bio-gallery-container">
+          <!-- Populated dynamically via JS -->
+          <div class="bio-photo-card">
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: #e0d9cd; font-size: 2rem;">👤</div>
+            <div class="bio-photo-label">Angle 1 • Frontal</div>
+          </div>
+          <div class="bio-photo-card">
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: #e0d9cd; font-size: 2rem;">👤</div>
+            <div class="bio-photo-label">Angle 2 • Left Profile</div>
+          </div>
+          <div class="bio-photo-card">
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: #e0d9cd; font-size: 2rem;">👤</div>
+            <div class="bio-photo-label">Angle 3 • Right Profile</div>
+          </div>
+          <div class="bio-photo-card">
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: #e0d9cd; font-size: 2rem;">👤</div>
+            <div class="bio-photo-label">Angle 4 • Slight Tilt</div>
+          </div>
+        </div>
+        <div style="margin-top: 1rem; font-size: 0.82rem; color: var(--color-text-secondary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <span>🔒 Biometric mathematical templates are securely hashed & protected on the institutional server.</span>
+          <a href="attendance.html" class="btn btn-sm btn-outline">Test Biometric Verification &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 4: Session Security & Controls -->
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h4 style="margin: 0; font-size: 1rem; color: var(--color-primary);">Account & Authentication Security</h4>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--color-text-secondary);">
+            Session verified via Spring Security and BCrypt cryptographic password hashing.
+          </p>
+        </div>
+        <button class="btn btn-secondary" onclick="Auth.logout()">
+          <span>🚪</span> Sign Out of Account
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <ul class="mobile-nav-items">
+      <li>
+        <a href="dashboard.html" class="mobile-nav-link">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="attendance.html" class="mobile-nav-link">
+          <span class="nav-icon">📍</span>
+          <span>Attendance</span>
+        </a>
+      </li>
+      <li>
+        <a href="history.html" class="mobile-nav-link">
+          <span class="nav-icon">🗓️</span>
+          <span>History</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html" class="mobile-nav-link active">
+          <span class="nav-icon">👤</span>
+          <span>Profile</span>
+        </a>
+      </li>
+    </ul>
   </nav>
-
-  <!-- Profile Main Container -->
-  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
-    <div style="margin-bottom: 2rem;">
-      <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Institutional Record</span>
-      <h1 style="font-size: 2.1rem;">Student Profile</h1>
-      <p style="font-size: 0.95rem; margin-top: 0.25rem;">
-        Academic affiliation and residential hostel room allocation details.
-      </p>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
-      
-      <!-- Card 1: Student Information -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Student Information</h3>
-          <span id="prof-student-id" class="badge badge-present">ASIET2024CS001</span>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
-          <div>
-            <span class="stat-label">Full Name</span>
-            <div id="prof-name" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">Rahul Sharma</div>
-          </div>
-          <div>
-            <span class="stat-label">College Email</span>
-            <div id="prof-email" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">rahul.cs@adishankara.ac.in</div>
-          </div>
-          <div>
-            <span class="stat-label">Phone Number</span>
-            <div id="prof-phone" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">+91 98765 43210</div>
-          </div>
-          <div>
-            <span class="stat-label">Academic Year</span>
-            <div id="prof-year" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">3rd Year (2023-2027)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Academic & Hostel Allocation -->
-      <div class="card card-warm">
-        <div class="card-header">
-          <h3 class="card-title">Academic & Hostel Details</h3>
-          <span class="badge badge-neutral">Enrolled</span>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
-          <div>
-            <span class="stat-label">College Name</span>
-            <div style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">
-              Adi Shankara Institute of Science and Technology
-            </div>
-          </div>
-          <div>
-            <span class="stat-label">Program & Department</span>
-            <div id="prof-course" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">
-              B.Tech Computer Science and Engineering
-            </div>
-            <div id="prof-dept" style="font-size: 0.82rem; color: var(--text-muted);">
-              Department of Computer Science and Engineering
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border-light);">
-            <div>
-              <span class="stat-label">Hostel Name</span>
-              <div id="prof-hostel" style="font-weight: 600; color: var(--color-warm-brown); margin-top: 0.15rem;">Main Campus Hostel</div>
-            </div>
-            <div>
-              <span class="stat-label">Room Number</span>
-              <div id="prof-room" style="font-weight: 600; color: var(--color-deep-brown); margin-top: 0.15rem;">A-204</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Biometric Facial Profile -->
-    <div class="card card-warm" style="margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-      <div>
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-          <h4 style="font-size: 1.05rem; color: var(--color-deep-brown);">Facial Biometric Enrollment</h4>
-          <span id="prof-face-badge" class="badge badge-present">Registered</span>
-        </div>
-        <p id="prof-face-info" style="font-size: 0.85rem; color: var(--text-secondary);">
-          Pretrained FaceNet model (VGGFace2) • 512-d embeddings enrolled
-        </p>
-      </div>
-      <a href="face-registration.html" class="btn btn-secondary">
-        <span>📸</span> Manage Face Photos &rarr;
-      </a>
-    </div>
-
-    <!-- Security & Signout Card -->
-    <div class="card" style="margin-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-      <div>
-        <h4 style="font-size: 1.05rem; color: var(--color-deep-brown);">Session Security</h4>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">Logged in via secure BCrypt authentication token.</p>
-      </div>
-      <button class="btn btn-secondary" onclick="Auth.logout()">
-        <span>🚪</span> Log Out of Student Account
-      </button>
-    </div>
-
-  </main>
 
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/profile.js"></script>
-  <script>
-    function toggleMobileNav() {
-      const menu = document.getElementById('nav-menu-list');
-      if (menu) menu.classList.toggle('show');
-    }
-  </script>
 </body>
 </html>

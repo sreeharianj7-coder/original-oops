@@ -3,298 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mark Attendance | HostelTrack</title>
+  <title>Mark Attendance | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .camera-container {
-      position: relative;
-      width: 100%;
-      max-width: 440px;
-      aspect-ratio: 4/3;
-      margin: 1rem auto;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--color-dark-espresso);
-      border: 2px solid var(--border-medium);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #camera-video, #captured-preview-canvas {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scaleX(-1); /* Mirror camera for natural selfie feel */
-    }
-    .camera-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .face-guide-oval {
-      width: 170px;
-      height: 230px;
-      border: 2px dashed rgba(248, 243, 234, 0.7);
-      border-radius: 50%;
-      box-shadow: 0 0 0 9999px rgba(39, 30, 23, 0.4);
-      transition: border-color var(--transition-normal);
-    }
-    .face-guide-oval.verified {
-      border-color: var(--status-present);
-      border-style: solid;
-      box-shadow: 0 0 0 9999px rgba(74, 124, 89, 0.25);
-    }
-    .face-guide-oval.failed {
-      border-color: var(--status-absent);
-      border-style: solid;
-      box-shadow: 0 0 0 9999px rgba(185, 102, 78, 0.25);
-    }
-    .camera-status-pill {
-      position: absolute;
-      bottom: 12px;
-      background: rgba(39, 30, 23, 0.85);
-      color: var(--color-ivory);
-      padding: 4px 12px;
-      border-radius: var(--radius-full);
-      font-size: 0.78rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .workflow-stepper {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .stepper-step {
-      padding: 0.75rem;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    .stepper-step.active {
-      border-color: var(--color-warm-brown);
-      color: var(--color-warm-brown);
-      background: var(--bg-surface-warm);
-    }
-    .stepper-step.completed {
-      border-color: var(--status-present);
-      color: var(--status-present);
-      background: var(--status-present-bg);
-    }
-  </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="dashboard.html" class="nav-brand">
-        <div class="brand-icon">🏛️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Mark Attendance</span>
+  <!-- Mobile Top Bar Header -->
+  <header class="mobile-header">
+    <div style="display: flex; align-items: center; gap: 0.6rem;">
+      <span style="font-size: 1.25rem;">🏛️</span>
+      <span class="mobile-brand">Mark Attendance</span>
+    </div>
+    <a href="dashboard.html" class="btn btn-sm btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 0.25rem 0.6rem;">
+      Dashboard
+    </a>
+  </header>
+
+  <div class="app-layout">
+    <!-- Desktop Left Navigation Sidebar (Dark Forest Green #163B2D) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">🏛️</div>
+        <div>
+          <div class="sidebar-brand-name">HOSTELTRACK</div>
+          <div class="sidebar-brand-sub">ASIET KALADY</div>
         </div>
-      </a>
-      
-      <ul class="nav-menu" id="nav-menu-list">
-        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="attendance.html" class="nav-link active">Mark Attendance</a></li>
-        <li><a href="face-registration.html" class="nav-link">Face Registration</a></li>
-        <li><a href="history.html" class="nav-link">Attendance History</a></li>
-        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="link-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="attendance.html" class="sidebar-link active">
+            <span class="link-icon">📍</span>
+            <span>Mark Attendance</span>
+          </a>
+        </li>
+        <li>
+          <a href="profile.html" class="sidebar-link">
+            <span class="link-icon">👤</span>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="history.html" class="sidebar-link">
+            <span class="link-icon">🗓️</span>
+            <span>Attendance History</span>
+          </a>
+        </li>
+        <li>
+          <a href="profile.html#settings" class="sidebar-link">
+            <span class="link-icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li style="margin-top: auto;">
+          <a href="javascript:void(0)" onclick="Auth.logout()" class="sidebar-link" style="color: #F1C4BF;">
+            <span class="link-icon">🚪</span>
+            <span>Logout</span>
+          </a>
+        </li>
       </ul>
 
-      <div class="nav-actions" id="nav-auth-section">
-        <!-- Rendered by Auth.initNav() -->
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar" id="sidebar-avatar">S</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-user-name">Loading...</div>
+            <div class="user-role" id="sidebar-user-id">Student</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Topbar Header -->
+      <div class="topbar">
+        <div>
+          <h1 class="topbar-greeting">Mark Attendance</h1>
+          <p class="topbar-subtitle">
+            Two-Step Multi-Factor Roll-Call: Face Biometric Match + Geolocation Geofence
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <span class="badge badge-present" id="policy-time-badge">09:00 AM – 05:00 PM WINDOW</span>
+        </div>
       </div>
 
-      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
-    </div>
+      <!-- Two-Column Attendance Layout (Reference Style: Left Camera, Right Verification Cards) -->
+      <div class="attendance-layout">
+        <!-- LEFT: Live Camera Preview & Capture -->
+        <div class="card" style="padding: 1.75rem;">
+          <div class="card-header" style="margin-bottom: 1rem;">
+            <h3 class="card-title">Live Camera Capture</h3>
+            <span class="badge badge-not-marked" id="camera-badge">CAMERA OFFLINE</span>
+          </div>
+          
+          <div class="camera-container" id="camera-viewport">
+            <video id="camera-video" autoplay playsinline muted style="display: none;"></video>
+            <canvas id="captured-canvas" style="display: none;"></canvas>
+
+            <!-- Placeholder before camera activation -->
+            <div id="camera-placeholder" style="text-align: center; color: var(--color-warm-cream); padding: 2rem;">
+              <div style="font-size: 3rem; margin-bottom: 0.5rem;">📷</div>
+              <div style="font-weight: 700; font-size: 1.1rem;">Webcam Inactive</div>
+              <div style="font-size: 0.85rem; color: var(--color-soft-beige); margin-top: 0.35rem;">
+                Click "Start Camera" to activate your camera for face verification
+              </div>
+            </div>
+
+            <!-- Face Oval Guide Overlay -->
+            <div class="camera-overlay-guide" id="face-guide" style="display: none;"></div>
+
+            <div class="camera-status-pill" id="camera-pill" style="display: none;">
+              <span id="pill-indicator" style="color: var(--status-present);">●</span>
+              <span id="pill-text">Camera Active — Align Face</span>
+            </div>
+          </div>
+
+          <!-- Camera Controls -->
+          <div class="camera-controls">
+            <button type="button" id="btn-toggle-camera" class="btn btn-forest" style="flex: 1;">
+              <span>📹</span> Start Camera
+            </button>
+            <button type="button" id="btn-capture-verify" class="btn btn-primary" style="flex: 1.2; display: none;">
+              <span>⚡</span> Capture & Verify
+            </button>
+            <button type="button" id="btn-retake" class="btn btn-secondary" style="display: none;">
+              <span>🔄</span> Retake
+            </button>
+          </div>
+
+          <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            FaceNet 512-d biometric representation is matched against your 3–4 registered photo angles.
+          </div>
+        </div>
+
+        <!-- RIGHT: Two-Step Verification Cards & Confirmation Action -->
+        <div style="display: flex; flex-direction: column;">
+          <!-- STEP 1: Face Verification Card -->
+          <div class="verification-card" id="card-step-face">
+            <span class="step-badge">STEP 1</span>
+            <div class="verification-title">
+              <span id="face-status-icon" style="font-size: 1.35rem;">⏳</span>
+              <span id="face-status-header">Face Verification</span>
+            </div>
+            <p class="verification-desc" id="face-status-desc">
+              Awaiting live photo capture. System will compare facial embeddings with enrolled photos.
+            </p>
+          </div>
+
+          <!-- STEP 2: Location Verification Card -->
+          <div class="verification-card" id="card-step-location">
+            <span class="step-badge">STEP 2</span>
+            <div class="verification-title">
+              <span id="location-status-icon" style="font-size: 1.35rem;">⏳</span>
+              <span id="location-status-header">Location Verification</span>
+            </div>
+            <p class="verification-desc" id="location-status-desc">
+              Checks GPS coordinates against college center (Lat: 10.1782, Lon: 76.4305, Radius: 1000m).
+            </p>
+          </div>
+
+          <!-- Dynamic Status / Progress Banner -->
+          <div id="attendance-status-banner" style="display: none; padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; margin-bottom: 1.25rem; text-align: center;">
+            <!-- Injected dynamically -->
+          </div>
+
+          <!-- Final Confirm & Mark Attendance Button -->
+          <button type="button" id="btn-mark-attendance" class="btn btn-primary btn-block btn-lg" disabled style="padding: 1.15rem; font-size: 1.1rem; letter-spacing: 0.02em;">
+            <span>✓</span> MARK ATTENDANCE
+          </button>
+
+          <!-- Attendance Rules Card -->
+          <div class="card card-warm" style="margin-top: 1.5rem; padding: 1.25rem; border-color: var(--color-beige-border);">
+            <div style="font-weight: 700; font-size: 0.88rem; color: var(--color-forest-green); margin-bottom: 0.5rem;">
+              Institutional Verification Rules
+            </div>
+            <ul style="font-size: 0.8rem; color: var(--text-secondary); list-style: square; padding-left: 1.2rem; line-height: 1.6;">
+              <li>Attendance is recorded <strong>only when BOTH</strong> face and geolocation checks succeed.</li>
+              <li>Attendance can only be marked between <strong>09:00 AM and 05:00 PM</strong>.</li>
+              <li>Only <strong>ONE attendance attempt</strong> is allowed per student per day.</li>
+              <li>Authoritative validation is computed on the Java Spring Boot backend.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <ul class="mobile-nav-items">
+      <li>
+        <a href="dashboard.html" class="mobile-nav-link">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="attendance.html" class="mobile-nav-link active">
+          <span class="nav-icon">📍</span>
+          <span>Attendance</span>
+        </a>
+      </li>
+      <li>
+        <a href="history.html" class="mobile-nav-link">
+          <span class="nav-icon">🗓️</span>
+          <span>History</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html" class="mobile-nav-link">
+          <span class="nav-icon">👤</span>
+          <span>Profile</span>
+        </a>
+      </li>
+    </ul>
   </nav>
-
-  <!-- Mark Attendance Main Container -->
-  <main class="container container-narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
-    <div style="margin-bottom: 1.75rem;">
-      <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Multi-Factor Roll-Call</span>
-      <h1 style="font-size: 2.1rem;">Mark Attendance</h1>
-      <p style="font-size: 0.95rem; margin-top: 0.25rem; color: var(--text-secondary);">
-        Face Verification + GPS Geolocation Distance Validation
-      </p>
-    </div>
-
-    <!-- Stepper Tracker -->
-    <div class="workflow-stepper">
-      <div id="step-pill-1" class="stepper-step active">
-        1. Live Face Capture
-      </div>
-      <div id="step-pill-2" class="stepper-step">
-        2. Location Check
-      </div>
-      <div id="step-pill-3" class="stepper-step">
-        3. Attendance Recorded
-      </div>
-    </div>
-
-    <!-- MAIN STEP 1: Live Face Verification Card -->
-    <div class="step-card" id="step-1-card">
-      <div class="step-indicator">
-        <span>Step 1 of 2</span>
-      </div>
-      <h3 style="margin-bottom: 0.35rem;">Face Verification</h3>
-      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
-        Align your face in the camera frame. The system will extract your FaceNet embedding and match it with your registered photos.
-      </p>
-
-      <!-- Camera Feed Area -->
-      <div class="camera-container" id="camera-box">
-        <video id="camera-video" autoplay playsinline muted style="display: none;"></video>
-        <canvas id="captured-preview-canvas" style="display: none;"></canvas>
-        
-        <div id="camera-placeholder" style="text-align: center; color: var(--color-sand); padding: 1.5rem;">
-          <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">📸</div>
-          <div style="font-weight: 600; font-size: 0.95rem;">Camera Inactive</div>
-          <div style="font-size: 0.8rem; color: var(--color-taupe); margin-top: 0.2rem;">
-            Click below to open device webcam
-          </div>
-        </div>
-
-        <!-- Face Alignment Guide Overlay -->
-        <div class="camera-overlay" id="camera-overlay" style="display: none;">
-          <div class="face-guide-oval" id="face-guide-oval"></div>
-          <div class="camera-status-pill" id="camera-status-pill">
-            <span>●</span> <span id="camera-status-text">Ready to verify</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Camera Action Controls -->
-      <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
-        <button type="button" id="btn-start-camera" class="btn btn-primary" onclick="AttendanceWorkflow.startCamera()">
-          <span>📹</span> Open Camera
-        </button>
-        <button type="button" id="btn-capture-face" class="btn btn-primary" style="display: none;" onclick="AttendanceWorkflow.captureFace()">
-          <span>⚡</span> Capture & Verify Face
-        </button>
-        <button type="button" id="btn-retake-camera" class="btn btn-secondary" style="display: none;" onclick="AttendanceWorkflow.retakeCamera()">
-          <span>🔄</span> Retake
-        </button>
-      </div>
-
-      <!-- Face Diagnostic Feedback -->
-      <div id="face-feedback-box" style="margin-top: 1.25rem; font-size: 0.88rem; text-align: center; color: var(--text-secondary);">
-        Awaiting camera activation...
-      </div>
-    </div>
-
-    <!-- MAIN STEP 2: Location Verification Card -->
-    <div class="step-card" id="step-2-card" style="opacity: 0.5; pointer-events: none; margin-top: 1.5rem;">
-      <div class="step-indicator">
-        <span>Step 2 of 2</span>
-      </div>
-      <h3 style="margin-bottom: 0.35rem;">GPS Geolocation Verification</h3>
-      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
-        Authoritative distance calculation from your assigned hostel perimeter.
-      </p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; background: var(--bg-surface-warm); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1rem;">
-        <div>
-          <span class="stat-label">GPS Coordinates</span>
-          <div id="loc-coords" style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600; color: var(--color-deep-brown); margin-top: 0.2rem;">
-            -- , --
-          </div>
-        </div>
-        <div>
-          <span class="stat-label">Hostel Distance</span>
-          <div id="loc-distance" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--color-deep-brown); margin-top: 0.1rem;">
-            --
-          </div>
-        </div>
-        <div>
-          <span class="stat-label">Allowed Perimeter</span>
-          <div id="loc-radius" style="font-size: 0.9rem; font-weight: 600; color: var(--color-warm-brown); margin-top: 0.2rem;">
-            1000 meters
-          </div>
-        </div>
-        <div>
-          <span class="stat-label">Location Status</span>
-          <div id="loc-status" class="badge badge-neutral" style="margin-top: 0.2rem;">
-            NOT CHECKED
-          </div>
-        </div>
-      </div>
-
-      <div id="loc-feedback-message" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
-        Awaiting face verification before GPS check...
-      </div>
-    </div>
-
-    <!-- Attendance Success Result Box -->
-    <div id="attendance-success-box" style="display: none; background: var(--status-present-bg); border: 1px solid var(--status-present-border); padding: 1.5rem; border-radius: var(--radius-md); margin-top: 1.5rem;">
-      <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--status-present); margin-bottom: 0.5rem;">
-        <span style="font-size: 1.35rem; font-weight: 700;">✓</span>
-        <h4 style="color: var(--status-present); font-size: 1.15rem;">Attendance Marked Successfully</h4>
-      </div>
-      <p style="font-size: 0.88rem; color: var(--color-deep-brown); margin-bottom: 1rem;">
-        Both Facial Biometric Identity and Hostel Geolocation were verified and recorded.
-      </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; font-size: 0.85rem; background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-        <div>
-          <span style="color: var(--text-muted); font-size: 0.75rem;">Date</span>
-          <div id="success-date" style="font-weight: 600; color: var(--color-deep-brown);">--</div>
-        </div>
-        <div>
-          <span style="color: var(--text-muted); font-size: 0.75rem;">Time</span>
-          <div id="success-time" style="font-weight: 600; color: var(--color-deep-brown);">--</div>
-        </div>
-        <div>
-          <span style="color: var(--text-muted); font-size: 0.75rem;">Verification Mode</span>
-          <div style="font-weight: 600; color: var(--status-present);">FACE + GEOLOCATION</div>
-        </div>
-      </div>
-      <div style="margin-top: 1.25rem;">
-        <a href="dashboard.html" class="btn btn-primary">Return to Dashboard Calendar &rarr;</a>
-      </div>
-    </div>
-
-    <!-- Attendance Rejection Box -->
-    <div id="attendance-rejected-box" style="display: none; background: var(--status-absent-bg); border: 1px solid var(--status-absent-border); padding: 1.5rem; border-radius: var(--radius-md); margin-top: 1.5rem;">
-      <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--status-absent); margin-bottom: 0.5rem;">
-        <span style="font-size: 1.35rem; font-weight: 700;">✕</span>
-        <h4 style="color: var(--status-absent); font-size: 1.15rem;">Attendance Rejected</h4>
-      </div>
-      <p id="rejected-reason-text" style="font-size: 0.88rem; color: var(--color-deep-brown); margin-top: 0.35rem; line-height: 1.5;">
-        Reason: Verification check failed.
-      </p>
-      <div style="margin-top: 1rem; display: flex; gap: 0.75rem;">
-        <button class="btn btn-secondary" onclick="AttendanceWorkflow.resetWorkflow()">Try Again</button>
-        <a href="face-registration.html" id="link-re-register" class="btn btn-secondary" style="display: none;">Update Face Photos</a>
-      </div>
-    </div>
-
-  </main>
 
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/location.js"></script>
   <script src="js/attendance.js"></script>
-  <script>
-    function toggleMobileNav() {
-      const menu = document.getElementById('nav-menu-list');
-      if (menu) menu.classList.toggle('show');
-    }
-  </script>
 </body>
 </html>

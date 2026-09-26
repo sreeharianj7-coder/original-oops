@@ -23,6 +23,13 @@ public class RegisterRequest {
     private String course = "B.Tech Computer Science and Engineering";
     private String department = "Computer Science and Engineering";
     private String academicYear = "2023 - 2027";
+    private String gender = "Male";
+    private String dateOfBirth;
+    private String semester = "S5";
+    private String division = "A";
+    private String block = "Block A";
+    private String username;
+    private java.util.List<String> faceImages;
 
     @NotNull(message = "Hostel selection is required")
     private Long hostelId;
@@ -128,5 +135,61 @@ public class RegisterRequest {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public java.util.List<String> getFaceImages() {
+        return faceImages;
+    }
+
+    public void setFaceImages(java.util.List<String> faceImages) {
+        this.faceImages = faceImages;
     }
 }

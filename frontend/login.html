@@ -3,79 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Login | HostelTrack</title>
+  <title>Student Login | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body style="background: linear-gradient(180deg, #F4EFE3 0%, #EFE8DA 100%); min-height: 100vh; display: flex; flex-direction: column;">
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="index.html" class="nav-brand">
-        <div class="brand-icon">🏛️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Student Portal</span>
-        </div>
-      </a>
-      <div class="nav-actions">
-        <a href="admin-login.html" class="btn btn-sm btn-outline">Admin Login</a>
-        <a href="register.html" class="btn btn-sm btn-secondary">Register</a>
+  <!-- Header -->
+  <header style="padding: 1.25rem 2rem; background: var(--color-forest-green); color: var(--color-warm-cream); display: flex; justify-content: space-between; align-items: center;">
+    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; color: inherit;">
+      <div style="width: 36px; height: 36px; background: var(--color-forest-green-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🏛️</div>
+      <div>
+        <div style="font-weight: 800; font-size: 1.05rem;">SMART HOSTEL ATTENDANCE</div>
+        <div style="font-size: 0.68rem; color: var(--color-soft-beige); text-transform: uppercase;">Adi Shankara Institute (ASIET)</div>
       </div>
+    </a>
+    <div>
+      <a href="admin-login.html" class="btn btn-sm btn-outline" style="border-color: var(--color-soft-beige); color: var(--color-soft-beige);">Warden / Admin Login →</a>
     </div>
-  </nav>
+  </header>
 
   <!-- Login Container -->
-  <main class="container container-narrow" style="padding-top: 3.5rem; padding-bottom: 4rem;">
-    <div class="card" style="max-width: 480px; margin: 0 auto; padding: 2.25rem;">
+  <main class="container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 440px; padding: 2.5rem; border-color: var(--color-beige-border); box-shadow: var(--shadow-elevated);">
       <div style="text-align: center; margin-bottom: 2rem;">
-        <span class="badge badge-present" style="margin-bottom: 0.5rem;">Student Access</span>
-        <h1 style="font-size: 1.85rem; margin-top: 0.25rem;">Welcome Back</h1>
-        <p style="font-size: 0.9rem; margin-top: 0.25rem;">Login to your student attendance account</p>
+        <div style="width: 56px; height: 56px; background: var(--color-orange-subtle); color: var(--color-orange-accent); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 1rem;">
+          🎓
+        </div>
+        <h1 style="font-size: 1.75rem; color: var(--color-forest-green);">Student Login</h1>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.25rem;">
+          Enter your Student ID / Username and Password
+        </p>
       </div>
 
-      <form id="login-form">
+      <form id="student-login-form">
         <div class="form-group">
-          <label class="form-label" for="login-identifier">Student ID or Email</label>
-          <input 
-            type="text" 
-            id="login-identifier" 
-            class="form-control" 
-            placeholder="e.g. ASIET2024CS001 or rahul.cs@adishankara.ac.in" 
-            required 
-            autocomplete="username"
-          >
-          <span class="form-hint">Use your college roll number or registered email.</span>
+          <label class="form-label" for="login-id">Student ID / Username</label>
+          <input type="text" id="login-id" class="form-control" placeholder="e.g. ASIET2024CS001" required autofocus>
         </div>
 
         <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <label class="form-label" for="login-password">Password</label>
-            <a href="#" onclick="showToast('Please contact your hostel warden for password reset.', 'info'); return false;" style="font-size: 0.8rem;">Forgot Password?</a>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label class="form-label" for="login-password" style="margin-bottom: 0;">Password</label>
           </div>
-          <input 
-            type="password" 
-            id="login-password" 
-            class="form-control" 
-            placeholder="••••••••" 
-            required 
-            autocomplete="current-password"
-          >
+          <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
         </div>
 
-        <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
-          <span>🔐</span> Login to Student Dashboard
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block btn-lg" style="margin-top: 1.25rem;">
+          Sign In to Dashboard →
         </button>
       </form>
 
-      <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.88rem;">
-        <p>Don't have an account? <a href="register.html" style="font-weight: 600;">Register Student Account</a></p>
-        <div style="margin-top: 0.75rem;">
-          <a href="admin-login.html" style="font-size: 0.82rem; color: var(--text-muted);">Hostel Administrator? Login here &rarr;</a>
-        </div>
+      <!-- Pre-seeded demo credentials pill -->
+      <div style="margin-top: 1.5rem; background: var(--color-warm-cream); border: 1px solid var(--color-beige-border); border-radius: var(--radius-md); padding: 0.85rem; font-size: 0.8rem; color: var(--text-secondary);">
+        <strong style="color: var(--color-forest-green);">Demo Student Account:</strong><br>
+        ID: <code style="font-family: var(--font-mono); color: var(--color-orange-accent);">ASIET2024CS001</code> | Pwd: <code style="font-family: var(--font-mono); color: var(--color-orange-accent);">Password@123</code>
+      </div>
+
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light); font-size: 0.85rem;">
+        <p>New hostel resident? <a href="register.html" style="font-weight: 700; color: var(--color-forest-green);">Register your account & face →</a></p>
       </div>
     </div>
   </main>
+
+  <footer style="padding: 1.25rem 2rem; border-top: 1px solid var(--color-beige-border); text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+    Smart Hostel Attendance Management System • Adi Shankara Institute of Engineering & Technology
+  </footer>
 
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
@@ -83,32 +75,39 @@
     document.addEventListener('DOMContentLoaded', () => {
       Auth.redirectIfLoggedIn();
 
-      const form = document.getElementById('login-form');
+      const form = document.getElementById('student-login-form');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const identifier = document.getElementById('login-identifier').value.trim();
-        const password = document.getElementById('login-password').value;
-        const btn = document.getElementById('login-submit-btn');
+        const id = document.getElementById('login-id').value.trim();
+        const pwd = document.getElementById('login-password').value;
+        const btn = document.getElementById('login-btn');
 
         btn.disabled = true;
-        btn.innerHTML = 'Authenticating...';
+        btn.textContent = 'Verifying Credentials...';
 
         try {
-          const result = await Auth.loginStudent(identifier, password);
-          if (result.success) {
-            showToast('Login successful! Redirecting...', 'success');
+          const res = await fetch(`${CONFIG.API_BASE_URL}/students/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier: id, password: pwd })
+          });
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            Auth.setSession(data.data.token, 'STUDENT', data.data.student);
+            showToast('Login successful! Redirecting to Dashboard...', 'success');
             setTimeout(() => {
               window.location.href = 'dashboard.html';
             }, 600);
           } else {
-            showToast(result.message || 'Invalid credentials', 'error');
+            showToast(data.message || 'Invalid Student ID or Password.', 'error');
             btn.disabled = false;
-            btn.innerHTML = '<span>🔐</span> Login to Student Dashboard';
+            btn.textContent = 'Sign In to Dashboard →';
           }
         } catch (err) {
-          showToast('An unexpected error occurred', 'error');
+          showToast('Failed to connect to authentication server: ' + err.message, 'error');
           btn.disabled = false;
-          btn.innerHTML = '<span>🔐</span> Login to Student Dashboard';
+          btn.textContent = 'Sign In to Dashboard →';
         }
       });
     });

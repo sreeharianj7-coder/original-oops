@@ -10,9 +10,11 @@ import com.smarthostel.model.Admin;
 import com.smarthostel.model.Attendance;
 import com.smarthostel.model.Hostel;
 import com.smarthostel.model.Student;
+import com.smarthostel.model.StudentFaceProfile;
 import com.smarthostel.repository.AdminRepository;
 import com.smarthostel.repository.AttendanceRepository;
 import com.smarthostel.repository.HostelRepository;
+import com.smarthostel.repository.StudentFaceProfileRepository;
 import com.smarthostel.repository.StudentRepository;
 import com.smarthostel.util.PasswordHasher;
 import org.slf4j.Logger;
@@ -327,10 +329,6 @@ public class AdminService {
                 faceStatus
         );
         detail.setRecentHistory(historyDTOs);
-
-        return detail;
-    }
-
 
         return detail;
     }

@@ -3,151 +3,297 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hostel Administrator Dashboard | HostelTrack</title>
+  <title>Hostel Administrator Dashboard | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .donut-container {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .donut-chart-svg {
+      width: 150px;
+      height: 150px;
+      transform: rotate(-90deg);
+    }
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(22, 59, 45, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="admin-dashboard.html" class="nav-brand">
-        <div class="brand-icon">🛡️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Administrator Portal</span>
+  <!-- Mobile Top Bar Header -->
+  <header class="mobile-header">
+    <div style="display: flex; align-items: center; gap: 0.6rem;">
+      <span style="font-size: 1.25rem;">🛡️</span>
+      <span class="mobile-brand">Admin Console</span>
+    </div>
+    <button class="btn btn-sm btn-outline" onclick="Auth.logout()" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 0.25rem 0.6rem;">
+      Logout
+    </button>
+  </header>
+
+  <div class="app-layout">
+    <!-- Desktop Left Navigation Sidebar (Dark Forest Green #163B2D) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">🛡️</div>
+        <div>
+          <div class="sidebar-brand-name">HOSTELTRACK</div>
+          <div class="sidebar-brand-sub">WARDEN ADMIN</div>
         </div>
-      </a>
-      
-      <ul class="nav-menu" id="nav-menu-list">
-        <li><a href="admin-dashboard.html" class="nav-link active">Dashboard</a></li>
-        <li><a href="#attendance-table-section" class="nav-link">Attendance</a></li>
-        <li><a href="admin-students.html" class="nav-link">Students</a></li>
-        <li><a href="admin-profile.html" class="nav-link">Profile</a></li>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <a href="admin-dashboard.html" class="sidebar-link active">
+            <span class="link-icon">📊</span>
+            <span>Roll-Call Overview</span>
+          </a>
+        </li>
+        <li>
+          <a href="admin-students.html" class="sidebar-link">
+            <span class="link-icon">👥</span>
+            <span>Resident Students</span>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" onclick="AdminDashboardController.openSettingsModal()" class="sidebar-link">
+            <span class="link-icon">📍</span>
+            <span>Geofence & Rules</span>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" onclick="AdminDashboardController.exportCsv()" class="sidebar-link">
+            <span class="link-icon">📥</span>
+            <span>Export CSV</span>
+          </a>
+        </li>
+        <li style="margin-top: auto;">
+          <a href="javascript:void(0)" onclick="Auth.logout()" class="sidebar-link" style="color: #F1C4BF;">
+            <span class="link-icon">🚪</span>
+            <span>Logout</span>
+          </a>
+        </li>
       </ul>
 
-      <div class="nav-actions" id="nav-auth-section">
-        <!-- Rendered by Auth.initNav() -->
-      </div>
-
-      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
-    </div>
-  </nav>
-
-  <!-- Admin Dashboard Main Content -->
-  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
-    <!-- Welcome Header -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1.25rem;">
-      <div>
-        <span class="badge badge-neutral" style="margin-bottom: 0.4rem;">Warden Roll-Call Overview</span>
-        <h1 style="font-size: 2.25rem;">
-          <span id="admin-greeting">Good Morning</span>, <span id="admin-name-display">Warden</span>
-        </h1>
-        <p style="font-size: 0.95rem; margin-top: 0.2rem;">
-          Hostel: <strong id="admin-hostel-display" style="color: var(--color-deep-brown);">Adi Shankara Main Campus Hostel</strong> • 
-          Selected Date: <span id="admin-header-date" style="font-weight: 600; color: var(--color-warm-brown);">September 14, 2026</span>
-        </p>
-      </div>
-
-      <!-- Date Filter Controls -->
-      <div class="card card-warm" style="padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-        <label for="admin-date-picker" style="font-size: 0.82rem; font-weight: 600; color: var(--color-deep-brown);">
-          Select Date:
-        </label>
-        <input 
-          type="date" 
-          id="admin-date-picker" 
-          class="form-control" 
-          style="padding: 0.35rem 0.65rem; font-size: 0.88rem; width: auto;"
-        >
-        <button type="button" class="btn btn-sm btn-primary" onclick="AdminDashboardController.onDateFilterChange()">
-          View Attendance
-        </button>
-      </div>
-    </div>
-
-    <!-- 4 MAJOR SUMMARY CARDS -->
-    <div class="stats-grid" style="margin-bottom: 2rem;">
-      <!-- Card 1: Total Students -->
-      <div class="stat-box">
-        <span class="stat-label">Total Students</span>
-        <div class="stat-value" id="stat-total-students">0</div>
-        <span class="stat-hint">Allocated in this hostel block</span>
-      </div>
-
-      <!-- Card 2: Present (Muted Green) -->
-      <div class="stat-box" style="border-left: 4px solid var(--status-present);">
-        <span class="stat-label" style="color: var(--status-present);">Present</span>
-        <div class="stat-value" id="stat-present-count" style="color: var(--status-present);">0</div>
-        <span class="stat-hint">Location verified & marked</span>
-      </div>
-
-      <!-- Card 3: Absent (Muted Terracotta) -->
-      <div class="stat-box" style="border-left: 4px solid var(--status-absent);">
-        <span class="stat-label" style="color: var(--status-absent);">Absent</span>
-        <div class="stat-value" id="stat-absent-count" style="color: var(--status-absent);">0</div>
-        <span class="stat-hint">Reported absent / leave</span>
-      </div>
-
-      <!-- Card 4: Not Marked (Muted Blue) -->
-      <div class="stat-box" style="border-left: 4px solid var(--status-not-marked);">
-        <span class="stat-label" style="color: var(--status-not-marked);">Not Marked</span>
-        <div class="stat-value" id="stat-not-marked-count" style="color: var(--status-not-marked);">0</div>
-        <span class="stat-hint">Awaiting roll-call submission</span>
-      </div>
-    </div>
-
-    <!-- Attendance Percentage Progress Banner -->
-    <div class="card" style="margin-bottom: 2.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; padding: 1.25rem 1.75rem;">
-      <div>
-        <span class="stat-label">Today's Hostel Attendance Rate</span>
-        <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-top: 0.2rem;">
-          <span id="stat-attendance-rate" style="font-family: var(--font-serif); font-size: 2.25rem; font-weight: 700; color: var(--color-deep-brown);">
-            0.0%
-          </span>
-          <span style="font-size: 0.88rem; color: var(--text-secondary);">compliance across hostel rooms</span>
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar" id="admin-sidebar-avatar">W</div>
+          <div class="user-info">
+            <div class="user-name" id="admin-sidebar-name">Warden</div>
+            <div class="user-role" id="admin-sidebar-role">Administrator</div>
+          </div>
         </div>
       </div>
+    </aside>
 
-      <div style="flex-grow: 1; max-width: 450px; min-width: 240px;">
-        <div style="width: 100%; height: 10px; background: var(--color-cream); border-radius: var(--radius-full); overflow: hidden; border: 1px solid var(--border-light);">
-          <div id="stat-rate-bar" style="height: 100%; width: 0%; background: var(--status-present); border-radius: var(--radius-full); transition: width 0.5s ease;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STUDENT SEARCH & ATTENDANCE TABLE SECTION -->
-    <div id="attendance-table-section" style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Topbar Header -->
+      <div class="topbar">
         <div>
-          <h2>Student Attendance Register</h2>
-          <p style="font-size: 0.9rem; margin-top: 0.2rem;">Click any student row to view full profile and attendance breakdown.</p>
+          <h1 class="topbar-greeting">
+            <span id="admin-greeting">Good Morning</span>, <span id="admin-name-display">Warden</span>
+          </h1>
+          <p class="topbar-subtitle">
+            Hostel: <strong id="admin-hostel-display" style="color: var(--color-primary);">Adi Shankara Main Campus Hostel</strong> • 
+            <span id="admin-header-date" style="font-weight: 600; color: var(--color-accent);">September 26, 2026</span>
+          </p>
         </div>
 
-        <!-- Search Bar -->
-        <div style="width: 100%; max-width: 320px;">
-          <input 
-            type="text" 
-            id="admin-student-search" 
-            class="form-control" 
-            placeholder="Search student name, ID, or room..."
-            oninput="AdminDashboardController.filterTable()"
-          >
+        <div class="topbar-actions" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--color-surface); padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-card-border);">
+            <label for="admin-date-picker" style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);">Date:</label>
+            <input 
+              type="date" 
+              id="admin-date-picker" 
+              class="form-control" 
+              style="padding: 0.25rem 0.5rem; font-size: 0.85rem; width: auto; border: none; background: transparent;"
+              onchange="AdminDashboardController.onDateFilterChange()"
+            >
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-sm" onclick="AdminDashboardController.exportCsv()">
+            <span>📥</span> Export CSV
+          </button>
         </div>
       </div>
 
-      <!-- Attendance Table -->
-      <div class="card" style="padding: 1rem;">
+      <!-- 4 MAJOR SUMMARY CARDS -->
+      <div class="stats-grid" style="margin-bottom: 1.5rem;">
+        <!-- Card 1: Total Students -->
+        <div class="stat-card">
+          <span class="stat-label">Total Resident Students</span>
+          <div class="stat-value" id="stat-total-students">0</div>
+          <span class="stat-trend" style="color: var(--color-text-secondary);">Enrolled hostel residents</span>
+        </div>
+
+        <!-- Card 2: Present (Green) -->
+        <div class="stat-card" style="border-left: 4px solid var(--color-success);">
+          <span class="stat-label" style="color: var(--color-success);">Present (Roll-Call)</span>
+          <div class="stat-value" id="stat-present-count" style="color: var(--color-success);">0</div>
+          <span class="stat-trend" style="color: var(--color-success);">Face & GPS Verified</span>
+        </div>
+
+        <!-- Card 3: Absent (Red) -->
+        <div class="stat-card" style="border-left: 4px solid var(--color-alert);">
+          <span class="stat-label" style="color: var(--color-alert);">Absent / Outside</span>
+          <div class="stat-value" id="stat-absent-count" style="color: var(--color-alert);">0</div>
+          <span class="stat-trend" style="color: var(--color-alert);">Marked or auto-closed</span>
+        </div>
+
+        <!-- Card 4: Not Marked (Grey) -->
+        <div class="stat-card" style="border-left: 4px solid var(--color-text-secondary);">
+          <span class="stat-label" style="color: var(--color-text-secondary);">Awaiting Roll-Call</span>
+          <div class="stat-value" id="stat-not-marked-count" style="color: var(--color-text-secondary);">0</div>
+          <span class="stat-trend" style="color: var(--color-text-secondary);">Window open (09:00 - 17:00)</span>
+        </div>
+      </div>
+
+      <!-- Analytics & Geofence Overview (Donut Chart + Rules Card) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+        
+        <!-- Donut Chart Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Attendance Distribution</h3>
+            <span class="badge badge-present" id="stat-compliance-badge">0% Turnout</span>
+          </div>
+
+          <div class="donut-container">
+            <div style="position: relative; width: 150px; height: 150px; flex-shrink: 0;">
+              <svg class="donut-chart-svg" viewBox="0 0 42 42">
+                <!-- Base background circle -->
+                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#E8E0D1" stroke-width="5"></circle>
+                <!-- Present segment (Green) -->
+                <circle id="donut-present" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#2F8F5B" stroke-width="5" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
+                <!-- Absent segment (Red) -->
+                <circle id="donut-absent" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#C85A50" stroke-width="5" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
+                <!-- Not Marked segment (Grey) -->
+                <circle id="donut-notmarked" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#8B8B82" stroke-width="5" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
+              </svg>
+              <!-- Center percentage label -->
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none;">
+                <span id="donut-center-pct" style="font-size: 1.35rem; font-weight: 700; color: var(--color-primary); line-height: 1;">0%</span>
+                <span style="font-size: 0.65rem; color: var(--color-text-secondary); text-transform: uppercase;">Present</span>
+              </div>
+            </div>
+
+            <div class="donut-legend">
+              <div class="legend-item">
+                <span class="legend-color" style="background: var(--color-success);"></span>
+                <span>Present: <strong id="legend-present">0</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color" style="background: var(--color-alert);"></span>
+                <span>Absent: <strong id="legend-absent">0</strong></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color" style="background: var(--color-neutral-grey);"></span>
+                <span>Not Marked: <strong id="legend-notmarked">0</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Institutional Geofence & Rules Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Enforced Verification Rules</h3>
+            <button class="btn btn-sm btn-outline" onclick="AdminDashboardController.openSettingsModal()">
+              ⚙️ Modify
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-card-border); padding-bottom: 0.5rem;">
+              <span style="color: var(--color-text-secondary);">Hostel GPS Coordinates</span>
+              <strong style="font-family: var(--font-mono); color: var(--color-primary);" id="rule-coords">10.1782° N, 76.4305° E</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-card-border); padding-bottom: 0.5rem;">
+              <span style="color: var(--color-text-secondary);">Allowed Geofence Radius</span>
+              <strong style="color: var(--color-accent);" id="rule-radius">1000 meters (1.0 km)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-card-border); padding-bottom: 0.5rem;">
+              <span style="color: var(--color-text-secondary);">Roll-Call Time Window</span>
+              <strong style="color: var(--color-primary);" id="rule-window">09:00 AM – 05:00 PM</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--color-text-secondary);">Biometric Engine</span>
+              <strong style="color: var(--color-success);">FaceNet 512-d (Zero OpenCV)</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ATTENDANCE REGISTER TABLE SECTION -->
+      <div class="card" style="padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h3 class="card-title" style="margin: 0;">Resident Roll-Call Register</h3>
+            <span style="font-size: 0.85rem; color: var(--color-text-secondary);">Click any student row to view full details and recent check-in log.</span>
+          </div>
+
+          <!-- Search and Filter Controls -->
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <input 
+              type="text" 
+              id="admin-student-search" 
+              class="form-control" 
+              placeholder="Search name, ID, room..." 
+              style="width: 220px; font-size: 0.85rem; padding: 0.4rem 0.75rem;"
+              oninput="AdminDashboardController.filterTable()"
+            >
+            <select id="admin-status-filter" class="form-control" style="width: auto; font-size: 0.85rem; padding: 0.4rem 0.75rem;" onchange="AdminDashboardController.filterTable()">
+              <option value="ALL">All Statuses</option>
+              <option value="PRESENT">Present</option>
+              <option value="ABSENT">Absent</option>
+              <option value="NOT_MARKED">Not Marked</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table -->
         <div class="table-container">
           <table class="data-table">
             <thead>
               <tr>
                 <th>Student ID</th>
-                <th>Student Name</th>
+                <th>Resident Name</th>
                 <th>Room</th>
-                <th>Course</th>
-                <th>Attendance Status</th>
-                <th>Location Status</th>
+                <th>Program</th>
+                <th>Roll-Call Status</th>
+                <th>Geofence Status</th>
                 <th>Time</th>
                 <th>Distance</th>
                 <th>Action</th>
@@ -155,7 +301,7 @@
             </thead>
             <tbody id="admin-attendance-tbody">
               <tr>
-                <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--color-text-secondary);">
                   Loading attendance records...
                 </td>
               </tr>
@@ -163,57 +309,81 @@
           </table>
         </div>
       </div>
-    </div>
-  </main>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav">
+    <ul class="mobile-nav-items">
+      <li>
+        <a href="admin-dashboard.html" class="mobile-nav-link active">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+      </li>
+      <li>
+        <a href="admin-students.html" class="mobile-nav-link">
+          <span class="nav-icon">👥</span>
+          <span>Students</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" onclick="AdminDashboardController.openSettingsModal()" class="mobile-nav-link">
+          <span class="nav-icon">⚙️</span>
+          <span>Rules</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" onclick="AdminDashboardController.exportCsv()" class="mobile-nav-link">
+          <span class="nav-icon">📥</span>
+          <span>Export</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
   <!-- STUDENT DETAIL MODAL -->
-  <div id="student-detail-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(39, 30, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;">
-    <div class="card" style="width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; background: var(--bg-surface); padding: 2rem; position: relative;">
-      
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem;">
+  <div id="student-detail-modal" class="modal-overlay">
+    <div class="card" style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 1.75rem; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; border-bottom: 1px solid var(--color-card-border); padding-bottom: 0.75rem;">
         <div>
-          <span class="badge badge-neutral" style="font-size: 0.75rem;">Student Record</span>
-          <h3 id="modal-student-name" style="font-size: 1.45rem; margin-top: 0.25rem;">Student Name</h3>
-          <span id="modal-student-id" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-warm-brown);">ASIET2024CS000</span>
+          <span class="badge badge-neutral" style="font-size: 0.75rem;">Resident Record</span>
+          <h3 id="modal-student-name" style="margin: 0.25rem 0 0 0; font-size: 1.35rem; color: var(--color-primary);">Student Name</h3>
+          <span id="modal-student-id" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-accent);">ASIET2024CS000</span>
         </div>
-        <button onclick="AdminDashboardController.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+        <button onclick="AdminDashboardController.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--color-text-secondary); cursor: pointer;">&times;</button>
       </div>
 
-      <!-- Student Overview Grid -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.88rem; background: var(--bg-surface-warm); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.88rem; background: var(--color-cream); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-card-border); margin-bottom: 1.25rem;">
         <div>
-          <span class="stat-label">Hostel & Room</span>
-          <div id="modal-room-hostel" style="font-weight: 600; color: var(--color-deep-brown);">Room A-101 • Main Hostel</div>
+          <span style="font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase;">Hostel & Room</span>
+          <div id="modal-room-hostel" style="font-weight: 600; color: var(--color-primary);">Room A-101 • Main Hostel</div>
         </div>
         <div>
-          <span class="stat-label">Overall Attendance Rate</span>
-          <div id="modal-percentage" style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--status-present);">92.5%</div>
+          <span style="font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase;">Overall Attendance</span>
+          <div id="modal-percentage" style="font-size: 1.2rem; font-weight: 700; color: var(--color-success);">92.5%</div>
         </div>
         <div>
-          <span class="stat-label">Course & Department</span>
-          <div id="modal-course" style="color: var(--text-primary);">B.Tech CSE</div>
+          <span style="font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase;">Course & Year</span>
+          <div id="modal-course" style="color: var(--color-text-primary);">B.Tech CSE (3rd Year)</div>
         </div>
         <div>
-          <span class="stat-label">Contact</span>
-          <div id="modal-contact" style="color: var(--text-primary);">+91 98765 43210</div>
+          <span style="font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase;">Contact Phone</span>
+          <div id="modal-contact" style="color: var(--color-text-primary);">+91 98765 43210</div>
         </div>
-        <div>
-          <span class="stat-label">Face Biometrics</span>
+        <div style="grid-column: span 2;">
+          <span style="font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase;">Biometric Profile</span>
           <div id="modal-face-status" style="margin-top: 0.2rem;">
-            <span class="badge badge-present">Registered</span>
+            <span class="badge badge-present">FaceNet 512-d Enrolled</span>
           </div>
         </div>
-        <div>
-          <span class="stat-label">Biometric Policy</span>
-          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">Protected (FaceNet 512-d)</div>
-        </div>
       </div>
 
-
-      <!-- Recent Attendance History Table -->
-      <h4 style="font-size: 1.05rem; margin-bottom: 0.75rem;">Recent Attendance History</h4>
-      <div class="table-container" style="max-height: 220px;">
-        <table class="data-table">
+      <!-- Recent History in Modal -->
+      <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--color-primary);">Recent Check-Ins</h4>
+      <div class="table-container" style="max-height: 180px; overflow-y: auto;">
+        <table class="data-table" style="font-size: 0.82rem;">
           <thead>
             <tr>
               <th>Date</th>
@@ -224,26 +394,66 @@
           </thead>
           <tbody id="modal-history-tbody">
             <tr>
-              <td colspan="4" style="text-align: center; color: var(--text-muted);">No records found.</td>
+              <td colspan="4" style="text-align: center; color: var(--color-text-secondary);">No records.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
-        <button class="btn btn-secondary" onclick="AdminDashboardController.closeModal()">Close</button>
+      <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-sm" onclick="AdminDashboardController.closeModal()">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- GEOFENCE & RULES SETTINGS MODAL -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="card" style="width: 100%; max-width: 500px; padding: 1.75rem; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--color-card-border); padding-bottom: 0.75rem;">
+        <h3 style="margin: 0; font-size: 1.25rem; color: var(--color-primary);">📍 Geofence & Roll-Call Settings</h3>
+        <button onclick="AdminDashboardController.closeSettingsModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--color-text-secondary); cursor: pointer;">&times;</button>
+      </div>
+
+      <form id="settings-form" onsubmit="AdminDashboardController.saveSettings(event)">
+        <div class="form-group">
+          <label class="form-label">Hostel Center Latitude</label>
+          <input type="number" step="any" id="set-lat" class="form-control" value="10.1782" required>
+          <span class="form-hint">ASIET Kalady: 10.1782</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Hostel Center Longitude</label>
+          <input type="number" step="any" id="set-lon" class="form-control" value="76.4305" required>
+          <span class="form-hint">ASIET Kalady: 76.4305</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Allowed Radius (Meters)</label>
+          <input type="number" id="set-radius" class="form-control" value="1000" min="50" max="10000" required>
+          <span class="form-hint">Default: 1000m (Campus geofence perimeter)</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label class="form-label">Window Start</label>
+            <input type="time" id="set-start" class="form-control" value="09:00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Window End</label>
+            <input type="time" id="set-end" class="form-control" value="17:00" required>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="AdminDashboardController.closeSettingsModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Rules</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/admin-dashboard.js"></script>
-  <script>
-    function toggleMobileNav() {
-      const menu = document.getElementById('nav-menu-list');
-      if (menu) menu.classList.toggle('show');
-    }
-  </script>
 </body>
 </html>

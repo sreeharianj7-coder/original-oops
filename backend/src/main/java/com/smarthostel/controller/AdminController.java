@@ -116,4 +116,43 @@ public class AdminController {
         }
         return ResponseEntity.ok(ApiResponse.ok("Admin profile loaded", adminOpt.get()));
     }
+
+    /**
+     * Exports attendance data as CSV for a specific date.
+     * GET /api/admin/attendance/export?date=2026-09-24
+     */
+    @GetMapping(value = "/attendance/export", produces = "text/csv")
+    public ResponseEntity<byte[]> exportAttendanceCsv(
+            @RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) LocalDate date) {
+        LocalDate selectedDate = (date != null) ? date : LocalDate.now();
+        AdminDashboardResponse dashboard = adminService.getDashboard(null, selectedDate);
+        List<StudentAttendanceDetailDTO> records = dashboard.getStudentRecords();
+
+        StringBuilder csv = new StringBuilder();
+        csv.append("Date,Student ID,Student Name,Department,Year,Status,Attendance Time,Distance\n");
+        for (StudentAttendanceDetailDTO r : records) {
+            csv.append(selectedDate.toString()).append(",");
+            csv.append(escapeCsv(r.getStudentId())).append(",");
+            csv.append(escapeCsv(r.getStudentName())).append(",");
+            csv.append(escapeCsv(r.getDepartment())).append(",");
+            csv.append(escapeCsv(r.getAcademicYear())).append(",");
+            csv.append(escapeCsv(r.getAttendanceStatus())).append(",");
+            csv.append(escapeCsv(r.getTime())).append(",");
+            csv.append(escapeCsv(r.getDistance())).append("\n");
+        }
+
+        byte[] bytes = csv.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        return ResponseEntity.ok()
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"attendance_" + selectedDate + ".csv\"")
+                .contentType(org.springframework.http.MediaType.parseMediaType("text/csv"))
+                .body(bytes);
+    }
+
+    private String escapeCsv(String val) {
+        if (val == null) return "";
+        if (val.contains(",") || val.contains("\"") || val.contains("\n")) {
+            return "\"" + val.replace("\"", "\"\"") + "\"";
+        }
+        return val;
+    }
 }

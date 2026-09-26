@@ -41,6 +41,24 @@ public class Student {
     @Column(name = "academic_year", nullable = false, length = 50)
     private String academicYear = "2023 - 2027";
 
+    @Column(name = "gender", length = 20)
+    private String gender = "Male";
+
+    @Column(name = "date_of_birth", length = 30)
+    private String dateOfBirth;
+
+    @Column(name = "semester", length = 20)
+    private String semester = "S5";
+
+    @Column(name = "division", length = 20)
+    private String division = "A";
+
+    @Column(name = "block", length = 50)
+    private String block = "Block A";
+
+    @Column(name = "username", length = 60)
+    private String username;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hostel_id", nullable = false)
     private Hostel hostel;
@@ -193,6 +211,54 @@ public class Student {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getUsername() {
+        return username != null ? username : studentId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**

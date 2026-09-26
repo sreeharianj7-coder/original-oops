@@ -3,341 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HostelTrack | Smart Hostel Attendance Management System</title>
-  <meta name="description" content="A modern digital hostel attendance platform that simplifies student attendance management through secure authentication and geolocation verification.">
+  <title>Smart Hostel Attendance Management System | ASIET</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body style="background: linear-gradient(180deg, #F4EFE3 0%, #EDE5D4 100%);">
 
-  <!-- Navigation Bar -->
-  <nav class="navbar" id="main-nav">
-    <div class="container nav-container">
-      <a href="index.html" class="nav-brand">
-        <div class="brand-icon">🏛️</div>
-        <div class="brand-info">
-          <span class="brand-title">HostelTrack</span>
-          <span class="brand-subtitle">Adi Shankara Institute of Science & Technology</span>
-        </div>
-      </a>
-      
-      <ul class="nav-menu" id="nav-menu-list">
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#features" class="nav-link">Features</a></li>
-        <li><a href="#workflow" class="nav-link">How It Works</a></li>
-        <li><a href="#technology" class="nav-link">Technology</a></li>
-      </ul>
-
-      <div class="nav-actions" id="nav-auth-section">
-        <a href="login.html" class="btn btn-sm btn-secondary">Student Login</a>
-        <a href="admin-login.html" class="btn btn-sm btn-outline">Admin Login</a>
-        <a href="register.html" class="btn btn-sm btn-primary">Register</a>
+  <!-- Minimal Brand Header -->
+  <header style="padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-beige-border);">
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <div style="width: 44px; height: 44px; background: var(--color-forest-green); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; color: var(--color-warm-cream);">
+        🏛️
       </div>
-
-      <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+      <div>
+        <div style="font-weight: 800; font-size: 1.15rem; color: var(--color-forest-green); letter-spacing: -0.01em;">ASIET HOSTEL ATTENDANCE</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Adi Shankara Institute of Engineering & Technology</div>
+      </div>
     </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <header class="hero-section">
-    <div class="container container-narrow">
-      <div class="hero-pill">
-        <span>📍</span> SMART HOSTEL
-      </div>
-      <h1 class="hero-title">
-        Smart Hostel Attendance<br>Management System
-      </h1>
-      <p class="hero-subtitle">
-        Secure • Smart • Location Verified
-      </p>
-      <p class="hero-description">
-        A modern digital hostel attendance platform that simplifies student attendance management through secure authentication and geolocation verification.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="login.html" class="btn btn-primary btn-lg">
-          <span>🔐</span> Student Login
-        </a>
-        <a href="admin-login.html" class="btn btn-secondary btn-lg">
-          <span>🛡️</span> Administrator Login
-        </a>
-        <a href="register.html" class="btn btn-outline btn-lg">
-          <span>📝</span> Register Student
-        </a>
-      </div>
-
-      <!-- Hero Visual Preview Card (Warm Superbook-Style Architecture Preview) -->
-      <div style="margin-top: 3.5rem;">
-        <div class="card card-warm" style="text-align: left; padding: 2rem; box-shadow: var(--shadow-elevated);">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-medium); padding-bottom: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-            <div>
-              <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Active Campus Perimeter</span>
-              <h3 style="font-size: 1.25rem; color: var(--color-deep-brown); margin-top: 0.15rem;">Adi Shankara Institute Main Campus Hostel</h3>
-            </div>
-            <span class="badge badge-present">GEOLOCATION ACTIVE</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.25rem;">
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
-              <span class="stat-label">Geofence Radius</span>
-              <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--color-deep-brown); margin: 0.35rem 0;">1000 Meters</div>
-              <span style="font-size: 0.78rem; color: var(--text-muted);">1.0 km residential boundary</span>
-            </div>
-
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
-              <span class="stat-label">Validation Engine</span>
-              <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--color-warm-brown); margin: 0.35rem 0;">Haversine Formula</div>
-              <span style="font-size: 0.78rem; color: var(--text-muted);">Authoritative Spring Boot verification</span>
-            </div>
-
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
-              <span class="stat-label">Security Protocol</span>
-              <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--status-present); margin: 0.35rem 0;">BCrypt + Roles</div>
-              <span style="font-size: 0.78rem; color: var(--text-muted);">Student & Admin role isolation</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <span class="badge badge-present">✓ SYSTEM ACTIVE</span>
     </div>
   </header>
 
-  <!-- About Section -->
-  <section class="section" id="about" style="padding: 4rem 0; background: var(--bg-surface-warm); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
-    <div class="container">
-      <div style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
-        <span class="badge badge-neutral" style="margin-bottom: 0.75rem;">Institutional Solution</span>
-        <h2>About The System</h2>
-        <p style="margin-top: 0.5rem;">
-          The system digitizes hostel attendance and allows students to mark attendance after their hostel location is verified, while hostel administrators can monitor attendance across students.
-        </p>
+  <!-- Hero Section -->
+  <main class="container" style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 2.5rem; padding-bottom: 3.5rem;">
+    <div class="landing-hero">
+      <div class="landing-badge">
+        <span>📍</span> B.TECH OOP COLLEGE PROJECT
       </div>
+      
+      <h1 class="landing-title">
+        SMART HOSTEL<br>ATTENDANCE SYSTEM
+      </h1>
+      
+      <p class="landing-subtitle">
+        Secure • Reliable • Simple
+      </p>
+      
+      <p class="landing-desc">
+        Track attendance, verify identity and manage hostel attendance in one place. Powered by FaceNet biometric embedding comparison, Haversine spherical geofencing, and strict institutional policy enforcement.
+      </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
-        <div class="card">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
-          <h3>Location-Verified Student Attendance</h3>
-          <p style="margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.65;">
-            Eliminates proxy attendance and manual paper registers. When students mark attendance, high-precision GPS coordinates are calculated by the Java backend using the Haversine distance algorithm against their allocated hostel boundary.
-          </p>
-        </div>
-
-        <div class="card">
-          <div style="font-size: 2rem; margin-bottom: 1rem;">🛡️</div>
-          <h3>Hostel Administrator Dashboard</h3>
-          <p style="margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.65;">
-            Provides hostel wardens with real-time visibility into daily roll-calls, attendance rates, student searches, and historical date filtering to ensure residential safety across hostel blocks.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Key Features Section -->
-  <section class="section" id="features" style="padding: 4.5rem 0;">
-    <div class="container">
-      <div style="text-align: center; max-width: 640px; margin: 0 auto 3rem;">
-        <span class="badge badge-neutral" style="margin-bottom: 0.75rem;">Comprehensive Capabilities</span>
-        <h2>Key Features</h2>
-        <p style="margin-top: 0.5rem;">Built with modern Java architecture, secure authentication, and a clean user experience.</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
-        <div class="card">
-          <h4>Student Registration</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Self-service onboarding with student ID, department, hostel assignment, and room number.</p>
-        </div>
-
-        <div class="card">
-          <h4>Secure Authentication</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">BCrypt cryptographic hashing and role-based access for students and administrators.</p>
-        </div>
-
-        <div class="card">
-          <h4>Location Verification</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Authoritative backend validation ensuring attendance is marked only within the 1000m hostel radius.</p>
-        </div>
-
-        <div class="card">
-          <h4>Attendance Marking</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">A simple 3-step verification workflow with instant feedback and duplicate prevention.</p>
-        </div>
-
-        <div class="card">
-          <h4>Monthly Attendance Calendar</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Visual calendar with status dots for Present (Green), Absent (Red), and Not Marked (Blue).</p>
-        </div>
-
-        <div class="card">
-          <h4>Attendance History</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Complete searchable audit log of all historical timestamps, verified distances, and statuses.</p>
-        </div>
-
-        <div class="card">
-          <h4>Administrator Dashboard</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Live monitoring of Total Students, Present, Absent, and Not Marked counts per hostel block.</p>
-        </div>
-
-        <div class="card">
-          <h4>Student Monitoring & Search</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Instant search by student name, roll number, or room to inspect individual attendance.</p>
-        </div>
-
-        <div class="card">
-          <h4>Date-Based Reports</h4>
-          <p style="font-size: 0.88rem; margin-top: 0.35rem;">Filter hostel attendance by any calendar date to review roll-call compliance.</p>
-        </div>
-
-        <div class="card future-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-            <h4>Face Recognition</h4>
-            <span class="badge badge-neutral" style="font-size: 0.7rem;">Coming Soon</span>
+      <!-- The 4 Major Options Required by User -->
+      <div class="landing-options-grid">
+        <!-- 1. Student Register -->
+        <div class="landing-option-card">
+          <div>
+            <div class="option-icon" style="color: var(--color-forest-green);">📝</div>
+            <h3 class="option-title">Student Register</h3>
+            <p class="option-desc">Enrol new student profile, assign hostel block & room, and register 3–4 facial biometric reference photos.</p>
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Future biometric module planned for subsequent system releases.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- How It Works Section -->
-  <section class="section" id="workflow" style="padding: 4.5rem 0; background: var(--bg-surface-warm); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
-    <div class="container">
-      <div style="text-align: center; max-width: 640px; margin: 0 auto 3.5rem;">
-        <span class="badge badge-neutral" style="margin-bottom: 0.75rem;">System Workflow</span>
-        <h2>How It Works</h2>
-        <p style="margin-top: 0.5rem;">Two tailored workflows for students and hostel administrators.</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
-        <!-- Student Workflow -->
-        <div class="card">
-          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem;">
-            <span class="badge badge-present">Student Portal</span>
-            <h3 style="font-size: 1.2rem;">Student Attendance Workflow</h3>
-          </div>
-          
-          <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-warm-brown);">1.</span>
-              <div><strong>Register & Login:</strong> Secure login to the student portal.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-warm-brown);">2.</span>
-              <div><strong>Verify Location:</strong> Request browser coordinates via Geolocation API.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-warm-brown);">3.</span>
-              <div><strong>Backend Validation:</strong> Java backend calculates Haversine distance against hostel coordinates.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-warm-brown);">4.</span>
-              <div><strong>Mark Attendance:</strong> If within radius, record is persisted in MySQL and calendar updates.</div>
-            </div>
-          </div>
+          <a href="register.html" class="btn btn-outline btn-block">
+            Student Register →
+          </a>
         </div>
 
-        <!-- Admin Workflow -->
-        <div class="card">
-          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem;">
-            <span class="badge badge-neutral">Admin Portal</span>
-            <h3 style="font-size: 1.2rem;">Administrator Workflow</h3>
+        <!-- 2. Administrator Register -->
+        <div class="landing-option-card">
+          <div>
+            <div class="option-icon" style="color: var(--color-orange-accent);">🛡️</div>
+            <h3 class="option-title">Administrator Register</h3>
+            <p class="option-desc">Register hostel warden or administrative officer account to supervise daily attendance and manage rosters.</p>
+          </div>
+          <a href="admin-register.html" class="btn btn-outline btn-block">
+            Admin Register →
+          </a>
+        </div>
+
+        <!-- 3. Student Login -->
+        <div class="landing-option-card highlight">
+          <span class="card-badge" style="background: var(--color-orange-subtle); color: var(--color-orange-accent);">PRIMARY</span>
+          <div>
+            <div class="option-icon" style="color: var(--color-orange-accent);">🎓</div>
+            <h3 class="option-title">Student Login</h3>
+            <p class="option-desc">Sign in with Student ID / Username to access student dashboard, interactive calendar, and mark live attendance.</p>
+          </div>
+          <a href="login.html" class="btn btn-primary btn-block">
+            Student Login →
+          </a>
+        </div>
+
+        <!-- 4. Administrator Login -->
+        <div class="landing-option-card">
+          <div>
+            <div class="option-icon" style="color: var(--color-forest-green);">🔐</div>
+            <h3 class="option-title">Administrator Login</h3>
+            <p class="option-desc">Sign in to warden console, review live roll-call statistics, filter date-wise student records, and export reports.</p>
+          </div>
+          <a href="admin-login.html" class="btn btn-forest btn-block">
+            Admin Login →
+          </a>
+        </div>
+      </div>
+
+      <!-- Campus Architecture Feature Overview (Warm Cream Card) -->
+      <div class="card card-warm" style="max-width: 960px; margin: 0 auto; text-align: left; border-color: var(--color-beige-border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-beige-border); padding-bottom: 0.85rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Active Campus Geofence Perimeter</span>
+            <h4 style="font-size: 1.15rem; color: var(--color-forest-green); margin-top: 0.2rem;">Adi Shankara Institute of Engineering & Technology (ASIET)</h4>
+          </div>
+          <span class="badge badge-present">✓ 1000m GEOFENCE RADIUS</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div style="background: var(--bg-surface-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Two-Step Verification</div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--color-forest-green); margin: 0.25rem 0;">FaceNet + Geolocation</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">512-d feature vector + GPS check</div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-deep-brown);">1.</span>
-              <div><strong>Admin Login:</strong> Authenticate into the warden monitoring dashboard.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-deep-brown);">2.</span>
-              <div><strong>Select Date & Hostel:</strong> View attendance overview for the selected evening.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-deep-brown);">3.</span>
-              <div><strong>Monitor Overview:</strong> Review Present, Absent, and Not Marked counts.</div>
-            </div>
-            <div style="display: flex; gap: 0.75rem;">
-              <span style="font-weight: 700; color: var(--color-deep-brown);">4.</span>
-              <div><strong>Student Search & Audit:</strong> Search students and view individual attendance histories.</div>
-            </div>
+          <div style="background: var(--bg-surface-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Attendance Time Window</div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--color-orange-accent); margin: 0.25rem 0;">09:00 AM – 05:00 PM</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">Server-side authoritative clock check</div>
+          </div>
+
+          <div style="background: var(--bg-surface-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Daily Attendance Policy</div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--status-present); margin: 0.25rem 0;">Single Attempt / Day</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">Duplicate prevention on (student, date)</div>
+          </div>
+
+          <div style="background: var(--bg-surface-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">College Center Coordinates</div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--color-forest-green); margin: 0.25rem 0;">10.1782° N, 76.4305° E</div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">Mattoor, Kalady campus center</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Technology Section -->
-  <section class="section" id="technology" style="padding: 4.5rem 0;">
-    <div class="container">
-      <div style="text-align: center; max-width: 640px; margin: 0 auto 3rem;">
-        <span class="badge badge-neutral" style="margin-bottom: 0.75rem;">Under The Hood</span>
-        <h2>Technology Stack</h2>
-        <p style="margin-top: 0.5rem;">Robust engineering stack for reliability, performance, and clean architecture.</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; text-align: center;">
-        <div class="card" style="padding: 1.5rem 1rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">☕</div>
-          <h4 style="font-size: 1.05rem;">Java 17</h4>
-          <span style="font-size: 0.78rem; color: var(--text-muted);">Core OOP Language</span>
-        </div>
-
-        <div class="card" style="padding: 1.5rem 1rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🍃</div>
-          <h4 style="font-size: 1.05rem;">Spring Boot</h4>
-          <span style="font-size: 0.78rem; color: var(--text-muted);">REST API & Business Layer</span>
-        </div>
-
-        <div class="card" style="padding: 1.5rem 1rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🐬</div>
-          <h4 style="font-size: 1.05rem;">MySQL</h4>
-          <span style="font-size: 0.78rem; color: var(--text-muted);">Relational Database</span>
-        </div>
-
-        <div class="card" style="padding: 1.5rem 1rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🌐</div>
-          <h4 style="font-size: 1.05rem;">Geolocation API</h4>
-          <span style="font-size: 0.78rem; color: var(--text-muted);">Browser GPS Coordinates</span>
-        </div>
-
-        <div class="card" style="padding: 1.5rem 1rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🎨</div>
-          <h4 style="font-size: 1.05rem;">Vanilla CSS & JS</h4>
-          <span style="font-size: 0.78rem; color: var(--text-muted);">Warm Editorial UI</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <div>
-        <div style="font-family: var(--font-serif); font-weight: 700; font-size: 1.1rem; color: var(--color-deep-brown);">
-          HostelTrack
-        </div>
-        <p style="font-size: 0.82rem; margin-top: 0.25rem;">
-          Adi Shankara Institute of Science and Technology • Kalady, Ernakulam, Kerala
-        </p>
-      </div>
-
-      <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
-        <a href="login.html">Student Portal</a>
-        <a href="admin-login.html">Administrator Portal</a>
-        <a href="register.html">Student Registration</a>
-      </div>
-    </div>
+  <footer style="padding: 1.5rem 2rem; border-top: 1px solid var(--color-beige-border); text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+    Smart Hostel Attendance Management System • Department of Computer Science & Engineering • Adi Shankara Institute of Engineering & Technology
   </footer>
 
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      Auth.initNav();
-    });
-
-    function toggleMobileNav() {
-      const menu = document.getElementById('nav-menu-list');
-      if (menu) menu.classList.toggle('show');
-    }
-  </script>
 </body>
 </html>

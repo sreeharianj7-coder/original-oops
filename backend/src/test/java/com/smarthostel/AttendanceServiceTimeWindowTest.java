@@ -32,6 +32,7 @@ public class AttendanceServiceTimeWindowTest {
     private AttendanceRepository attendanceRepository;
     private StudentRepository studentRepository;
     private LocationService locationService;
+    private com.smarthostel.service.FaceVerificationService faceVerificationService;
     private AttendanceService attendanceService;
 
     private Hostel campusHostel;
@@ -43,7 +44,8 @@ public class AttendanceServiceTimeWindowTest {
         attendanceRepository = Mockito.mock(AttendanceRepository.class);
         studentRepository = Mockito.mock(StudentRepository.class);
         locationService = Mockito.mock(LocationService.class);
-        attendanceService = new AttendanceService(attendanceRepository, studentRepository, locationService);
+        faceVerificationService = Mockito.mock(com.smarthostel.service.FaceVerificationService.class);
+        attendanceService = new AttendanceService(attendanceRepository, studentRepository, locationService, faceVerificationService);
 
         campusHostel = new Hostel("Adi Shankara Institute Main Campus Hostel", 10.1706000, 76.4357000, 1000, "Main Campus");
 

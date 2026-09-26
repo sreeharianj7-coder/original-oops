@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * ============================================================================
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping({"/api/auth", "/api"})
 @CrossOrigin(origins = "*")
 public class AuthController {
 
@@ -31,9 +31,9 @@ public class AuthController {
 
     /**
      * Registers a new student account.
-     * POST /api/auth/student/register
+     * POST /api/auth/student/register OR POST /api/students/register
      */
-    @PostMapping("/student/register")
+    @PostMapping({"/student/register", "/students/register"})
     public ResponseEntity<ApiResponse<AuthResponse>> registerStudent(@Valid @RequestBody RegisterRequest request) {
         try {
             AuthResponse response = authService.registerStudent(request);
@@ -50,9 +50,9 @@ public class AuthController {
 
     /**
      * Authenticates a student.
-     * POST /api/auth/student/login
+     * POST /api/auth/student/login OR POST /api/students/login
      */
-    @PostMapping("/student/login")
+    @PostMapping({"/student/login", "/students/login"})
     public ResponseEntity<ApiResponse<AuthResponse>> loginStudent(@Valid @RequestBody LoginRequest request) {
         try {
             AuthResponse response = authService.loginStudent(request);
@@ -68,7 +68,7 @@ public class AuthController {
 
     /**
      * Registers a new hostel administrator account.
-     * POST /api/auth/admin/register
+     * POST /api/auth/admin/register OR POST /api/admin/register
      */
     @PostMapping("/admin/register")
     public ResponseEntity<ApiResponse<AuthResponse>> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
@@ -87,7 +87,7 @@ public class AuthController {
 
     /**
      * Authenticates a hostel administrator.
-     * POST /api/auth/admin/login
+     * POST /api/auth/admin/login OR POST /api/admin/login
      */
     @PostMapping("/admin/login")
     public ResponseEntity<ApiResponse<AuthResponse>> loginAdmin(@Valid @RequestBody LoginRequest request) {
