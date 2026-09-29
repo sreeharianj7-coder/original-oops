@@ -82,30 +82,23 @@
         const pwd = document.getElementById('login-password').value;
         const btn = document.getElementById('login-btn');
 
+        if (!id || !pwd) {
+          showToast('Please enter your Student ID and Password.', 'warning');
+          return;
+        }
+
         btn.disabled = true;
         btn.textContent = 'Verifying Credentials...';
 
-        try {
-          const res = await fetch(`${CONFIG.API_BASE_URL}/students/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier: id, password: pwd })
-          });
+        const result = await Auth.loginStudent(id, pwd);
 
-          const data = await res.json();
-          if (res.ok && data.success) {
-            Auth.setSession(data.data.token, 'STUDENT', data.data.student);
-            showToast('Login successful! Redirecting to Dashboard...', 'success');
-            setTimeout(() => {
-              window.location.href = 'dashboard.html';
-            }, 600);
-          } else {
-            showToast(data.message || 'Invalid Student ID or Password.', 'error');
-            btn.disabled = false;
-            btn.textContent = 'Sign In to Dashboard →';
-          }
-        } catch (err) {
-          showToast('Failed to connect to authentication server: ' + err.message, 'error');
+        if (result.success) {
+          showToast(result.message || 'Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        } else {
+          showToast(result.message || 'Invalid Student ID or Password.', 'error');
           btn.disabled = false;
           btn.textContent = 'Sign In to Dashboard →';
         }

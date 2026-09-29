@@ -374,35 +374,23 @@
         btn.disabled = true;
         btn.innerHTML = 'Enrolling Student & Registering Face Biometrics...';
 
-        try {
-          const res = await fetch(`${CONFIG.API_BASE_URL}/students/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+        const result = await Auth.registerStudent(payload);
 
-          const data = await res.json();
+        if (result.success) {
+          // Save registered photos in localStorage for display in My Profile
+          try {
+            localStorage.setItem(`profile_photos_${studentId}`, JSON.stringify(capturedImages));
+          } catch (e) {}
 
-          if (res.ok && data.success) {
-            // Save registered photos in localStorage for display in My Profile
-            try {
-              localStorage.setItem(`profile_photos_${studentId}`, JSON.stringify(capturedImages));
-            } catch (err) {}
-
-            showToast('Registration and facial enrollment completed! Redirecting to login...', 'success');
-            if (mediaStream) {
-              mediaStream.getTracks().forEach(t => t.stop());
-            }
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 1200);
-          } else {
-            showToast(data.message || 'Registration failed.', 'error');
-            btn.disabled = false;
-            btn.innerHTML = '<span>📝</span> Complete Student Registration';
+          showToast(result.message || 'Registration completed! Redirecting to login...', 'success');
+          if (mediaStream) {
+            mediaStream.getTracks().forEach(t => t.stop());
           }
-        } catch (err) {
-          showToast('Failed to connect to server: ' + err.message, 'error');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1200);
+        } else {
+          showToast(result.message || 'Registration failed.', 'error');
           btn.disabled = false;
           btn.innerHTML = '<span>📝</span> Complete Student Registration';
         }
