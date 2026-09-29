@@ -345,8 +345,8 @@ const AdminDashboardController = {
     const lat = localStorage.getItem('admin_rule_lat') || '10.1782';
     const lon = localStorage.getItem('admin_rule_lon') || '76.4305';
     const rad = localStorage.getItem('admin_rule_rad') || '1000';
-    const start = localStorage.getItem('admin_rule_start') || '09:00';
-    const end = localStorage.getItem('admin_rule_end') || '17:00';
+    const start = localStorage.getItem('admin_rule_start') || '00:00';
+    const end = localStorage.getItem('admin_rule_end') || '23:59';
 
     const coordsEl = document.getElementById('rule-coords');
     const radiusEl = document.getElementById('rule-radius');

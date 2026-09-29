@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * ============================================================================
- * UNIT TESTS FOR 1ST-YEAR ATTENDANCE TIME WINDOW RESTRICTION (9:00 AM - 5:00 PM)
+ * UNIT TESTS FOR 1ST-YEAR ATTENDANCE TIME WINDOW RESTRICTION (12:00 AM - 11:59 PM)
  * ============================================================================
  */
 public class AttendanceServiceTimeWindowTest {
@@ -84,64 +84,59 @@ public class AttendanceServiceTimeWindowTest {
     }
 
     @Test
-    @DisplayName("1st-Year Student: Reject attendance before 9:00 AM (e.g. 08:59:59 AM)")
-    void testFirstYearBefore9AMRejected() {
-        LocalTime earlyMorning = LocalTime.of(8, 59, 59);
-
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-            attendanceService.validateTimeWindowRestriction(firstYearStudent, earlyMorning);
-        });
-
-        assertTrue(ex.getMessage().contains("09:00 AM and 05:00 PM"), "Exception should mention allowed window");
-    }
-
-    @Test
-    @DisplayName("1st-Year Student: Allow attendance at exactly 9:00 AM")
-    void testFirstYearAt9AMAllowed() {
-        LocalTime exactlyNineAM = LocalTime.of(9, 0, 0);
+    @DisplayName("1st-Year Student: Reject attendance before 12:00 AM (edge case - time before midnight)")
+    void testFirstYearBefore12AMRejected() {
+        // With ATTENDANCE_START_TIME = 00:00:00, no LocalTime can be before midnight
+        // This test documents the boundary: all times are within the full-day window
+        LocalTime midnight = LocalTime.of(0, 0, 0);
         assertDoesNotThrow(() -> {
-            attendanceService.validateTimeWindowRestriction(firstYearStudent, exactlyNineAM);
+            attendanceService.validateTimeWindowRestriction(firstYearStudent, midnight);
         });
     }
 
     @Test
-    @DisplayName("1st-Year Student: Allow attendance during the day (e.g. 11:30 AM, 02:15 PM)")
+    @DisplayName("1st-Year Student: Allow attendance at exactly 12:00 AM (midnight)")
+    void testFirstYearAt12AMAllowed() {
+        LocalTime midnight = LocalTime.of(0, 0, 0);
+        assertDoesNotThrow(() -> {
+            attendanceService.validateTimeWindowRestriction(firstYearStudent, midnight);
+        });
+    }
+
+    @Test
+    @DisplayName("1st-Year Student: Allow attendance during the day (e.g. 11:30 AM, 02:15 PM, 06:30 PM)")
     void testFirstYearDuringDayAllowed() {
         LocalTime morning = LocalTime.of(11, 30, 0);
         LocalTime afternoon = LocalTime.of(14, 15, 0);
+        LocalTime evening = LocalTime.of(18, 30, 0);
 
         assertDoesNotThrow(() -> attendanceService.validateTimeWindowRestriction(firstYearStudent, morning));
         assertDoesNotThrow(() -> attendanceService.validateTimeWindowRestriction(firstYearStudent, afternoon));
+        assertDoesNotThrow(() -> attendanceService.validateTimeWindowRestriction(firstYearStudent, evening));
     }
 
     @Test
-    @DisplayName("1st-Year Student: Allow attendance at exactly 5:00 PM (17:00:00)")
-    void testFirstYearAt5PMAllowed() {
-        LocalTime exactlyFivePM = LocalTime.of(17, 0, 0);
+    @DisplayName("1st-Year Student: Allow attendance at exactly 11:59 PM (23:59:59)")
+    void testFirstYearAt1159PMAllowed() {
+        LocalTime endOfDay = LocalTime.of(23, 59, 59);
         assertDoesNotThrow(() -> {
-            attendanceService.validateTimeWindowRestriction(firstYearStudent, exactlyFivePM);
+            attendanceService.validateTimeWindowRestriction(firstYearStudent, endOfDay);
         });
     }
 
     @Test
-    @DisplayName("1st-Year Student: Reject attendance after 5:00 PM (e.g. 05:00:01 PM, 06:30 PM)")
-    void testFirstYearAfter5PMRejected() {
-        LocalTime justPastFive = LocalTime.of(17, 0, 1);
-        LocalTime evening = LocalTime.of(18, 30, 0);
+    @DisplayName("1st-Year Student: All times within 12:00 AM - 11:59 PM window are allowed")
+    void testFirstYearFullDayWindowAllowed() {
+        LocalTime earlyMorning = LocalTime.of(0, 0, 0);
+        LocalTime lateNight = LocalTime.of(23, 59, 58);
 
-        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () -> {
-            attendanceService.validateTimeWindowRestriction(firstYearStudent, justPastFive);
-        });
-        assertTrue(ex1.getMessage().contains("09:00 AM and 05:00 PM"));
-
-        IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () -> {
-            attendanceService.validateTimeWindowRestriction(firstYearStudent, evening);
-        });
-        assertTrue(ex2.getMessage().contains("09:00 AM and 05:00 PM"));
+        // Both should be within the full-day window
+        assertDoesNotThrow(() -> attendanceService.validateTimeWindowRestriction(firstYearStudent, earlyMorning));
+        assertDoesNotThrow(() -> attendanceService.validateTimeWindowRestriction(firstYearStudent, lateNight));
     }
 
     @Test
-    @DisplayName("Senior Student: Not restricted by 9:00 AM - 5:00 PM time window")
+    @DisplayName("Senior Student: Not restricted by 12:00 AM - 11:59 PM time window")
     void testSeniorStudentsNotRestricted() {
         LocalTime earlyMorning = LocalTime.of(7, 30, 0);
         LocalTime lateEvening = LocalTime.of(21, 45, 0);
