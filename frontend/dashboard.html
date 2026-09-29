@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard | Smart Hostel Attendance System</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .sidebar-photo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.25);
+      display: none;
+    }
+    .user-avatar.has-photo { display: none; }
+  </style>
 </head>
 <body>
 
@@ -72,6 +83,7 @@
       <div class="sidebar-footer">
         <div class="user-badge">
           <div class="user-avatar" id="sidebar-avatar">S</div>
+          <img class="sidebar-photo" id="sidebar-photo" src="" alt="Student Photo">
           <div class="user-info">
             <div class="user-name" id="sidebar-user-name">Loading...</div>
             <div class="user-role" id="sidebar-user-id">Student</div>
@@ -201,7 +213,7 @@
             <ul style="list-style: none; font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.6rem;">
               <li style="display: flex; gap: 0.5rem;">
                 <span style="color: var(--color-orange-accent); font-weight: 700;">⏱️</span>
-                <span><strong>Window:</strong> 09:00 AM – 05:00 PM daily.</span>
+                <span><strong>Window:</strong> 12:00 AM – 11:59 PM daily.</span>
               </li>
               <li style="display: flex; gap: 0.5rem;">
                 <span style="color: var(--status-present); font-weight: 700;">📍</span>

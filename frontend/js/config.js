@@ -20,12 +20,12 @@ const CONFIG = {
     academicYear: '2023 - 2027'
   },
 
-  // Default Campus Hostel Coordinates & Radius (ASIET Demonstration Center)
+  // Default Campus Hostel Coordinates & Radius (ASIET Mattoor, Kalady)
   DEFAULT_HOSTEL: {
     id: 1,
     name: 'Adi Shankara Institute of Engineering & Technology',
-    latitude: 10.1782,
-    longitude: 76.4305,
+    latitude: 10.1706,
+    longitude: 76.4357,
     allowedRadius: 1000, // in meters (1km geofence)
     description: 'Vidya Bharathi Nagar, Mattoor, Kalady, Kerala'
   },
