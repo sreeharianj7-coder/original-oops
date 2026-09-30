@@ -27,7 +27,7 @@
   <!-- Mobile Top Bar Header -->
   <header class="mobile-header">
     <div style="display: flex; align-items: center; gap: 0.6rem;">
-      <span style="font-size: 1.25rem;">🛡️</span>
+      <span style="display: flex; align-items: center; color: #fff;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
       <span class="mobile-brand">Admin Console</span>
     </div>
     <button class="btn btn-sm btn-outline" onclick="Auth.logout()" style="color: #fff; border-color: rgba(255,255,255,0.4); padding: 0.25rem 0.6rem;">
@@ -39,7 +39,9 @@
     <!-- Desktop Left Navigation Sidebar (Dark Forest Green #163B2D) -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-logo-icon">🛡️</div>
+        <div class="sidebar-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
         <div>
           <div class="sidebar-brand-name">HOSTELTRACK</div>
           <div class="sidebar-brand-sub">WARDEN ADMIN</div>
@@ -321,15 +323,29 @@
       },
 
       renderFallback() {
-        const mock = [
-          { studentId: 'ASIET2024CS001', name: 'Sreehari K A', roomNumber: 'A-204', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 98765 43210', email: 'sreehari@adishankara.ac.in', attendanceRate: '94.0%' },
+        const registered = (typeof Auth !== 'undefined' && Auth.getRegisteredStudents) ? Auth.getRegisteredStudents() : [];
+        const baseMocks = [
           { studentId: 'ASIET2024CS002', name: 'Nithin S', roomNumber: 'A-205', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 98451 23456', email: 'nithin@adishankara.ac.in', attendanceRate: '90.0%' },
           { studentId: 'ASIET2024CS003', name: 'Ajith P', roomNumber: 'A-206', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 98123 45678', email: 'ajith@adishankara.ac.in', attendanceRate: '88.0%' },
-          { studentId: 'ASIET2024CS004', name: 'Rithin M', roomNumber: 'A-207', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 97451 11223', email: 'rithin@adishankara.ac.in', attendanceRate: '82.0%' },
-          { studentId: 'ASIET2024CS005', name: 'Adhithya K', roomNumber: 'A-208', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 97452 33445', email: 'adhithya@adishankara.ac.in', attendanceRate: '85.0%' }
+          { studentId: 'ASIET2024CS004', name: 'Rithin M', roomNumber: 'A-207', course: 'B.Tech CSE', academicYear: '3rd Year', phone: '+91 97451 11223', email: 'rithin@adishankara.ac.in', attendanceRate: '82.0%' }
         ];
-        this.allStudents = mock;
-        this.renderTable(mock);
+
+        // Format registered students to include attendanceRate
+        const formattedReg = registered.map(s => ({
+          ...s,
+          attendanceRate: s.attendanceRate || '95.0%'
+        }));
+
+        // Merge without duplicates
+        const combined = [...formattedReg];
+        baseMocks.forEach(m => {
+          if (!combined.some(c => c.studentId.toUpperCase() === m.studentId.toUpperCase())) {
+            combined.push(m);
+          }
+        });
+
+        this.allStudents = combined;
+        this.renderTable(combined);
       }
     };
 

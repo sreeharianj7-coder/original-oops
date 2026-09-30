@@ -33,15 +33,31 @@ function populateStudentHeader(student) {
   const sidebarAvatar = document.getElementById('sidebar-avatar');
 
   const hr = new Date().getHours();
-  let timeGreeting = 'Good Morning';
-  if (hr >= 12 && hr < 17) timeGreeting = 'Good Afternoon';
-  else if (hr >= 17) timeGreeting = 'Good Evening';
+  let timeGreeting = 'Good Evening';
+  if (hr >= 5 && hr < 12) timeGreeting = 'Good Morning';
+  else if (hr >= 12 && hr < 17) timeGreeting = 'Good Afternoon';
+  else timeGreeting = 'Good Evening';
 
-  const studentName = student.name || 'Student';
+  let studentName = (student && student.name) ? student.name : '';
+
+  if (!studentName || Auth.isStudentIdString(studentName, student ? student.studentId : null)) {
+    if (student && student.studentId) {
+      const reg = Auth.findRegisteredStudent(student.studentId);
+      if (reg && reg.name && !Auth.isStudentIdString(reg.name, reg.studentId)) {
+        studentName = reg.name;
+        student.name = reg.name;
+        localStorage.setItem(CONFIG.STORAGE_KEYS.STUDENT_DATA, JSON.stringify(student));
+      }
+    }
+  }
+
+  if (!studentName || Auth.isStudentIdString(studentName, student ? student.studentId : null)) {
+    studentName = 'Student';
+  }
 
   if (greetingEl)    greetingEl.textContent    = `${timeGreeting}, ${studentName}!`;
   if (sidebarName)   sidebarName.textContent   = studentName;
-  if (sidebarId)     sidebarId.textContent     = student.studentId || 'Resident Student';
+  if (sidebarId)     sidebarId.textContent     = (student && student.studentId) ? student.studentId : 'Resident Student';
   if (sidebarAvatar) sidebarAvatar.textContent = (studentName.charAt(0) || 'S').toUpperCase();
 }
 

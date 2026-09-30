@@ -20,9 +20,20 @@ function populateSidebar(student) {
   const nameEl = document.getElementById('sidebar-user-name');
   const idEl = document.getElementById('sidebar-user-id');
 
-  const initial = (student.name || 'S').charAt(0).toUpperCase();
+  let studentName = student.name;
+  if (!studentName || Auth.isStudentIdString(studentName, student.studentId)) {
+    const reg = Auth.findRegisteredStudent(student.studentId);
+    if (reg && reg.name && !Auth.isStudentIdString(reg.name, reg.studentId)) {
+      studentName = reg.name;
+    }
+  }
+  if (!studentName || Auth.isStudentIdString(studentName, student.studentId)) {
+    studentName = 'Student';
+  }
+
+  const initial = (studentName || 'S').charAt(0).toUpperCase();
   if (avatarEl) avatarEl.textContent = initial;
-  if (nameEl) nameEl.textContent = student.name || 'Student';
+  if (nameEl) nameEl.textContent = studentName;
   if (idEl) idEl.textContent = student.studentId || 'Resident';
 }
 

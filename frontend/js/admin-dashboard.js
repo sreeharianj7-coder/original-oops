@@ -32,8 +32,8 @@ const AdminDashboardController = {
 
       const hr = new Date().getHours();
       if (greetingEl) {
-        if (hr < 12) greetingEl.textContent = 'Good Morning';
-        else if (hr < 17) greetingEl.textContent = 'Good Afternoon';
+        if (hr >= 5 && hr < 12) greetingEl.textContent = 'Good Morning';
+        else if (hr >= 12 && hr < 17) greetingEl.textContent = 'Good Afternoon';
         else greetingEl.textContent = 'Good Evening';
       }
     }

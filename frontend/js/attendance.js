@@ -15,9 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarId   = document.getElementById('sidebar-user-id');
     const sidebarAvatar = document.getElementById('sidebar-avatar');
 
-    if (sidebarName) sidebarName.textContent = student.name || 'Student';
+    let studentName = student.name;
+    if (!studentName || Auth.isStudentIdString(studentName, student.studentId)) {
+      const reg = Auth.findRegisteredStudent(student.studentId);
+      if (reg && reg.name && !Auth.isStudentIdString(reg.name, reg.studentId)) {
+        studentName = reg.name;
+      }
+    }
+    if (!studentName || Auth.isStudentIdString(studentName, student.studentId)) {
+      studentName = 'Student';
+    }
+
+    if (sidebarName) sidebarName.textContent = studentName;
     if (sidebarId)   sidebarId.textContent   = student.studentId || 'Resident Student';
-    if (sidebarAvatar) sidebarAvatar.textContent = (student.name ? student.name.charAt(0) : 'S').toUpperCase();
+    if (sidebarAvatar) sidebarAvatar.textContent = (studentName.charAt(0) || 'S').toUpperCase();
   }
 
   AttendanceManager.init();

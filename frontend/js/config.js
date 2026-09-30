@@ -36,7 +36,9 @@ const CONFIG = {
     USER_ROLE: 'hosteltrack_role', // 'STUDENT' or 'ADMIN'
     STUDENT_DATA: 'hosteltrack_student',
     ADMIN_DATA: 'hosteltrack_admin',
-    ACTIVE_HOSTEL: 'hosteltrack_active_hostel'
+    ACTIVE_HOSTEL: 'hosteltrack_active_hostel',
+    REGISTERED_STUDENTS: 'hosteltrack_registered_students',
+    REGISTERED_ADMINS: 'hosteltrack_registered_admins'
   }
 };
 
