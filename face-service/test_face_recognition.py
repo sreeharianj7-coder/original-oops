@@ -204,29 +204,29 @@ class TestFaceRecognitionPipeline(unittest.TestCase):
     # Test Case 11: Face match + location inside hostel perimeter
     def test_11_face_match_and_location_inside(self):
         face_matched = True
-        hostel_radius = 1000 # 1km
+        hostel_radius = 1500 # 1.5km
         student_distance = 15.0 # 15 meters away
         location_verified = student_distance <= hostel_radius
 
         attendance_granted = face_matched and location_verified
         self.assertTrue(attendance_granted, "Attendance should be granted when both face and location pass")
-        print("✓ Test 11 Passed: Attendance Granted (Face Matched + Location 15m <= 1000m).")
+        print("✓ Test 11 Passed: Attendance Granted (Face Matched + Location 15m <= 1500m).")
 
     # Test Case 12: Face match + location outside hostel perimeter
     def test_12_face_match_and_location_outside(self):
         face_matched = True
-        hostel_radius = 1000
+        hostel_radius = 1500
         student_distance = 2500.0 # 2.5km away (outside hostel)
         location_verified = student_distance <= hostel_radius
 
         attendance_granted = face_matched and location_verified
         self.assertFalse(attendance_granted, "Attendance must be rejected when location is outside radius")
-        print("✓ Test 12 Passed: Attendance Rejected (Face Matched BUT Distance 2500m > 1000m).")
+        print("✓ Test 12 Passed: Attendance Rejected (Face Matched BUT Distance 2500m > 1500m).")
 
     # Test Case 13: Face mismatch + correct location
     def test_13_face_mismatch_and_correct_location(self):
         face_matched = False
-        hostel_radius = 1000
+        hostel_radius = 1500
         student_distance = 10.0 # Inside hostel
         location_verified = student_distance <= hostel_radius
 

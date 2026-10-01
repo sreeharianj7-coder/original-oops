@@ -73,7 +73,7 @@ const GeoLocationHandler = {
         verified: result.success,
         message: result.message,
         distance: result.data ? result.data.distance : -1,
-        allowedRadius: 1000
+        allowedRadius: 1500
       };
     } catch (err) {
       console.warn('Backend verification API unavailable, performing local Haversine computation fallback', err);

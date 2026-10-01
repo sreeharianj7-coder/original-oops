@@ -54,35 +54,35 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         log.info("Checking database initialization status...");
 
-        // 1. Initialize Hostels if empty (Main campus geofence: 1000m / 1km radius)
+        // 1. Initialize Hostels if empty (Main campus geofence: 1500m / 1.5km radius)
         if (hostelRepository.count() == 0) {
-            log.info("Seeding default Adi Shankara Institute hostels with 1000m geofence radius...");
+            log.info("Seeding default Adi Shankara Institute hostels with 1500m geofence radius...");
             Hostel mainHostel = new Hostel(
                     "Adi Shankara Institute Main Campus Hostel", 
                     10.1782, 
                     76.4305, 
-                    1000, 
+                    1500, 
                     "Main Campus Hostel - Block A, Adi Shankara Institute of Science and Technology, Kalady"
             );
             Hostel boysHostel = new Hostel(
                     "ASIET Boys Hostel (Block B)", 
                     10.1708500, 
                     76.4359200, 
-                    1000, 
+                    1500, 
                     "Senior Boys Hostel, Mattoor-Kalady Campus"
             );
             Hostel ladiesHostel = new Hostel(
                     "ASIET Ladies Hostel (Block C)", 
                     10.1714000, 
                     76.4364000, 
-                    1000, 
+                    1500, 
                     "Womens Hostel, North Wing"
             );
 
             hostelRepository.save(mainHostel);
             hostelRepository.save(boysHostel);
             hostelRepository.save(ladiesHostel);
-            log.info("Hostels initialized successfully with 1000m geofence.");
+            log.info("Hostels initialized successfully with 1500m geofence.");
         }
 
         Hostel defaultHostel = hostelRepository.findAll().get(0);

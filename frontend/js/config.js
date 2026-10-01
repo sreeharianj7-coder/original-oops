@@ -26,7 +26,7 @@ const CONFIG = {
     name: 'Adi Shankara Institute of Engineering & Technology',
     latitude: 10.1706,
     longitude: 76.4357,
-    allowedRadius: 1000, // in meters (1km geofence)
+    allowedRadius: 1500, // in meters (1.5km geofence)
     description: 'Vidya Bharathi Nagar, Mattoor, Kalady, Kerala'
   },
 

@@ -47,7 +47,7 @@ public class AttendanceServiceTimeWindowTest {
         faceVerificationService = Mockito.mock(com.smarthostel.service.FaceVerificationService.class);
         attendanceService = new AttendanceService(attendanceRepository, studentRepository, locationService, faceVerificationService);
 
-        campusHostel = new Hostel("Adi Shankara Institute Main Campus Hostel", 10.1706000, 76.4357000, 1000, "Main Campus");
+        campusHostel = new Hostel("Adi Shankara Institute Main Campus Hostel", 10.1706000, 76.4357000, 1500, "Main Campus");
 
         firstYearStudent = new Student(
                 "ASIET2026CS001",
@@ -163,14 +163,14 @@ public class AttendanceServiceTimeWindowTest {
     }
 
     @Test
-    @DisplayName("markAttendance workflow: Successfully marks attendance for 1st-year at 10:00 AM within 1000m radius")
+    @DisplayName("markAttendance workflow: Successfully marks attendance for 1st-year at 10:00 AM within 1500m radius")
     void testMarkAttendanceAllowsValidTimeAndLocation() {
         when(studentRepository.findByStudentId("ASIET2026CS001")).thenReturn(Optional.of(firstYearStudent));
         when(attendanceRepository.existsByStudentIdAndAttendanceDate(any(), any())).thenReturn(false);
 
         LocationVerifyResponse verifyRes = new LocationVerifyResponse(
-                true, 15.5, 1000, "Adi Shankara Institute Main Campus Hostel",
-                10.1706000, 76.4357000, "VERIFIED", "Location verified within 1000m radius"
+                true, 15.5, 1500, "Adi Shankara Institute Main Campus Hostel",
+                10.1706000, 76.4357000, "VERIFIED", "Location verified within 1500m radius"
         );
         when(locationService.verifyLocation(any())).thenReturn(verifyRes);
 

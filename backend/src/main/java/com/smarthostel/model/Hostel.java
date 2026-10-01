@@ -29,7 +29,7 @@ public class Hostel {
     private Double longitude;
 
     @Column(name = "allowed_radius", nullable = false)
-    private Integer allowedRadius = 1000; // in meters (1km geofence)
+    private Integer allowedRadius = 1500; // in meters (1.5km geofence)
 
     @Column(name = "description", length = 255)
     private String description;
@@ -49,7 +49,7 @@ public class Hostel {
         this.hostelName = hostelName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.allowedRadius = allowedRadius != null ? allowedRadius : 1000;
+        this.allowedRadius = allowedRadius != null ? allowedRadius : 1500;
         this.description = description;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

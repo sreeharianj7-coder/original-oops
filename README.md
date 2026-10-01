@@ -15,7 +15,7 @@ The **Smart Hostel Attendance Management System** is a full-stack, enterprise-gr
 
 Traditional hostel attendance registers rely on manual paper sign-ins or proxy-prone RFID/fingerprint scanners. This system implements an authoritative **Two-Step Verification Protocol**:
 1. **Biometric Face Verification**: 512-dimensional facial feature vector extraction and cosine similarity template comparison against enrolled multi-angle student photographs (enforcing single face, anti-spoofing, and **strictly ZERO OpenCV**).
-2. **Authoritative Geolocation Geofencing**: Real-time browser GPS coordinates evaluated via the backend **Spherical Haversine Distance Formula** against Adi Shankara Institute's campus coordinates (`10.1782° N, 76.4305° E`, allowed radius: `1000m`).
+2. **Authoritative Geolocation Geofencing**: Real-time browser GPS coordinates evaluated via the backend **Spherical Haversine Distance Formula** against Adi Shankara Institute's campus coordinates (`10.1782° N, 76.4305° E`, allowed radius: `1500m`).
 
 ---
 
@@ -87,12 +87,12 @@ smart-hostel-attendance/
 
 ### 2. Geofence Verification (Haversine Formula)
 - **Hostel Coordinates**: `Latitude: 10.1782° N`, `Longitude: 76.4305° E` (ASIET Kalady Campus).
-- **Perimeter Radius**: `1000 meters` ($1.0\text{ km}$).
+- **Perimeter Radius**: `1500 meters` ($1.5\text{ km}$).
 - **Formula**:
   $$a = \sin^2\left(\frac{\Delta \phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta \lambda}{2}\right)$$
   $$c = 2 \cdot \text{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)$$
   $$d = R \cdot c \quad (\text{where } R = 6,371,000\text{ meters})$$
-- If $d \le 1000\text{m}$, location status is `VERIFIED`; otherwise `OUTSIDE_HOSTEL`.
+- If $d \le 1500\text{m}$, location status is `VERIFIED`; otherwise `OUTSIDE_HOSTEL`.
 
 ### 3. Attendance Business Rules
 - **Daily Window**: Attendance is permitted between **09:00 AM and 05:00 PM** only. Attempts outside this window are automatically rejected.

@@ -32,17 +32,17 @@ public class DistanceCalculatorTest {
     }
 
     @Test
-    @DisplayName("Should validate within 1000m (1 km) campus radius correctly")
-    void testWithin1000MeterRadius() {
-        // Within 1km geofence
-        assertTrue(DistanceCalculator.isWithinRadius(0.0, 1000));
-        assertTrue(DistanceCalculator.isWithinRadius(450.5, 1000));
-        assertTrue(DistanceCalculator.isWithinRadius(999.9, 1000));
-        assertTrue(DistanceCalculator.isWithinRadius(1000.0, 1000));
+    @DisplayName("Should validate within 1500m (1.5 km) campus radius correctly")
+    void testWithin1500MeterRadius() {
+        // Within 1.5km geofence
+        assertTrue(DistanceCalculator.isWithinRadius(0.0, 1500));
+        assertTrue(DistanceCalculator.isWithinRadius(450.5, 1500));
+        assertTrue(DistanceCalculator.isWithinRadius(999.9, 1500));
+        assertTrue(DistanceCalculator.isWithinRadius(1500.0, 1500));
 
-        // Outside 1km geofence
-        assertFalse(DistanceCalculator.isWithinRadius(1000.1, 1000));
-        assertFalse(DistanceCalculator.isWithinRadius(1250.0, 1000));
-        assertFalse(DistanceCalculator.isWithinRadius(2500.0, 1000));
+        // Outside 1.5km geofence
+        assertFalse(DistanceCalculator.isWithinRadius(1500.1, 1500));
+        assertFalse(DistanceCalculator.isWithinRadius(1850.0, 1500));
+        assertFalse(DistanceCalculator.isWithinRadius(2500.0, 1500));
     }
 }

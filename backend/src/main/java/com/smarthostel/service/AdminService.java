@@ -142,7 +142,7 @@ public class AdminService {
 
         if (hostel == null) {
             hostel = hostelRepository.findAll().stream().findFirst()
-                    .orElse(new Hostel("Main Campus Hostel", 10.1706, 76.4357, 1000, "Campus"));
+                    .orElse(new Hostel("Main Campus Hostel", 10.1706, 76.4357, 1500, "Campus"));
         }
 
         List<Student> students = studentRepository.findByHostelId(hostel.getId());

@@ -2,7 +2,7 @@
  * ============================================================================
  * TWO-STEP ATTENDANCE WORKFLOW CONTROLLER
  * STEP 1: Real Face Biometric Match (face-api.js client-side)
- * STEP 2: GPS Geolocation Check (ASIET Campus, 1 km radius)
+ * STEP 2: GPS Geolocation Check (ASIET Campus, 1.5 km radius)
  * ============================================================================
  */
 
@@ -47,7 +47,7 @@ const AttendanceManager = {
   // ✅ CORRECT ASIET CAMPUS COORDINATES (Mattoor, Kalady, Kerala)
   CAMPUS_LAT: 10.1706,
   CAMPUS_LON: 76.4357,
-  ALLOWED_RADIUS: 1000, // meters
+  ALLOWED_RADIUS: 1500, // meters
 
   // face-api.js model source
   MODEL_URL: 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights',
